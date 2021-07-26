@@ -1,0 +1,4 @@
+apiRules:
+- exclude:
+    uidRegex: ^VaraniumSharp.WinUI\.Tests
+    type: Type
