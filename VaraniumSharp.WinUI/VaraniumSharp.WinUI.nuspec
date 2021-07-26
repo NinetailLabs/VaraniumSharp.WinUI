@@ -11,10 +11,9 @@
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/NinetailLabs/VaraniumSharp.WinUI</projectUrl>
     <icon>images\nugetIcon.png</icon>
-    <icon>images\nugetIcon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <copyright>Copyright (c) NineTail Labs 2021</copyright>
-    <releaseNotes>ReleaseNotesHere</releaseNotes>
+    <releaseNotes></releaseNotes>
     <tags>C# VaraniumSharp Varanium WinUI</tags>
 
     <repository type="git" url="https://github.com/NinetailLabs/VaraniumSharp.ServiceCollection.git" commit="GitHashHere" />
