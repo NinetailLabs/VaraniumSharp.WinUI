@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using VaraniumSharp.Attributes;
 using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
+using VaraniumSharp.WinUI.Interfaces.TabViewHelpers;
 
 namespace VaraniumSharp.WinUI.TabViewHelpers
 {
     /// <summary>
     /// Assist with persisting the TabView layout
     /// </summary>
-    public sealed class TabViewStorageManager
+    [AutomaticContainerRegistration(typeof(ITabViewStorageManager))]
+    public sealed class TabViewStorageManager : ITabViewStorageManager
     {
         /// <summary>
         /// DI Constructor
@@ -23,12 +26,7 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             _logger = StaticLogger.GetLogger<TabViewStorageManager>();
         }
 
-        /// <summary>
-        /// Save the current tab layout to a JSon file
-        /// </summary>
-        /// <param name="tabs">Collection of tabs to persist</param>
-        /// <param name="filePath">Path to JSon file used for persistence</param>
-        /// <returns>Indicate if the file was successfully written</returns>
+        /// <inheritdoc/>
         public Task SaveLayoutAsync(IEnumerable<TabViewModel> tabs, string filePath)
         {
             try
@@ -45,11 +43,7 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             }
         }
 
-        /// <summary>
-        /// Load the tab layout from a JSon file
-        /// </summary>
-        /// <param name="filePath">Path to the JSon to load</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public Task<IEnumerable<TabViewModel>> LoadLayoutAsync(string filePath)
         {
             try
