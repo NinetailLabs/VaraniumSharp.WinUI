@@ -21,7 +21,7 @@
 Task ("VariableSetup")
 	.Does(() => {
 		projectName = "VaraniumSharp.WinUI";
-		releaseFolderString = "./{0}/bin/{1}/netstandard2.0";
+		releaseFolderString = "./{0}/bin/{1}/net5.0-windows10.0.19041.0";
 		releaseBinaryType = "dll";
 		repoOwner = "NinetailLabs";
 		botName = "NinetailLabsBot";
