@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [
-            "/VaraniumSharp.ServiceCollection.sln"
+            "/VaraniumSharp.WinUI.sln"
           ],
           "exclude": [
             "**/obj/**",
