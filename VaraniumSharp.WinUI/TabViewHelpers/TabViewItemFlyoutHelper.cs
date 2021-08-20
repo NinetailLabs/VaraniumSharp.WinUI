@@ -39,27 +39,12 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             };
             renameItem.Click += RenameItem;
 
-            var tabCloseItem = new MenuFlyoutSubItem
+            var tabCloseItem = new ToggleMenuFlyoutItem
             {
-                Text = "Tab Close"
+                Text = "Closable",
+                IsChecked = tabItem.IsClosable
             };
-            var canCloseItem = new RadioMenuFlyoutItem
-            {
-                Text = "Can Close",
-                GroupName = "CloseLogic",
-                IsChecked = true,
-                DataContext = tabItem
-            };
-            var cannotCloseItem = new RadioMenuFlyoutItem
-            {
-                Text = "Cannot Close",
-                GroupName = "CloseLogic",
-                DataContext = tabItem,
-            };
-            canCloseItem.Click += OnCloseSubItemClick;
-            cannotCloseItem.Click += OnCloseSubItemClick;
-            tabCloseItem.Items.Add(canCloseItem);
-            tabCloseItem.Items.Add(cannotCloseItem);
+            tabCloseItem.Click += OnCloseSubItemClick;
 
             flyout.Items.Add(renameItem);
             flyout.Items.Add(tabCloseItem);
@@ -84,9 +69,9 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         /// <param name="e">Event arguments</param>
         private async void OnCloseSubItemClick(object? sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is MenuFlyoutItem {DataContext: TabViewItem tabItem} menuFlyout)
+            if (e.OriginalSource is ToggleMenuFlyoutItem { DataContext: TabViewItem tabItem} menuFlyout)
             {
-                tabItem.IsClosable = menuFlyout.Text == "Can Close";
+                tabItem.IsClosable = menuFlyout.IsChecked;
 
                 if (_saveCallbackFuncAsync != null)
                 {
