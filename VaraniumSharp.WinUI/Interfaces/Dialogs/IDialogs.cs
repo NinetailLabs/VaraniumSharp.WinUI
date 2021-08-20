@@ -9,6 +9,16 @@ namespace VaraniumSharp.WinUI.Interfaces.Dialogs
     /// </summary>
     public interface IDialogs
     {
+        #region Public Methods
+
+        /// <summary>
+        /// Show a dialog box that displays a message to the user
+        /// </summary>
+        /// <param name="title">The title of the dialog box</param>
+        /// <param name="message">The message to display to the user</param>
+        /// <param name="root">XamlRoot of the control the dialog is tied to</param>
+        Task ShowMessageDialogAsync(string title, string message, XamlRoot root);
+
         /// <summary>
         /// Show a dialog box that takes text input
         /// </summary>
@@ -18,12 +28,6 @@ namespace VaraniumSharp.WinUI.Interfaces.Dialogs
         /// <returns>New header or <see cref="String.Empty"/> if the user cancelled out of the dialog</returns>
         Task<string> ShowTextInputDialogAsync(string title, string currentValue, XamlRoot root);
 
-        /// <summary>
-        /// Show a dialog box that displays a message to the user
-        /// </summary>
-        /// <param name="title">The title of the dialog box</param>
-        /// <param name="message">The message to display to the user</param>
-        /// <param name="root">XamlRoot of the control the dialog is tied to</param>
-        Task ShowMessageDialogAsync(string title, string message, XamlRoot root);
+        #endregion
     }
 }

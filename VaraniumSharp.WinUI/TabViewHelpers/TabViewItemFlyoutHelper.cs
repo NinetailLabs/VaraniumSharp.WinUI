@@ -14,6 +14,8 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
     [AutomaticContainerRegistration(typeof(ITabViewFlyoutHelper))]
     public sealed class TabViewItemFlyoutHelper : ITabViewFlyoutHelper
     {
+        #region Constructor
+
         /// <summary>
         /// DI Constructor
         /// </summary>
@@ -22,11 +24,9 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             _dialogHelper = dialogs;
         }
 
-        /// <inheritdoc/>
-        public void SetSaveCallback(Func<Task> saveCallbackFuncAsync)
-        {
-            _saveCallbackFuncAsync = saveCallbackFuncAsync;
-        }
+        #endregion
+
+        #region Public Methods
 
         /// <inheritdoc/>
         public MenuFlyout CreateFlyoutForTabItem(TabViewItem tabItem)
@@ -39,33 +39,28 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             };
             renameItem.Click += RenameItem;
 
-            var tabCloseItem = new MenuFlyoutSubItem
+            var tabCloseItem = new ToggleMenuFlyoutItem
             {
-                Text = "Tab Close"
+                Text = "Closable",
+                IsChecked = tabItem.IsClosable
             };
-            var canCloseItem = new RadioMenuFlyoutItem
-            {
-                Text = "Can Close",
-                GroupName = "CloseLogic",
-                IsChecked = true,
-                DataContext = tabItem
-            };
-            var cannotCloseItem = new RadioMenuFlyoutItem
-            {
-                Text = "Cannot Close",
-                GroupName = "CloseLogic",
-                DataContext = tabItem,
-            };
-            canCloseItem.Click += OnCloseSubItemClick;
-            cannotCloseItem.Click += OnCloseSubItemClick;
-            tabCloseItem.Items.Add(canCloseItem);
-            tabCloseItem.Items.Add(cannotCloseItem);
+            tabCloseItem.Click += OnCloseSubItemClick;
 
             flyout.Items.Add(renameItem);
             flyout.Items.Add(tabCloseItem);
 
             return flyout;
         }
+
+        /// <inheritdoc/>
+        public void SetSaveCallback(Func<Task> saveCallbackFuncAsync)
+        {
+            _saveCallbackFuncAsync = saveCallbackFuncAsync;
+        }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// Change the <see cref="TabViewItem.IsClosable"/> property based on the item that was clicked
@@ -74,25 +69,15 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         /// <param name="e">Event arguments</param>
         private async void OnCloseSubItemClick(object? sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is MenuFlyoutItem menuFlyout)
+            if (e.OriginalSource is ToggleMenuFlyoutItem { DataContext: TabViewItem tabItem} menuFlyout)
             {
-                if (menuFlyout.DataContext is TabViewItem tabItem)
-                {
-                    if (menuFlyout.Text == "Can Close")
-                    {
-                        tabItem.IsClosable = true;
-                    }
-                    else
-                    {
-                        tabItem.IsClosable = false;
-                    }
+                tabItem.IsClosable = menuFlyout.IsChecked;
 
-                    if (_saveCallbackFuncAsync != null)
-                    {
-                        await _saveCallbackFuncAsync
-                            .Invoke()
-                            .ConfigureAwait(false);
-                    }
+                if (_saveCallbackFuncAsync != null)
+                {
+                    await _saveCallbackFuncAsync
+                        .Invoke()
+                        .ConfigureAwait(false);
                 }
             }
         }
@@ -126,6 +111,10 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             }
         }
 
+        #endregion
+
+        #region Variables
+
         /// <summary>
         /// DialogHelper instance
         /// </summary>
@@ -135,5 +124,7 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         /// Function to call when changes were made to a tab to request persistence
         /// </summary>
         private Func<Task>? _saveCallbackFuncAsync;
+
+        #endregion
     }
 }

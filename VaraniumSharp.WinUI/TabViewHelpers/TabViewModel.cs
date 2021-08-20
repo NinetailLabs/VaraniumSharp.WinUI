@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Text.Json.Serialization;
 
 namespace VaraniumSharp.WinUI.TabViewHelpers
 {
@@ -8,6 +9,8 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
     /// </summary>
     public sealed class TabViewModel
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -28,13 +31,39 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             IsClosable = item.IsClosable;
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Name of the Tab
+        /// </summary>
+        [JsonInclude]
+        public string Header { get; set; }
+
+        /// <summary>
+        /// Indicate if the tab item can be closed
+        /// </summary>
+        [JsonInclude]
+        public bool IsClosable { get; set; }
+
+        /// <summary>
+        /// The name of the tab item
+        /// </summary>
+        [JsonInclude]
+        public string Name { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
         /// <summary>
         /// Creates a new <see cref="TabViewItem"/> based on the model
         /// </summary>
         /// <returns>Populated tab item</returns>
         public TabViewItem GetTabViewItem()
         {
-            return new TabViewItem
+            return new()
             {
                 Name = Name,
                 Header = Header,
@@ -42,19 +71,6 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             };
         }
 
-        /// <summary>
-        /// The name of the tab item
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Name of the Tab
-        /// </summary>
-        public string Header { get; set; }
-
-        /// <summary>
-        /// Indicate if the tab item can be closed
-        /// </summary>
-        public bool IsClosable { get; set; }
+        #endregion
     }
 }
