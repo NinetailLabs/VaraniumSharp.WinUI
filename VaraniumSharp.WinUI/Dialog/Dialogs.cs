@@ -15,12 +15,47 @@ namespace VaraniumSharp.WinUI.Dialog
     [AutomaticContainerRegistration(typeof(IDialogs), Enumerations.ServiceReuse.Singleton)]
     public sealed class Dialogs : IDialogs
     {
+        #region Constructor
+
         /// <summary>
         /// DI Constructor
         /// </summary>
         public Dialogs()
         {
             _logger = StaticLogger.GetLogger<Dialogs>();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <inheritdoc/>
+        public async Task ShowMessageDialogAsync(string title, string message, XamlRoot root)
+        {
+            var textBlock = new TextBlock
+            {
+                Text = message,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+
+            var dialog = new ContentDialog
+            {
+                Content = textBlock,
+                Title = title,
+                IsSecondaryButtonEnabled = false,
+                PrimaryButtonText = "Ok",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = root
+            };
+
+            try
+            {
+                await dialog.ShowAsync();
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "An error occurred while showing the MessageDialog");
+            }
         }
 
         /// <inheritdoc/>
@@ -52,44 +87,21 @@ namespace VaraniumSharp.WinUI.Dialog
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "An error occured while showing the TextInputDialog");
+                _logger.LogError(exception, "An error occurred while showing the TextInputDialog");
                 return string.Empty;
             }
 
         }
 
-        /// <inheritdoc/>
-        public async Task ShowMessageDialogAsync(string title, string message, XamlRoot root)
-        {
-            var textBlock = new TextBlock
-            {
-                Text = message,
-                VerticalAlignment = VerticalAlignment.Bottom
-            };
+        #endregion
 
-            var dialog = new ContentDialog
-            {
-                Content = textBlock,
-                Title = title,
-                IsSecondaryButtonEnabled = false,
-                PrimaryButtonText = "Ok",
-                DefaultButton = ContentDialogButton.Primary,
-                XamlRoot = root
-            };
-
-            try
-            {
-                await dialog.ShowAsync();
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, "An error occured while showing the MessageDialog");
-            }
-        }
+        #region Variables
 
         /// <summary>
         /// Logger instance
         /// </summary>
         private readonly ILogger _logger;
+
+        #endregion
     }
 }
