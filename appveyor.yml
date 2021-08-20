@@ -16,6 +16,8 @@ environment:
     secure: 8KQxK7dJEQ2md8qskfgGHSQzZMFw7fKHdJ5H5rWXJKYndbyctdtRVnUC8NsX3sdW
   BotToken:
     secure: PmtGSlRIDP4Ew76A1ouTv6RExmiuXWnoezbSr3BPKxA=
+  SonarToken:
+    secure: rV3fJeUCjwImzHVmB78aFwdQ8SZUY0+6vBLjIxwuWmkoUcmSydOupp1zx5CtoC1i
 build_script:
 - ps: .\build.ps1 --branch $env:APPVEYOR_REPO_BRANCH --buildCounter $env:APPVEYOR_BUILD_NUMBER --gitHash $env:APPVEYOR_REPO_COMMIT --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE
 test: off
