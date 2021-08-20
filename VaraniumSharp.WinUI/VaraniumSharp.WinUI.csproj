@@ -25,6 +25,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CustomPaneBase\GridViewStyles.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -42,6 +46,16 @@
     </PackageReference>
     <PackageReference Include="System.Text.Json" Version="6.0.0-preview.6.21352.12" />
     <PackageReference Include="VaraniumSharp" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\VerticalPane\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="CustomPaneBase\GridViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
 </Project>
