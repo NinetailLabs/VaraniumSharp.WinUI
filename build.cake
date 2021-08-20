@@ -12,6 +12,7 @@
 #load "CakeScripts/base/base.nuget.pack.cake"
 #load "CakeScripts/base/base.nuget.push.cake"
 #load "CakeScripts/base/base.docfx.cake"
+#load "CakeScripts/base/base.sonarqube.cake"
 
 #endregion
 
@@ -28,6 +29,11 @@ Task ("VariableSetup")
 		botEmail = "gitbot@ninetaillabs.com";
 		botToken = EnvironmentVariable("BotToken");
 		gitRepo = string.Format("https://github.com/{0}/{1}.git", repoOwner, projectName);
+		sonarQubeKey = "NinetailLabs_VaraniumSharp.WinUI";
+		sonarBranch = branch;
+		sonarOrganization = "ninetaillabs";
+		sonarQubeServerUrl = "https://sonarcloud.io";
+		sonarLogin = EnvironmentVariable("SonarToken");;
 	});
 
 Task ("Default")
@@ -36,8 +42,10 @@ Task ("Default")
 	.IsDependentOn ("LocateFiles")
 	.IsDependentOn ("VariableSetup")
 	.IsDependentOn ("NugetRestore")
+	.IsDependentOn ("SonarQubeStartup")
 	.IsDependentOn ("Build")
 	.IsDependentOn ("UnitTests")
+	.IsDependentOn ("SonarQubeShutdown")
 	.IsDependentOn ("CoverageUpload")
 	.IsDependentOn ("GenerateReleaseNotes")
 	.IsDependentOn ("NugetPack")
