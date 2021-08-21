@@ -29,6 +29,43 @@ namespace VaraniumSharp.WinUI.Dialog
 
         #region Public Methods
 
+        /// <summary>
+        /// Show a confirmation dialog box
+        /// </summary>
+        /// <param name="title">The title of the dialog</param>
+        /// <param name="message">The prompt for the user</param>
+        /// <param name="root"></param>
+        /// <returns>True if user clicked "Yes" button, otherwise false</returns>
+        public async Task<bool> ShowConfirmationDialog(string title, string message, XamlRoot root)
+        {
+            var textBlock = new TextBlock
+            {
+                Text = message,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+
+            var dialog = new ContentDialog
+            {
+                Content = textBlock,
+                Title = title,
+                IsSecondaryButtonEnabled = true,
+                PrimaryButtonText = "Yes",
+                SecondaryButtonText = "No",
+                DefaultButton = ContentDialogButton.Primary,
+                XamlRoot = root
+            };
+
+            try
+            {
+                return await dialog.ShowAsync() == ContentDialogResult.Primary;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "An error occurred while showing the confirmation dialog");
+                return false;
+            }
+        }
+
         /// <inheritdoc/>
         public async Task ShowMessageDialogAsync(string title, string message, XamlRoot root)
         {
@@ -90,7 +127,6 @@ namespace VaraniumSharp.WinUI.Dialog
                 _logger.LogError(exception, "An error occurred while showing the TextInputDialog");
                 return string.Empty;
             }
-
         }
 
         #endregion

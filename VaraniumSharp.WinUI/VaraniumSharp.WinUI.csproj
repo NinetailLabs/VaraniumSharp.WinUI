@@ -25,23 +25,66 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CustomPaneBase\GridViewStyles.xaml" />
+    <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
+    <None Remove="TabPane\TabLayoutLayoutPane.xaml" />
+    <None Remove="TabWindow\TabWindow.xaml" />
+    <None Remove="VerticalPane\VerticalLayoutPane.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.1" />
-    <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.1" />
-    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.1" />
+    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.2" />
+    <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.2" />
+    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.2" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="SemVer.Git.MSBuild" Version="1.3.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Text.Json" Version="6.0.0-preview.6.21352.12" />
-    <PackageReference Include="VaraniumSharp" Version="3.8.0" />
+    <PackageReference Include="VaraniumSharp" Version="3.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\VerticalPane\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="TabWindow\TabWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="VerticalPane\VerticalLayoutPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="TabPane\TabLayoutLayoutPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="HorizontalPane\HorizontalLayoutPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="CustomPaneBase\GridViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
 </Project>
