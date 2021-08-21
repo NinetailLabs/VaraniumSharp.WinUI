@@ -85,7 +85,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 if (!string.IsNullOrEmpty(newHeader))
                 {
                     layoutItem.Control.Title = newHeader;
-                    await _customLayoutEventRouter.SetLayoutChanged();
+                    await _customLayoutEventRouter
+                        .SetLayoutChanged()
+                        .ConfigureAwait(false);
                 }
             }
         }

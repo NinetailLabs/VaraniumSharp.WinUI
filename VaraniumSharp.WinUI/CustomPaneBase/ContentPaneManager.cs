@@ -47,7 +47,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             var layoutId = BasePane.GetIdentifier();
             var path = _layoutStorageOptions.GetJsonPath($"{layoutId}.json");
-            var wrapper = new LayoutWrapperModel(layoutId, await BasePane.GetComponentsForStorageAsync());
+            var wrapper = new LayoutWrapperModel(layoutId, await BasePane.GetComponentsForStorageAsync().ConfigureAwait(false));
             var jsonLayout = JsonSerializer.Serialize(wrapper, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
             _fileWrapper.WriteAllText(path, jsonLayout);
         }
@@ -56,13 +56,17 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         public async void UpdateBasePaneSize(object sender, SizeChangedEventArgs e)
         {
             var size = e.NewSize;
-            await BasePane.SetControlSizeAsync(size.Width, size.Height);
+            await BasePane
+                .SetControlSizeAsync(size.Width, size.Height)
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
         public async Task UpdateContentAsync(string tabName)
         {
-            await BasePane.CleanPaneAsync();
+            await BasePane
+                .CleanPaneAsync()
+                .ConfigureAwait(false);
 
             var path = _layoutStorageOptions.GetJsonPath($"{tabName}.json");
 
@@ -77,11 +81,15 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     return;
                 }
 
-                await BasePane.InitAsync(Guid.Parse(tabName), wrapper.Controls);
+                await BasePane
+                    .InitAsync(Guid.Parse(tabName), wrapper.Controls)
+                    .ConfigureAwait(false);
             }
             else
             {
-                await BasePane.InitAsync(Guid.Parse(tabName));
+                await BasePane
+                    .InitAsync(Guid.Parse(tabName))
+                    .ConfigureAwait(false);
             }
         }
 

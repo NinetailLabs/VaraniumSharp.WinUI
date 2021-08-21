@@ -130,7 +130,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 if (control.Control is IAsyncDisposable disposableControl)
                 {
-                    await disposableControl.DisposeAsync();
+                    await disposableControl
+                        .DisposeAsync()
+                        .ConfigureAwait(false);
                 }
             }
 
@@ -155,7 +157,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 if (component.Control is ICustomLayoutPane customPane)
                 {
                     var control = new ControlStorageModel(component.Control);
-                    control.ChildItems.AddRange(await customPane.GetComponentsForStorageAsync());
+                    control.ChildItems.AddRange(await customPane.GetComponentsForStorageAsync().ConfigureAwait(false));
                     resultList.Add(control);
                 }
                 else
@@ -172,10 +174,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             foreach (var item in controls)
             {
-                var newControl = await _controlDiscoveryHelper.CreateControlAsync(item.ContentId);
+                var newControl = await _controlDiscoveryHelper
+                    .CreateControlAsync(item.ContentId)
+                    .ConfigureAwait(false);
                 if (newControl is ICustomLayoutPane customPane)
                 {
-                    await customPane.InitAsync(item.ContentId);
+                    await customPane
+                        .InitAsync(item.ContentId)
+                        .ConfigureAwait(false);
                 }
 
                 if (newControl != null)
@@ -194,7 +200,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
             }
 
-            await ResizeAllControlsAsync();
+            await ResizeAllControlsAsync().ConfigureAwait(false);
 
             foreach (var layoutPane in Components.Where(x => x.Control is ICustomLayoutPane).Select(x => x.Control))
             {
@@ -202,7 +208,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 {
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.ContentId == controlId);
-                    await customPane.InitAsync(controlId, controlItems.ChildItems);
+                    await customPane
+                        .InitAsync(controlId, controlItems.ChildItems)
+                        .ConfigureAwait(false);
                 }
             }
         }
@@ -210,8 +218,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <inheritdoc />
         public async Task ResizeControlsWithDragHandleAsync(LayoutDisplay content)
         {
-            await HandleControlResizingAsync(content, true);
-            await CustomLayoutEventRouter.SetLayoutChanged();
+            await HandleControlResizingAsync(content, true).ConfigureAwait(false);
+            await CustomLayoutEventRouter
+                .SetLayoutChanged()
+                .ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -261,7 +271,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 && Width > 0
                 && Height > 0)
             {
-                await ResizeAllControlsAsync();
+                await ResizeAllControlsAsync().ConfigureAwait(false);
             }
         }
 
@@ -283,7 +293,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 : Height + ManagementControlHeight;
             if (Components.Count > 0)
             {
-                await ResizeAllControlsAsync();
+                await ResizeAllControlsAsync().ConfigureAwait(false);
             }
         }
 
@@ -321,8 +331,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             if (sender is LayoutDisplay displayItem)
             {
                 Components.Remove(displayItem);
-                await CustomLayoutEventRouter.SetLayoutChanged();
-                await ResizeAllControlsAsync();
+                await CustomLayoutEventRouter
+                    .SetLayoutChanged()
+                    .ConfigureAwait(false);
+                await ResizeAllControlsAsync().ConfigureAwait(false);
             }
         }
 
@@ -356,8 +368,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         LayoutBeingEdited = _showControls
                     };
                     Components.Add(layout);
-                    await CustomLayoutEventRouter.SetLayoutChanged();
-                    await ResizeAllControlsAsync();
+                    await CustomLayoutEventRouter.SetLayoutChanged().ConfigureAwait(false);
+                    await ResizeAllControlsAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -369,7 +381,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             if (Components.Count > 0)
             {
-                await HandleControlResizingAsync(Components[0], false);
+                await HandleControlResizingAsync(Components[0], false).ConfigureAwait(false);
             }
         }
 
@@ -388,7 +400,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 var adjustedHeight = childrenSizes[r].Height;
                 if (child is ICustomLayoutPane customChild)
                 {
-                    await customChild.SetControlSizeAsync(adjustedWidth, adjustedHeight);
+                    await customChild
+                        .SetControlSizeAsync(adjustedWidth, adjustedHeight)
+                        .ConfigureAwait(false);
                 }
                 else
                 {

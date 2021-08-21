@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.Enumerations;
+using VaraniumSharp.Interfaces.DependencyInjection;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
@@ -23,7 +23,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <summary>
         /// DI Constructor
         /// </summary>
-        public ControlDiscoveryHelper(IContainer container)
+        public ControlDiscoveryHelper(IContainerFactoryWrapper container)
         {
             _container = container;
             AvailableControls = new();
@@ -48,7 +48,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var control = (IDisplayComponent)_container.Resolve(controlToCreate.Value.RegisteredInterface);
             control.Width = controlToCreate.Value.MinWidth;
             control.Height = controlToCreate.Value.MinHeight;
-            await control.InitAsync();
+            await control
+                .InitAsync()
+                .ConfigureAwait(false);
             return control;
         }
 
@@ -116,7 +118,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <summary>
         /// Container instance
         /// </summary>
-        private readonly IContainer _container;
+        private readonly IContainerFactoryWrapper _container;
 
         #endregion
     }
