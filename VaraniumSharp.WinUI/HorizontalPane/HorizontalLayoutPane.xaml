@@ -11,77 +11,83 @@
 
     <UserControl.Resources>
 
-        <ResourceDictionary Source="../CustomPaneBase/GridViewStyles.xaml" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../CustomPaneBase/GridViewStyles.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
 
-        <media:AcrylicBrush 
-            x:Key="CustomAcrylicBrush" 
-            TintOpacity="0" 
-            TintColor="#FF000000" 
-            FallbackColor="#FF008000" />
+            <media:AcrylicBrush 
+                x:Key="CustomAcrylicBrush" 
+                TintOpacity="0" 
+                TintColor="#FF000000" 
+                FallbackColor="#FF008000" />
 
-        <DataTemplate x:Key="ResizableControl" x:DataType="customPaneBase:LayoutDisplay">
-            <ContentControl>
-                <Grid>
-                    <ContentPresenter 
-                        Content="{Binding Path=Control}" 
-                        Margin="2" />
-                    <Grid 
-                        BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
-                        BorderThickness="1"
-                        Margin="2"
-                        Visibility="{x:Bind converter:BindConverters.ConvertBoolToVisibility(LayoutBeingEdited), Mode=OneWay}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid
-                            Background="{ThemeResource CustomAcrylicBrush}"
-                            Grid.Column="1"
-                            Grid.Row="0">
-                            <Button 
-                            Click="{x:Bind Path=RequestRemovalAsync}"
-                            Grid.Column="0"
-                            Height="30"
-                            HorizontalAlignment="Right"
-                            Margin="5,5,5,5"
-                            VerticalAlignment="Top"
-                            Width="30">
-                                <Button.Content>
-                                    <FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    FontSize="12"
-                                    Glyph="&#xE894;"/>
-                                </Button.Content>
-                            </Button>
+            <DataTemplate x:Key="ResizableControl" x:DataType="customPaneBase:LayoutDisplay">
+                <ContentControl>
+                    <Grid>
+                        <ContentPresenter 
+                            Content="{Binding Path=Control}" 
+                            Margin="2" />
+                        <Grid 
+                            BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
+                            BorderThickness="1"
+                            Margin="2"
+                            Visibility="{x:Bind converter:BindConverters.ConvertBoolToVisibility(LayoutBeingEdited), Mode=OneWay}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid
+                                Background="{ThemeResource CustomAcrylicBrush}"
+                                Grid.Column="1"
+                                Grid.Row="0">
+                                <Button 
+                                Click="{x:Bind Path=RequestRemovalAsync}"
+                                Grid.Column="0"
+                                Height="30"
+                                HorizontalAlignment="Right"
+                                Margin="5,5,5,5"
+                                VerticalAlignment="Top"
+                                Width="30">
+                                    <Button.Content>
+                                        <FontIcon
+                                        FontFamily="Segoe MDL2 Assets"
+                                        FontSize="12"
+                                        Glyph="&#xE894;"/>
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid 
-                        Background="{ThemeResource SystemControlAcrylicElementBrush}"                        
-                        BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
-                        BorderThickness="1"
-                        Margin="2"
-                        Visibility="{x:Bind converter:BindConverters.ConvertBoolToVisibility(ShowResizeHandle), Mode=OneWay}" >
-                        <Thumb
-                            Background="{ThemeResource SystemAccentColor}"
-                            DragCompleted="Thumb_DragCompleted"
-                            DragDelta="Thumb_DragDelta"
-                            DragStarted="Thumb_DragStarted"
-                            Height="100"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,-7,0"
-                            PointerEntered="Thumb_PointerEntered"
-                            PointerExited="Thumb_PointerExited"
-                            VerticalAlignment="Center"
-                            Width="7" />
-                    </Grid>
+                        <Grid 
+                            Background="{ThemeResource SystemControlAcrylicElementBrush}"                        
+                            BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
+                            BorderThickness="1"
+                            Margin="2"
+                            Visibility="{x:Bind converter:BindConverters.ConvertBoolToVisibility(ShowResizeHandle), Mode=OneWay}" >
+                            <Thumb
+                                Background="{ThemeResource SystemAccentColor}"
+                                DragCompleted="Thumb_DragCompleted"
+                                DragDelta="Thumb_DragDelta"
+                                DragStarted="Thumb_DragStarted"
+                                Height="100"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,-7,0"
+                                PointerEntered="Thumb_PointerEntered"
+                                PointerExited="Thumb_PointerExited"
+                                VerticalAlignment="Center"
+                                Width="7" />
+                        </Grid>
 
-                </Grid>
-            </ContentControl>
-        </DataTemplate>
+                    </Grid>
+                </ContentControl>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
     </UserControl.Resources>
 
     <Grid>
