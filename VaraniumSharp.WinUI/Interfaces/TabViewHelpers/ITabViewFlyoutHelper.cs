@@ -9,11 +9,7 @@ namespace VaraniumSharp.WinUI.Interfaces.TabViewHelpers
     /// </summary>
     public interface ITabViewFlyoutHelper
     {
-        /// <summary>
-        /// Set the action to be called when changes to tabs occured so that the changes can be persisted
-        /// </summary>
-        /// <param name="saveCallbackFuncAsync">Action to be called</param>
-        void SetSaveCallback(Func<Task> saveCallbackFuncAsync);
+        #region Public Methods
 
         /// <summary>
         /// Create a <see cref="MenuFlyout"/> for a TabViewItem
@@ -21,5 +17,13 @@ namespace VaraniumSharp.WinUI.Interfaces.TabViewHelpers
         /// <param name="tabItem">Item the flyout should be created for</param>
         /// <returns>Created flyout</returns>
         MenuFlyout CreateFlyoutForTabItem(TabViewItem tabItem);
+
+        /// <summary>
+        /// Set the action to be called when changes to tabs occurred so that the changes can be persisted
+        /// </summary>
+        /// <param name="saveCallbackFuncAsync">Action to be called</param>
+        void SetSaveCallback(Func<Task> saveCallbackFuncAsync);
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace VaraniumSharp.WinUI.TabViewHelpers
 {
@@ -7,6 +8,8 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
     /// </summary>
     public sealed class TabsContainerModel
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -24,9 +27,16 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             Tabs = new List<TabViewModel>(tabs);
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Collection of Tabs
         /// </summary>
+        [JsonInclude]
         public List<TabViewModel> Tabs { get; set; }
+
+        #endregion
     }
 }

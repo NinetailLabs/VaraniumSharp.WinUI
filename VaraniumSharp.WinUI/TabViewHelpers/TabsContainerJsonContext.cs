@@ -7,6 +7,5 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
     /// </summary>
     [JsonSerializable(typeof(TabsContainerModel))]
     public partial class TabsContainerJsonContext : JsonSerializerContext
-    {
-    }
+    {}
 }
