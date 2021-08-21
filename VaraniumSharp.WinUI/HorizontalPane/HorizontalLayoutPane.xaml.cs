@@ -10,6 +10,9 @@ using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
 
 namespace VaraniumSharp.WinUI.HorizontalPane
 {
+    /// <summary>
+    /// CustomLayoutPane that lays it's components out horizontally
+    /// </summary>
     [AutomaticContainerRegistration(typeof(IHorizontalLayoutPane))]
     [DisplayComponent("Horizontal Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(IHorizontalLayoutPane))]
     public sealed partial class CustomLayoutPane : IHorizontalLayoutPane, IAsyncDisposable

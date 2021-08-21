@@ -8,6 +8,9 @@ using VaraniumSharp.WinUI.Interfaces.TabPane;
 
 namespace VaraniumSharp.WinUI.TabPane
 {
+    /// <summary>
+    /// CustomLayoutPane that lays out its components as tabs
+    /// </summary>
     [AutomaticContainerRegistration(typeof(ITabLayoutPane))]
     [DisplayComponent("Tab Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(ITabLayoutPane))]
     public sealed partial class TabLayoutLayoutPane : ITabLayoutPane, IAsyncDisposable

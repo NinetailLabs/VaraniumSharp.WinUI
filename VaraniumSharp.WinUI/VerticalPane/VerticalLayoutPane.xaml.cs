@@ -10,6 +10,9 @@ using VaraniumSharp.WinUI.Interfaces.VerticalPane;
 
 namespace VaraniumSharp.WinUI.VerticalPane
 {
+    /// <summary>
+    /// CustomLayoutPane that lays out its components vertically
+    /// </summary>
     [AutomaticContainerRegistration(typeof(IVerticalLayoutPane))]
     [DisplayComponent("Vertical Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(IVerticalLayoutPane))]
     public sealed partial class VerticalLayoutPane : IVerticalLayoutPane, IAsyncDisposable
