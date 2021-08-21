@@ -11,6 +11,8 @@
 
     <UserControl.Resources>
 
+        <ResourceDictionary Source="../CustomPaneBase/GridViewStyles.xaml" />
+
         <media:AcrylicBrush 
             x:Key="CustomAcrylicBrush" 
             TintOpacity="0" 
