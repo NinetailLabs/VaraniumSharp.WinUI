@@ -37,6 +37,6 @@
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.deps.json" target="lib\net5.0-windows10.0.19041.0" />
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll.config" target="lib\net5.0-windows10.0.19041.0" />
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.pri" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/**/*.*" target="lib\net5.0-windows10.0.19041.0/VaraniumSharp.WinUI" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/**/*.*" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI" />
   </files>
 </package>
