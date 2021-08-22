@@ -39,6 +39,13 @@
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.pri" target="lib\net5.0-windows10.0.19041.0" />
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/CustomPaneBase/GridViewStyles.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\CustomPaneBase" />
     <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/CustomPaneBase/GridViewStyles.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\CustomPaneBase" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/**/*.*" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
+    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
   </files>
 </package>
