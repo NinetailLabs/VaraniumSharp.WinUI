@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
+using VaraniumSharp.Extensions;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
 {
@@ -144,14 +145,18 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
             }
             
-            Components.Clear();
+            Components.Clear(displays =>
+            {
+                foreach (var layoutDisplay in displays)
+                {
+                    layoutDisplay.RequestRemoval -= Entry_RequestRemoval;
+                }
+            });
         }
 
         /// <inheritdoc />
         public ValueTask DisposeAsync()
         {
-            CustomLayoutEventRouter.ControlDisplayChanged -= _customLayoutEventRouter_ControlDisplayChanged;
-
             CustomLayoutEventRouter.ControlDisplayChanged -= _customLayoutEventRouter_ControlDisplayChanged;
             Components.CollectionChanged -= Components_CollectionChanged;
 
@@ -462,6 +467,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         protected readonly ICustomLayoutEventRouter CustomLayoutEventRouter;
 
         /// <summary>
+        /// Logger instance
+        /// </summary>
+        protected readonly ILogger Logger;
+
+        /// <summary>
         /// Backing variable for the <see cref="ControlMenu" /> property
         /// </summary>
         private MenuFlyout? _menuFlyout;
@@ -490,11 +500,6 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// Width of the parent container
         /// </summary>
         protected double Width;
-
-        /// <summary>
-        /// Logger instance
-        /// </summary>
-        protected readonly ILogger Logger;
 
         #endregion
     }
