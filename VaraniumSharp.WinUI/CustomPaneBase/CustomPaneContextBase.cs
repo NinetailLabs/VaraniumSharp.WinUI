@@ -6,8 +6,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
 
@@ -36,6 +38,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
             Components = new ObservableCollection<LayoutDisplay>();
             Components.CollectionChanged += Components_CollectionChanged;
+            Logger = StaticLogger.GetLogger<CustomPaneContextBase>();
         }
 
         #endregion
@@ -130,9 +133,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 if (control.Control is IAsyncDisposable disposableControl)
                 {
+                    Logger.LogDebug("Disposing {ContentId}", control.Control.ContentId);
                     await disposableControl
                         .DisposeAsync()
                         .ConfigureAwait(false);
+                }
+                else
+                {
+                    Logger.LogDebug("Not disposing {ContentId} as it does not implement IAsyncDisposable", control.Control.ContentId);
                 }
             }
 
@@ -196,6 +204,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
                     layout.Control.Width = item.Width;
                     layout.Control.Height = item.Height;
+                    Logger.LogDebug("Adding control {ControlId}", newControl.ContentId);
                     Components.Add(layout);
                 }
             }
@@ -367,6 +376,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         ShowResizeHandle = _resizeControls,
                         LayoutBeingEdited = _showControls
                     };
+                    Logger.LogDebug("Adding control {ContentId}", newControl.ContentId);
                     Components.Add(layout);
                     await CustomLayoutEventRouter.SetLayoutChanged().ConfigureAwait(false);
                     await ResizeAllControlsAsync().ConfigureAwait(false);
@@ -442,39 +452,44 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         private readonly IDialogs _dialogs;
 
         /// <summary>
-        ///     CustomLayoutEventRouter instance
+        /// CustomLayoutEventRouter instance
         /// </summary>
         protected readonly ICustomLayoutEventRouter CustomLayoutEventRouter;
 
         /// <summary>
-        ///     Backing variable for the <see cref="ControlMenu" /> property
+        /// Backing variable for the <see cref="ControlMenu" /> property
         /// </summary>
         private MenuFlyout? _menuFlyout;
 
         /// <summary>
-        ///     Backing variable for <see cref="MoveControls" />
+        /// Backing variable for <see cref="MoveControls" />
         /// </summary>
         private bool _moveControls;
 
         /// <summary>
-        ///     Backing variable for <see cref="ResizeControls" />
+        /// Backing variable for <see cref="ResizeControls" />
         /// </summary>
         private bool _resizeControls;
 
         /// <summary>
-        ///     Backing variable for <see cref="ShowControls" />
+        /// Backing variable for <see cref="ShowControls" />
         /// </summary>
         private bool _showControls;
 
         /// <summary>
-        ///     Height of the parent container
+        /// Height of the parent container
         /// </summary>
         protected double Height;
 
         /// <summary>
-        ///     Width of the parent container
+        /// Width of the parent container
         /// </summary>
         protected double Width;
+
+        /// <summary>
+        /// Logger instance
+        /// </summary>
+        protected readonly ILogger Logger;
 
         #endregion
     }
