@@ -39,6 +39,9 @@ Generated\ Files/
 # Cake build
 /tools
 
+# Testing
+/TestHelper
+
 # NUNIT
 *.VisualState.xml
 TestResult.xml
