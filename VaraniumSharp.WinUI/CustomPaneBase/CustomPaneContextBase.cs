@@ -190,6 +190,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     .ConfigureAwait(false);
                 if (newControl is ICustomLayoutPane customPane)
                 {
+                    item.UniqueControlIdentifier = Guid.NewGuid();
+                    customPane.UniqueIdentifier = item.UniqueControlIdentifier;
                     await customPane
                         .InitAsync(item.ContentId)
                         .ConfigureAwait(false);
@@ -219,7 +221,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 if (layoutPane is ICustomLayoutPane customPane)
                 {
                     var controlId = customPane.GetIdentifier();
-                    var controlItems = controls.First(x => x.ContentId == controlId);
+                    var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
                     await customPane
                         .InitAsync(controlId, controlItems.ChildItems)
                         .ConfigureAwait(false);

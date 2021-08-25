@@ -62,6 +62,9 @@ namespace VaraniumSharp.WinUI.TabPane
         #region Public Methods
 
         /// <inheritdoc />
+        public Guid UniqueIdentifier { get; set; }
+
+        /// <inheritdoc />
         public async Task CleanPaneAsync()
         {
             await Context.ClearComponentsAsync();
