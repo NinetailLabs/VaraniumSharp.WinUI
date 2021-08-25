@@ -10,6 +10,15 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
     /// </summary>
     public interface ICustomLayoutPane : IDisplayComponent
     {
+        #region Properties
+
+        /// <summary>
+        /// Unique identifier used during control initialization
+        /// </summary>
+        public Guid UniqueIdentifier { get; set; }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>

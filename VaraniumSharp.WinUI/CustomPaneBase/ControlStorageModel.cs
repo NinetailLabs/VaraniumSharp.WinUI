@@ -64,6 +64,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         public string Title { get; set; }
 
         /// <summary>
+        /// Unique identifier to match control back during initialization
+        /// </summary>
+        public Guid UniqueControlIdentifier { get; set; }
+
+        /// <summary>
         /// The width of the control
         /// </summary>
         [JsonInclude]
