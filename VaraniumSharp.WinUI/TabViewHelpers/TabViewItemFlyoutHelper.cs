@@ -42,7 +42,8 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             var tabCloseItem = new ToggleMenuFlyoutItem
             {
                 Text = "Closable",
-                IsChecked = tabItem.IsClosable
+                IsChecked = tabItem.IsClosable,
+                DataContext = tabItem
             };
             tabCloseItem.Click += OnCloseSubItemClick;
 
@@ -89,23 +90,20 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         /// <param name="e">Event arguments</param>
         private async void RenameItem(object? sender, RoutedEventArgs e)
         {
-            if (e.OriginalSource is MenuFlyoutItem menuFlyout)
+            if (e.OriginalSource is MenuFlyoutItem {DataContext: TabViewItem tabItem} menuFlyout)
             {
-                if (menuFlyout.DataContext is TabViewItem tabItem)
+                var newHeader = await _dialogHelper
+                    .ShowTextInputDialogAsync($"Enter new name for \"{tabItem.Header}\"", tabItem.Header?.ToString() ?? string.Empty, menuFlyout.XamlRoot)
+                    .ConfigureAwait(true);
+                if (!string.IsNullOrEmpty(newHeader))
                 {
-                    var newHeader = await _dialogHelper
-                        .ShowTextInputDialogAsync($"Enter new name for \"{tabItem.Header}\"", tabItem.Header?.ToString() ?? string.Empty, menuFlyout.XamlRoot)
-                        .ConfigureAwait(true);
-                    if (!string.IsNullOrEmpty(newHeader))
-                    {
-                        tabItem.Header = newHeader;
+                    tabItem.Header = newHeader;
 
-                        if (_saveCallbackFuncAsync != null)
-                        {
-                            await _saveCallbackFuncAsync
-                                .Invoke()
-                                .ConfigureAwait(false);
-                        }
+                    if (_saveCallbackFuncAsync != null)
+                    {
+                        await _saveCallbackFuncAsync
+                            .Invoke()
+                            .ConfigureAwait(false);
                     }
                 }
             }
