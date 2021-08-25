@@ -143,7 +143,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     Logger.LogDebug("Not disposing {ContentId} as it does not implement IAsyncDisposable", control.Control.ContentId);
                 }
             }
-
+            
             Components.Clear();
         }
 
@@ -151,6 +151,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         public ValueTask DisposeAsync()
         {
             CustomLayoutEventRouter.ControlDisplayChanged -= _customLayoutEventRouter_ControlDisplayChanged;
+
+            CustomLayoutEventRouter.ControlDisplayChanged -= _customLayoutEventRouter_ControlDisplayChanged;
+            Components.CollectionChanged -= Components_CollectionChanged;
 
             return ValueTask.CompletedTask;
         }
