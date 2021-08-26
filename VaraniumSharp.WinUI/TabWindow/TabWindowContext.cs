@@ -275,6 +275,9 @@ namespace VaraniumSharp.WinUI.TabWindow
                         .DisposeAsync()
                         .ConfigureAwait(false);
                 }
+
+                var paneIdentifier = Guid.Parse(tabToRemove.Name);
+                await ContentPaneManager.DeleteLayoutAsync(paneIdentifier);
             }
             await HandleTabViewPersistenceAsync().ConfigureAwait(false);
         }

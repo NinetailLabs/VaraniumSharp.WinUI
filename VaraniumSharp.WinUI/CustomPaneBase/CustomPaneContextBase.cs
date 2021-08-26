@@ -155,12 +155,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
-        public ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
             CustomLayoutEventRouter.ControlDisplayChanged -= _customLayoutEventRouter_ControlDisplayChanged;
             Components.CollectionChanged -= Components_CollectionChanged;
 
-            return ValueTask.CompletedTask;
+            await ClearComponentsAsync();
         }
 
         /// <inheritdoc />
@@ -350,6 +350,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             if (sender is LayoutDisplay displayItem)
             {
                 Components.Remove(displayItem);
+                if (displayItem.Control is IAsyncDisposable disposableControl)
+                {
+                    await disposableControl.DisposeAsync();
+                }
+
                 await CustomLayoutEventRouter
                     .SetLayoutChanged()
                     .ConfigureAwait(false);
