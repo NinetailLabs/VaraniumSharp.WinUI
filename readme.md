@@ -1,6 +1,6 @@
 # VaraniumSharp.WinUI
 
-![Logo](images/logo.png)
+![Logo](logo.png)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7ki0vvu6hecak8uw/branch/master?svg=true)](https://ci.appveyor.com/project/DeadlyEmbrace/varaniumsharp-winui/branch/master)
 [![NuGet](https://img.shields.io/nuget/v/VaraniumSharp.WinUI.svg)](https://www.nuget.org/packages/VaraniumSharp.WinUI/)
