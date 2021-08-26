@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
 
@@ -19,6 +20,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Delete a layout file
+        /// </summary>
+        /// <param name="layoutId">Id of the layout to remove</param>
+        Task DeleteLayoutAsync(Guid layoutId);
 
         /// <summary>
         /// Request that the current layout is saved

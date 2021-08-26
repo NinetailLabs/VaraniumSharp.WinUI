@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ABI.Microsoft.UI.Xaml.Shapes;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
@@ -9,6 +10,7 @@ using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
+using Path = System.IO.Path;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
 {
@@ -41,6 +43,15 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         #endregion
 
         #region Public Methods
+
+        /// <inheritdoc />
+        public Task DeleteLayoutAsync(Guid layoutId)
+        {
+            var path = _layoutStorageOptions.GetJsonPath($"{layoutId}.json");
+            _fileWrapper.DeleteFile(path);
+
+            return Task.CompletedTask;
+        }
 
         /// <inheritdoc/>
         public async Task SaveLayoutAsync()
