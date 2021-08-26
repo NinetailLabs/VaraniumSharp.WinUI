@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
@@ -28,6 +29,7 @@ namespace VaraniumSharp.WinUI.HorizontalPane
             Title = "Horizontal Pane";
             Context = horizontalLayoutPaneContext;
             InitializeComponent();
+            Unloaded += OnUnloaded;
         }
 
         #endregion
@@ -49,7 +51,7 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         /// <summary>
         /// HorizontalLayoutPaneContext instance
         /// </summary>
-        public IHorizontalLayoutPaneContext Context { get; }
+        public IHorizontalLayoutPaneContext Context { get; private set; }
 
         /// <inheritdoc/>
         public bool ShowResizeHandle { get; set; }
@@ -60,12 +62,12 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         /// <inheritdoc />
         public string Title { get; set; }
 
+        /// <inheritdoc />
+        public Guid UniqueIdentifier { get; set; }
+
         #endregion
 
         #region Public Methods
-
-        /// <inheritdoc />
-        public Guid UniqueIdentifier { get; set; }
 
         /// <inheritdoc/>
         public async Task CleanPaneAsync()
@@ -132,6 +134,17 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Occurs when the control is unloaded
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Bindings.StopTracking();
+            Context = null!; // Suppressing this as it will only happen when the control is unloaded
+        }
 
         /// <inheritdoc/>
         protected override async void Thumb_DragDelta(object sender, DragDeltaEventArgs e)

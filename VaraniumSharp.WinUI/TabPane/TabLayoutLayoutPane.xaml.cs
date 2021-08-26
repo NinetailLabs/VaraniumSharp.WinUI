@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.TabPane;
@@ -25,6 +26,7 @@ namespace VaraniumSharp.WinUI.TabPane
             Title = "Tab Pane";
             Context = tabLayoutPaneContext;
             InitializeComponent();
+            Unloaded += OnUnloaded;
         }
 
         #endregion
@@ -46,7 +48,7 @@ namespace VaraniumSharp.WinUI.TabPane
         /// <summary>
         /// TabLayoutPaneContext instance
         /// </summary>
-        public ITabLayoutPaneContext Context { get; }
+        public ITabLayoutPaneContext Context { get; private set; }
 
         /// <inheritdoc />
         public bool ShowResizeHandle { get; set; }
@@ -57,12 +59,12 @@ namespace VaraniumSharp.WinUI.TabPane
         /// <inheritdoc />
         public string Title { get; set; }
 
+        /// <inheritdoc />
+        public Guid UniqueIdentifier { get; set; }
+
         #endregion
 
         #region Public Methods
-
-        /// <inheritdoc />
-        public Guid UniqueIdentifier { get; set; }
 
         /// <inheritdoc />
         public async Task CleanPaneAsync()
@@ -124,6 +126,21 @@ namespace VaraniumSharp.WinUI.TabPane
             TabContainer.Height = height + 12;
 
             await Context.UpdateChildrenSizeAsync(width, height);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Occurs when the control is unloaded
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            Bindings.StopTracking();
+            Context = null!; // Suppressing this as it will only happen when the control is unloaded
         }
 
         #endregion
