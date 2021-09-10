@@ -60,7 +60,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var path = _layoutStorageOptions.GetJsonPath($"{layoutId}.json");
             var wrapper = new LayoutWrapperModel(layoutId, await BasePane.GetComponentsForStorageAsync().ConfigureAwait(false));
             var jsonLayout = JsonSerializer.Serialize(wrapper, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
-            _fileWrapper.WriteAllText(path, jsonLayout);
+            await _fileWrapper.WriteAllTextAsync(path, jsonLayout);
         }
 
         /// <inheritdoc/>
@@ -83,7 +83,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
             if (_fileWrapper.FileExists(path))
             {
-                var jsonData = _fileWrapper.ReadAllText(path);
+                var jsonData = await _fileWrapper.ReadAllTextAsync(path);
                 var wrapper = JsonSerializer.Deserialize<LayoutWrapperModel>(jsonData, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
 
                 if (wrapper == null)
