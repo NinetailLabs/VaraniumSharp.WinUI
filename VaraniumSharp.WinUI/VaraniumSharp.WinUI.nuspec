@@ -20,11 +20,11 @@
 
     <dependencies>
       <group targetFramework="net5.0-windows10.0.19041.0">
-        <dependency id="Microsoft.ProjectReunion" version="0.8.2" />
-        <dependency id="Microsoft.ProjectReunion.Foundation" version="0.8.2" />
-        <dependency id="Microsoft.ProjectReunion.WinUI" version="0.8.2" />
-        <dependency id="System.Text.Json" version="6.0.0-preview.6.21352.12" />
-        <dependency id="VaraniumSharp" version="3.10.0" />
+        <dependency id="Microsoft.ProjectReunion" version="0.8.3" />
+        <dependency id="Microsoft.ProjectReunion.Foundation" version="0.8.3" />
+        <dependency id="Microsoft.ProjectReunion.WinUI" version="0.8.3" />
+        <dependency id="System.Text.Json" version="6.0.0-preview.7.21377.19" />
+        <dependency id="VaraniumSharp" version="3.12.0" />
       </group>
     </dependencies>
   </metadata>
