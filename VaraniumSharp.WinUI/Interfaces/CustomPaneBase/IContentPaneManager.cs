@@ -33,6 +33,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Task SaveLayoutAsync();
 
         /// <summary>
+        /// Request that the setting page is displayed
+        /// </summary>
+        Task ShowSettingPageAsync();
+
+        /// <summary>
         /// Request update of the <see cref="BasePane"/>'s size
         /// </summary>
         /// <param name="sender">Sender of the event</param>

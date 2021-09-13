@@ -1,0 +1,47 @@
+﻿<UserControl
+    x:Class="VaraniumSharp.WinUI.SettingPane.SettingPane"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VaraniumSharp.WinUI.SettingPane"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <DataTemplate x:DataType="local:SettingCategory" x:Key="NavigationTemplate" >
+            <NavigationViewItem Content="{x:Bind Name}">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="{x:Bind Glyph}" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </DataTemplate>
+</UserControl.Resources>
+
+    <Grid>
+        <NavigationView
+            Grid.Column="0"
+            IsSettingsVisible="False"
+            IsBackButtonVisible="Collapsed"
+            MenuItemsSource="{x:Bind Path=Context.SettingCategories}"
+            MenuItemTemplate="{StaticResource NavigationTemplate}"
+            SelectedItem="{x:Bind Path=Context.SelectedCategory, Mode=TwoWay}"
+            VerticalAlignment="Stretch">
+            <Frame 
+                BorderBrush="{ThemeResource AppBarBorderThemeBrush}"
+                Margin="0,-2,0,0"
+                BorderThickness="5,0,0,0">
+                <GridView 
+                    ItemContainerStyle="{ThemeResource NoSelect}"
+                    ItemsSource="{x:Bind Path=Context.SettingControls}">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel 
+                                HorizontalAlignment="Left" 
+                                Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </Frame>
+        </NavigationView>
+    </Grid>
+</UserControl>

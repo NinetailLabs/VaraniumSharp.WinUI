@@ -63,6 +63,9 @@ namespace VaraniumSharp.WinUI.TabWindow
         public IContentPaneManager ContentPaneManager { get; }
 
         /// <inheritdoc/>
+        public bool EnableContextMenuItems { get; private set; }
+
+        /// <inheritdoc/>
         public TabViewKeyboardAccelerators KeyboardAccelerators { get; set; }
 
         /// <inheritdoc/>
@@ -127,6 +130,25 @@ namespace VaraniumSharp.WinUI.TabWindow
                 return;
             }
 
+            var tab = Tabs[SelectedIndex];
+            if (tab.Name == SettingGuid)
+            {
+                EnableContextMenuItems = false;
+                await ShowSettingPaneAsync();
+                return;
+            }
+
+            EnableContextMenuItems = true;
+            await HandleTabChangesAsync();
+            await ContentPaneManager.UpdateContentAsync(tab.Name);
+            _previousIndex = SelectedIndex;
+        }
+
+        /// <summary>
+        /// Handle tab if it has changes.
+        /// </summary>
+        private async Task HandleTabChangesAsync()
+        {
             if (_currentTabHasChanges)
             {
                 if (_root != null && await _dialogs.ShowConfirmationDialog("Unsaved Changes", "Your layout has unsaved changes.\r\nDo you want to save them?", _root))
@@ -136,10 +158,6 @@ namespace VaraniumSharp.WinUI.TabWindow
                 Tabs[_previousIndex].IconSource = null;
                 _currentTabHasChanges = false;
             }
-
-            var tab = Tabs[SelectedIndex];
-            await ContentPaneManager.UpdateContentAsync(tab.Name);
-            _previousIndex = SelectedIndex;
         }
 
         /// <inheritdoc/>
@@ -160,6 +178,31 @@ namespace VaraniumSharp.WinUI.TabWindow
         public void SetXamlRoot(XamlRoot root)
         {
             _root = root;
+        }
+
+        /// <inheritdoc/>
+        public async Task ShowSettingPaneAsync()
+        {
+            await HandleTabChangesAsync();
+
+            if (Tabs.Any(x => x.Name == SettingGuid))
+            {
+                var settingTab = Tabs.First(x => x.Name == SettingGuid);
+                SelectedIndex = Tabs.IndexOf(settingTab);
+            }
+            else
+            {
+                var settingTab = new TabViewItem
+                {
+                    Name = SettingGuid,
+                    Header = "Settings"
+                };
+                Tabs.Add(settingTab);
+                SelectedIndex = Tabs.IndexOf(settingTab);
+            }
+
+            await ContentPaneManager.ShowSettingPageAsync();
+            _previousIndex = SelectedIndex;
         }
 
         /// <summary>
@@ -186,7 +229,10 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <param name="tab">The tab to add</param>
         private Task AddExistingTabAsync(TabViewItem tab)
         {
-            tab.ContextFlyout = _tabViewItemFlyoutHelper.CreateFlyoutForTabItem(tab);
+            if (tab.Name != SettingGuid)
+            {
+                tab.ContextFlyout = _tabViewItemFlyoutHelper.CreateFlyoutForTabItem(tab);
+            }
 
             Tabs.Add(tab);
             if (Tabs.Count == 1)
@@ -374,6 +420,11 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// The XamlRoot of the container
         /// </summary>
         private XamlRoot? _root;
+
+        /// <summary>
+        /// The GUID for the Settings pane
+        /// </summary>
+        private const string SettingGuid = "90ef7c67-1cea-4001-aedc-afb8c760a4c8";
 
         #endregion
     }

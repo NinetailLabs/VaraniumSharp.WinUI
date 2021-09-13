@@ -27,6 +27,7 @@ namespace VaraniumSharp.WinUI.TabWindow
             TabViewer.Loaded += TabViewer_Loaded;
             LayoutPane.Children.Add(tabWindowContext.ContentPaneManager.BasePane as UIElement);
             _customLayoutEventRouter = customLayoutEventRouter;
+            _customLayoutEventRouter.ControlDisplayChanged += CustomLayoutEventRouterOnControlDisplayChanged;
         }
 
         #endregion
@@ -41,6 +42,18 @@ namespace VaraniumSharp.WinUI.TabWindow
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Occurs when a request is made to show/hide controls
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="showControls">Indicate if controls should be shown or hidden</param>
+        private void CustomLayoutEventRouterOnControlDisplayChanged(object? sender, bool showControls)
+        {
+            ControlShowItem.Text = showControls
+                ? HideText
+                : ShowText;
+        }
 
         /// <summary>
         /// Occurs when the TabViewer has loaded
@@ -59,15 +72,26 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <param name="e">Event arguments</param>
         private void ToggleMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is ToggleMenuFlyoutItem flyoutItem)
+            if (sender is MenuFlyoutItem flyoutItem)
             {
-                _customLayoutEventRouter.SetControlDisplayValue(flyoutItem.IsChecked);
+                var showControls = flyoutItem.Text == ShowText;
+                _customLayoutEventRouter.SetControlDisplayValue(showControls);
             }
         }
 
         #endregion
 
         #region Variables
+
+        /// <summary>
+        /// Text to display when controls can be shown
+        /// </summary>
+        private const string ShowText = "Show Layout Controls";
+
+        /// <summary>
+        /// Text to display when controls can be hidden
+        /// </summary>
+        private const string HideText = "Hide Layout Controls";
 
         /// <summary>
         /// CustomLayoutEventRouter instance
