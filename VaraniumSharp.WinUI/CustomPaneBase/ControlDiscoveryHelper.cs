@@ -62,25 +62,33 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var subMenuGroup = AvailableControls.GroupBy(x => x.Value.SubMenu);
             foreach (var subMenuItem in subMenuGroup)
             {
-                var subMenu = new MenuFlyoutSubItem
+                if (subMenuItem.Any(x => x.Value.ShowInMenus))
                 {
-                    Name = subMenuItem.Key.Replace(" ", ""),
-                    Text = subMenuItem.Key
-                };
-
-                foreach (var control in subMenuItem.OrderBy(x => x.Value.ControlName))
-                {
-                    var menuItem = new MenuFlyoutItem
+                    var subMenu = new MenuFlyoutSubItem
                     {
-                        Name = control.Value.ContentId,
-                        Text = control.Value.ControlName
+                        Name = subMenuItem.Key.Replace(" ", ""),
+                        Text = subMenuItem.Key
                     };
-                    menuItem.Click += buttonClickAction.Invoke;
 
-                    subMenu.Items.Add(menuItem);
+                    foreach (var control in subMenuItem.OrderBy(x => x.Value.ControlName))
+                    {
+                        if (!control.Value.ShowInMenus)
+                        {
+                            continue;
+                        }
+
+                        var menuItem = new MenuFlyoutItem
+                        {
+                            Name = control.Value.ContentId,
+                            Text = control.Value.ControlName
+                        };
+                        menuItem.Click += buttonClickAction.Invoke;
+
+                        subMenu.Items.Add(menuItem);
+                    }
+
+                    menu.Items.Add(subMenu);
                 }
-
-                menu.Items.Add(subMenu);
             }
 
             return menu;

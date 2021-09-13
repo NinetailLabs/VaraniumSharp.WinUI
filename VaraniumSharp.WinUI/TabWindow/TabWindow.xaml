@@ -53,12 +53,27 @@
                     </Button.Content>
                     <Button.Flyout>
                         <MenuFlyout>
-                            <ToggleMenuFlyoutItem 
+                            <MenuFlyoutItem 
+                                x:Name="ControlShowItem"
                                 Click="ToggleMenuFlyoutItem_Click"
+                                IsEnabled="{x:Bind Path=Context.EnableContextMenuItems, Mode=OneWay}"
                                 Text="Show Layout Controls" />
                             <MenuFlyoutItem 
                                 Click="{x:Bind Path=Context.SaveLayoutAsync}"
-                                Text="Save Layout" />
+                                IsEnabled="{x:Bind Path=Context.EnableContextMenuItems, Mode=OneWay}"
+                                Text="Save Layout">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE74E;"/>
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem
+                                Click="{x:Bind Path=Context.ShowSettingPaneAsync}"
+                                IsEnabled="{x:Bind Path=Context.EnableContextMenuItems, Mode=OneWay}"
+                                Text="Settings">
+                                <MenuFlyoutItem.Icon>
+                                    <FontIcon Glyph="&#xE713;"/>
+                                </MenuFlyoutItem.Icon>
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>

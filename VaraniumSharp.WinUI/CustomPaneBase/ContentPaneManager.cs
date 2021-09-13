@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ABI.Microsoft.UI.Xaml.Shapes;
@@ -25,11 +26,13 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <summary>
         /// DI Constructor
         /// </summary>
-        public ContentPaneManager(IHorizontalLayoutPane customLayout, ILayoutStorageOptions layoutStorageOptions, IFileWrapper fileWrapper)
+        public ContentPaneManager(IHorizontalLayoutPane customLayout, ILayoutStorageOptions layoutStorageOptions, 
+            IFileWrapper fileWrapper, ICustomLayoutEventRouter customLayoutEventRouter)
         {
             BasePane = customLayout;
             _layoutStorageOptions = layoutStorageOptions;
             _fileWrapper = fileWrapper;
+            _customLayoutEventRouter = customLayoutEventRouter;
             _logger = StaticLogger.GetLogger<ContentPaneManager>();
         }
 
@@ -61,6 +64,26 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var wrapper = new LayoutWrapperModel(layoutId, await BasePane.GetComponentsForStorageAsync().ConfigureAwait(false));
             var jsonLayout = JsonSerializer.Serialize(wrapper, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
             await _fileWrapper.WriteAllTextAsync(path, jsonLayout);
+        }
+
+        /// <inheritdoc />
+        public async Task ShowSettingPageAsync()
+        {
+            await _customLayoutEventRouter.SetControlDisplayValue(false);
+
+            await BasePane
+                .CleanPaneAsync()
+                .ConfigureAwait(false);
+
+            var control = new ControlStorageModel
+            {
+                ContentId = Guid.Parse("90ef7c67-1cea-4001-aedc-afb8c760a4c8"),
+                Title = "Settings",
+                Height = 100,
+                Width = 100
+            };
+
+            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control });
         }
 
         /// <inheritdoc/>
@@ -107,6 +130,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         #endregion
 
         #region Variables
+
+        /// <summary>
+        /// CustomLayoutEventRouter instance
+        /// </summary>
+        private readonly ICustomLayoutEventRouter _customLayoutEventRouter;
 
         /// <summary>
         /// FileWrapper instance

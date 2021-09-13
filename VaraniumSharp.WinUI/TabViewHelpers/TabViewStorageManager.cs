@@ -33,14 +33,15 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         #region Public Methods
 
         /// <inheritdoc/>
-        public Task<IEnumerable<TabViewModel>> LoadLayoutAsync(string filePath)
+        public async Task<IEnumerable<TabViewModel>> LoadLayoutAsync(string filePath)
         {
             try
             {
-                var jsonData = _fileWrapper
-                    .ReadAllText(filePath);
+                var jsonData = await _fileWrapper
+                    .ReadAllTextAsync(filePath);
                 var tabsContainer = JsonSerializer.Deserialize<TabsContainerModel>(jsonData, TabsContainerJsonContext.Default.TabsContainerModel);
-                return Task.FromResult(tabsContainer?.Tabs ?? Enumerable.Empty<TabViewModel>());
+                return tabsContainer?.Tabs 
+                       ?? Enumerable.Empty<TabViewModel>();
             }
             catch (Exception exception)
             {
@@ -50,14 +51,13 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
         }
 
         /// <inheritdoc/>
-        public Task SaveLayoutAsync(IEnumerable<TabViewModel> tabs, string filePath)
+        public async Task SaveLayoutAsync(IEnumerable<TabViewModel> tabs, string filePath)
         {
             try
             {
                 var jsonTabs = JsonSerializer.Serialize(new TabsContainerModel(tabs), TabsContainerJsonContext.Default.TabsContainerModel);
-                _fileWrapper
-                    .WriteAllText(filePath, jsonTabs);
-                return Task.CompletedTask;
+                await _fileWrapper
+                    .WriteAllTextAsync(filePath, jsonTabs);
             }
             catch (Exception exception)
             {

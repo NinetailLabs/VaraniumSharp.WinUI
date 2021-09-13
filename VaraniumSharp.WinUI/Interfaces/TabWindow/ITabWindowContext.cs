@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
@@ -19,6 +20,11 @@ namespace VaraniumSharp.WinUI.Interfaces.TabWindow
         /// ContentPaneManager instance
         /// </summary>
         IContentPaneManager ContentPaneManager { get; }
+
+        /// <summary>
+        /// Indicate if context menu items should be enabled or not
+        /// </summary>
+        bool EnableContextMenuItems { get; }
 
         /// <summary>
         /// TabViewKeyboardAccelerators instance
@@ -82,6 +88,12 @@ namespace VaraniumSharp.WinUI.Interfaces.TabWindow
         /// </summary>
         /// <param name="root">XamlRoot for the container</param>
         void SetXamlRoot(XamlRoot root);
+
+        /// <summary>
+        /// Request the display of the setting pane
+        /// </summary>
+        /// <returns></returns>
+        Task ShowSettingPaneAsync();
 
         /// <summary>
         /// Occurs when the size of the window changes

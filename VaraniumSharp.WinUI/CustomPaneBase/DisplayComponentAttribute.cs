@@ -28,6 +28,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             RegisteredInterface = registeredInterface;
             MinWidth = minWidth;
             MinHeight = minHeight;
+            ShowInMenus = true;
         }
 
         #endregion
@@ -58,6 +59,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// The interface that should be used to retrieve the control from the DI container
         /// </summary>
         public Type RegisteredInterface { get; }
+
+        /// <summary>
+        /// Indicate if the control should be shown in the flyout menu to be user addable
+        /// </summary>
+        public bool ShowInMenus { get; set; }
 
         /// <summary>
         /// SubMenu where the item appears in the flyout
