@@ -19,8 +19,9 @@ namespace VaraniumSharp.WinUI.SettingPane
         /// <summary>
         /// DI Constructor
         /// </summary>
-        public SettingPane()
+        public SettingPane(ISettingPaneContext settingPaneContext)
         {
+            Context = settingPaneContext;
             InitializeComponent();
             Title = "Settings";
         }
@@ -30,7 +31,9 @@ namespace VaraniumSharp.WinUI.SettingPane
         #region Events
 
         /// <inheritdoc />
+#pragma warning disable CS0067 // Is used via Fody
         public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 
         #endregion
 
@@ -38,6 +41,11 @@ namespace VaraniumSharp.WinUI.SettingPane
 
         /// <inheritdoc />
         public Guid ContentId => Guid.Parse(ContentIdentifier);
+
+        /// <summary>
+        /// Context for the control
+        /// </summary>
+        public ISettingPaneContext Context { get; }
 
         /// <inheritdoc />
         public bool ShowResizeHandle { get; set; }

@@ -7,7 +7,41 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <DataTemplate x:DataType="local:SettingCategory" x:Key="NavigationTemplate" >
+            <NavigationViewItem Content="{x:Bind Name}">
+                <NavigationViewItem.Icon>
+                    <SymbolIcon Symbol="{x:Bind Glyph}" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </DataTemplate>
+</UserControl.Resources>
+
     <Grid>
-        <TextBlock>Settings</TextBlock>
+        <NavigationView
+            Grid.Column="0"
+            IsSettingsVisible="False"
+            IsBackButtonVisible="Collapsed"
+            MenuItemsSource="{x:Bind Path=Context.SettingCategories}"
+            MenuItemTemplate="{StaticResource NavigationTemplate}"
+            SelectedItem="{x:Bind Path=Context.SelectedCategory, Mode=TwoWay}"
+            VerticalAlignment="Stretch">
+            <Frame 
+                BorderBrush="{ThemeResource AppBarBorderThemeBrush}"
+                Margin="0,-2,0,0"
+                BorderThickness="5,0,0,0">
+                <GridView 
+                    ItemContainerStyle="{ThemeResource NoSelect}"
+                    ItemsSource="{x:Bind Path=Context.SettingControls}">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel 
+                                HorizontalAlignment="Left" 
+                                Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </Frame>
+        </NavigationView>
     </Grid>
 </UserControl>
