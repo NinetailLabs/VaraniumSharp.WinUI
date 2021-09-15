@@ -12,7 +12,7 @@ namespace VaraniumSharp.WinUI.SettingPane
     /// </summary>
     [DisplayComponent("Settings", ContentIdentifier, "Settings", 100, 100, typeof(ISettingPane), ShowInMenus = false)]
     [AutomaticContainerRegistration(typeof(ISettingPane))]
-    public sealed partial class SettingPane : ISettingPane
+    public sealed partial class SettingPane : ISettingPane, IAsyncDisposable
     {
         #region Constructor
 
@@ -59,6 +59,15 @@ namespace VaraniumSharp.WinUI.SettingPane
         #endregion
 
         #region Public Methods
+
+        /// <inheritdoc />
+        public async ValueTask DisposeAsync()
+        {
+            if (Context is IAsyncDisposable disposableContext)
+            {
+                await disposableContext.DisposeAsync();
+            }
+        }
 
         /// <inheritdoc />
         public Task InitAsync()

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Interfaces.SettingPane;
 
@@ -12,7 +13,7 @@ namespace VaraniumSharp.WinUI.SettingPane
     /// Context for the setting pane
     /// </summary>
     [AutomaticContainerRegistration(typeof(ISettingPaneContext))]
-    public class SettingPaneContext : ISettingPaneContext
+    public class SettingPaneContext : ISettingPaneContext, IAsyncDisposable
     {
         #region Constructor
 
@@ -86,11 +87,6 @@ namespace VaraniumSharp.WinUI.SettingPane
             }
         }
 
-        /// <summary>
-        /// Backing variable for the <see cref="SelectedCategory"/> property
-        /// </summary>
-        private SettingCategory? _settingCategory;
-
         /// <inheritdoc />
         public ObservableCollection<SettingCategory> SettingCategories { get; }
 
@@ -99,9 +95,31 @@ namespace VaraniumSharp.WinUI.SettingPane
 
         #endregion
 
+        #region Public Methods
+
+        /// <inheritdoc />
+        public async ValueTask DisposeAsync()
+        {
+            SettingControls.Clear();
+            foreach (var entry in _controlDictionary.SelectMany(x => x.Value))
+            {
+                if (entry is IAsyncDisposable disposableEntry)
+                {
+                    await disposableEntry.DisposeAsync();
+                }
+            }
+        }
+
+        #endregion
+
         #region Variables
 
         private readonly Dictionary<SettingCategory, List<ISettingControl>> _controlDictionary;
+
+        /// <summary>
+        /// Backing variable for the <see cref="SelectedCategory"/> property
+        /// </summary>
+        private SettingCategory? _settingCategory;
 
         #endregion
     }
