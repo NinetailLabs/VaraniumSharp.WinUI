@@ -14,7 +14,7 @@ namespace VaraniumSharp.WinUI.Pickers
         #region Properties
 
         /// <inheritdoc />
-        public Window ParentWindow { get; set; }
+        public Window? ParentWindow { get; set; }
 
         #endregion
     }
