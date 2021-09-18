@@ -29,7 +29,18 @@ namespace VaraniumSharp.WinUI.Pickers
         #region Public Methods
 
         /// <inheritdoc />
-        public async Task<StorageFile> PickSaveFileAsync(KeyValuePair<string, List<string>> fileTypes, string? suggestedFilename)
+        public async Task<StorageFolder?> PickFolderAsync()
+        {
+            var directoryPicker = new FolderPicker();
+
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(_ownerWindow.ParentWindow);
+            WinRT.Interop.InitializeWithWindow.Initialize(directoryPicker, hwnd);
+
+            return await directoryPicker.PickSingleFolderAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<StorageFile?> PickSaveFileAsync(KeyValuePair<string, List<string>> fileTypes, string? suggestedFilename)
         {
             var savePicker = new FileSavePicker();
             savePicker.FileTypeChoices.Add(fileTypes.Key, fileTypes.Value);
