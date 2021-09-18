@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.Enumerations;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
+using VaraniumSharp.WinUI.Interfaces.Pickers;
 using VaraniumSharp.WinUI.Interfaces.TabWindow;
 
 namespace VaraniumSharp.WinUI.TabWindow
@@ -18,7 +19,7 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <summary>
         /// DI Constructor
         /// </summary>
-        public TabWindow(ITabWindowContext tabWindowContext, ICustomLayoutEventRouter customLayoutEventRouter)
+        public TabWindow(ITabWindowContext tabWindowContext, ICustomLayoutEventRouter customLayoutEventRouter, IOwnerWindow ownerWindow)
         {
             InitializeComponent();
             ExtendsContentIntoTitleBar = true;
@@ -28,6 +29,7 @@ namespace VaraniumSharp.WinUI.TabWindow
             LayoutPane.Children.Add(tabWindowContext.ContentPaneManager.BasePane as UIElement);
             _customLayoutEventRouter = customLayoutEventRouter;
             _customLayoutEventRouter.ControlDisplayChanged += CustomLayoutEventRouterOnControlDisplayChanged;
+            ownerWindow.ParentWindow = this;
         }
 
         #endregion

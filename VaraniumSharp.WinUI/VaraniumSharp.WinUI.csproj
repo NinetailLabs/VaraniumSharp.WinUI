@@ -57,6 +57,7 @@
   <ItemGroup>
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
+    <Folder Include="Pickers\" />
   </ItemGroup>
 
   <ItemGroup>
