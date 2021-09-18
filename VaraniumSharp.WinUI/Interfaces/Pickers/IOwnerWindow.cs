@@ -13,7 +13,7 @@ namespace VaraniumSharp.WinUI.Interfaces.Pickers
         /// <summary>
         /// The main parent Window that the Pickers should be assigned to
         /// </summary>
-        Window ParentWindow { get; set; }
+        Window? ParentWindow { get; set; }
 
         #endregion
     }
