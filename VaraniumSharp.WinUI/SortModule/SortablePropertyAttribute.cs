@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using CommunityToolkit.WinUI.UI;
 
 namespace VaraniumSharp.WinUI.SortModule
 {
     /// <summary>
     /// Attribute used to mark properties in a ViewModel as sortable
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]
     public sealed class SortablePropertyAttribute : Attribute
     {
         #region Constructor
@@ -16,20 +18,21 @@ namespace VaraniumSharp.WinUI.SortModule
         private SortablePropertyAttribute()
         {
             NestedTypes = Type.EmptyTypes;
-            Title = string.Empty;
+            Header = string.Empty;
             ToolTip = string.Empty;
+            DefaultSortDirection = SortDirection.Ascending;
         }
 
         /// <summary>
         /// Construct the attribute
         /// </summary>
-        /// <param name="title">The title to display on the sort control</param>
+        /// <param name="header">The title to display on the sort control</param>
         /// <param name="toolTip">Tooltip to display on the search button</param>
-        public SortablePropertyAttribute(string title, string toolTip)
+        public SortablePropertyAttribute(string header, string toolTip)
             : this()
         {
+            Header = header;
             ToolTip = toolTip;
-            DefaultSortDirection = ListSortDirection.Ascending;
         }
 
         /// <summary>
@@ -41,7 +44,6 @@ namespace VaraniumSharp.WinUI.SortModule
         {
             HasNestedSorts = true;
             NestedTypes = nestedTypes;
-            DefaultSortDirection = ListSortDirection.Ascending;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <summary>
         /// Gets or sets the default sort direction for the property
         /// </summary>
-        public ListSortDirection DefaultSortDirection { get; set; }
+        public SortDirection DefaultSortDirection { get; set; }
 
         /// <summary>
         /// Indicate if the property is a complex containing properties that should also be sorted
@@ -89,7 +91,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <summary>
         /// The text to display on the sort entry
         /// </summary>
-        public string Title { get; }
+        public string Header { get; }
 
         /// <summary>
         /// The tooltip to display on the sorting button
