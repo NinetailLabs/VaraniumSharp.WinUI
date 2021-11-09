@@ -150,20 +150,24 @@ namespace TestHelper.Sorting
                 var target = (GridView)sender;
                 var pos = e.GetPosition(target.ItemsPanelRoot);
                 var sampleItem = (GridViewItem)target.ContainerFromIndex(0);
-                var itemHeight = sampleItem.ActualHeight + sampleItem.Margin.Top + sampleItem.Margin.Bottom;
-                var index = Math.Min(target.Items.Count - 1, (int)(pos.Y / itemHeight));
-
-                var targetItem = (GridViewItem)target.ContainerFromIndex(index);
-
-                // Figure out if to insert above or below
-                var positionInItem = e.GetPosition(targetItem);
-                if (positionInItem.Y > itemHeight / 2)
+                var index = 0;
+                if (sampleItem != null)
                 {
-                    index++;
-                }
+                    var itemHeight = sampleItem.ActualHeight + sampleItem.Margin.Top + sampleItem.Margin.Bottom;
+                    index = Math.Min(target.Items.Count - 1, (int)(pos.Y / itemHeight));
 
-                // Don't go out of bounds
-                index = Math.Min(target.Items.Count, index);
+                    var targetItem = (GridViewItem)target.ContainerFromIndex(index);
+
+                    // Figure out if to insert above or below
+                    var positionInItem = e.GetPosition(targetItem);
+                    if (positionInItem.Y > itemHeight / 2)
+                    {
+                        index++;
+                    }
+
+                    // Don't go out of bounds
+                    index = Math.Min(target.Items.Count, index);
+                }
 
                 foreach (var item in items)
                 {
