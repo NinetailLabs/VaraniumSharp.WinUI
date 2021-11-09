@@ -60,6 +60,41 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         public List<Type[]> NestedTypeList { get; }
 
+        /// <summary>
+        /// The <see cref="SortOrderEntry"/> that is selected in the <see cref="AvailableSortEntries"/> collection
+        /// </summary>
+        public SortOrderEntry? SelectedAvailableEntry {
+            get => _selectedAvailableEntry;
+            set
+            {
+                _selectedAvailableEntry = value;
+                MoveAvailableEnabled = value != null;
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="SortOrderEntry"/> that is selected in the <see cref="EntriesSortedBy"/> collection
+        /// </summary>
+        public SortOrderEntry? SelectedSortByEntry 
+        {
+            get => _selectedSortByEntry;
+            set
+            {
+                _selectedSortByEntry = value;
+                MoveSortedByEnabled = value != null;
+            }
+        }
+
+        /// <summary>
+        /// Indicate if the UI button to move entries from the <see cref="AvailableSortEntries"/> to the <see cref="EntriesSortedBy"/> collection should be enabled
+        /// </summary>
+        public bool MoveAvailableEnabled { get; private set; }
+
+        /// <summary>
+        /// Indicate if the UI button to move entries from the <see cref="EntriesSortedBy"/> to the <see cref="AvailableSortEntries"/> collection should be enabled
+        /// </summary>
+        public bool MoveSortedByEnabled { get; private set; }
+
         #endregion
 
         #region Variables
@@ -73,6 +108,16 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Property to use for default sorting of the collection
         /// </summary>
         private string? _defaultSortProperty;
+
+        /// <summary>
+        /// Backing variable for the <see cref="SelectedAvailableEntry"/> property
+        /// </summary>
+        private SortOrderEntry? _selectedAvailableEntry;
+
+        /// <summary>
+        /// Backing variable for the <see cref="SelectedSortByEntry"/>
+        /// </summary>
+        private SortOrderEntry? _selectedSortByEntry;
 
         #endregion
     }

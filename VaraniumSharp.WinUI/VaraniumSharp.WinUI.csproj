@@ -28,6 +28,7 @@
     <None Remove="CustomPaneBase\GridViewStyles.xaml" />
     <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
     <None Remove="SettingPane\SettingPane.xaml" />
+    <None Remove="SharedStyles\GridViewTemplates.xaml" />
     <None Remove="TabPane\TabLayoutLayoutPane.xaml" />
     <None Remove="TabWindow\TabWindow.xaml" />
     <None Remove="VerticalPane\VerticalLayoutPane.xaml" />
@@ -59,6 +60,12 @@
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
     <Folder Include="Pickers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SharedStyles\GridViewTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

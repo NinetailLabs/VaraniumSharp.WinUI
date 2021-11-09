@@ -25,6 +25,34 @@ namespace VaraniumSharp.WinUI.SortModule
         }
 
         /// <summary>
+        /// Move the <see cref="SelectedAvailableEntry"/> to the <see cref="EntriesSortedBy"/> collection to sort by it.
+        /// Note that the entry will be added to the end.
+        /// </summary>
+        public void MoveEntryFromAvailableToSortedBy()
+        {
+            var entry = SelectedAvailableEntry;
+            if(entry != null)
+            {
+                AvailableSortEntries.Remove(entry);
+                EntriesSortedBy.Add(entry);
+            }
+        }
+
+        /// <summary>
+        /// Move the <see cref="SelectedSortByEntry"/> to the <see cref="AvailableSortEntries"/> collection to sort by it.
+        /// Note that the entry will be added to the end.
+        /// </summary>
+        public void MoveEntryFromSortedByToAvailable()
+        {
+            var entry = SelectedSortByEntry;
+            if(entry != null)
+            {
+                EntriesSortedBy.Remove(entry);
+                AvailableSortEntries.Add(entry);
+            }
+        }
+
+        /// <summary>
         /// Generate the buttons for sorting the collection
         /// </summary>
         /// <param name="collectionTypes">
