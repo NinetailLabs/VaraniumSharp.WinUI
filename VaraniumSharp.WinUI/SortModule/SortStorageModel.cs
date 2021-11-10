@@ -14,7 +14,8 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         public SortStorageModel()
         {
-            SortEntries = new List<SortEntryStorageModel>();
+            SortEntries = new();
+            SubEntries = new();
         }
 
         /// <summary>
@@ -37,5 +38,11 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Sort entries to store
         /// </summary>
         public List<SortEntryStorageModel> SortEntries { get; set; }
+
+        /// <summary>
+        /// Sub entries of the storage model.
+        /// These entries are used for controls that are part of a sub layout pane
+        /// </summary>
+        public List<SortStorageModel> SubEntries { get; set; }
     }
 }

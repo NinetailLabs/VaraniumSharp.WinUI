@@ -20,6 +20,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// </summary>
         event EventHandler? LayoutChanged;
 
+        /// <summary>
+        /// Event that is fired when the sort order of the controls changed
+        /// </summary>
+        event EventHandler? SortChanged;
+
         #endregion
 
         #region Properties
@@ -43,6 +48,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// Fires the event to indicate that the layout of the controls has been changed
         /// </summary>
         Task SetLayoutChanged();
+
+        /// <summary>
+        /// Fires the event to indicate that the sort order of the controls has been changed
+        /// </summary>
+        void SetSortOrderChanged();
 
         #endregion
     }

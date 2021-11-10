@@ -13,6 +13,7 @@ using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
 using VaraniumSharp.Extensions;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
 {
@@ -132,6 +133,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             foreach (var control in Components)
             {
+                if(control is ISortableDisplayComponent sortableDisplayComponent)
+                {
+                    sortableDisplayComponent.SortChanged -= SortableDisplayComponent_SortChanged;
+                }
+
                 if (control.Control is IAsyncDisposable disposableControl)
                 {
                     Logger.LogDebug("Disposing {ContentId}", control.Control.ContentId);
@@ -186,7 +192,39 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
-        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls)
+        public async Task<List<SortStorageModel>> GetControlSortOrdersAsync()
+        {
+            var resultList = new List<SortStorageModel>();
+
+            foreach(var component in Components)
+            {
+                if(component.Control is ICustomLayoutPane customPane)
+                {
+                    var storageEntry = new SortStorageModel
+                    {
+                        ContentId = customPane.ContentId
+                    };
+                    storageEntry.SubEntries.AddRange(await customPane.GetSortStorageModelsAsync());
+                    resultList.Add(storageEntry);
+                }
+                else
+                {
+                    if(component.Control is ISortableDisplayComponent sortableDisplayComponent)
+                    {
+                        resultList.Add(new()
+                        {
+                            ContentId = sortableDisplayComponent.ContentId,
+                            SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesSortedBy.Select(x => new SortEntryStorageModel(x)).ToList()
+                        });
+                    }
+                }
+            }
+
+            return resultList;
+        }
+
+        /// <inheritdoc />
+        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
         {
             foreach (var item in controls)
             {
@@ -204,6 +242,19 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
                 if (newControl != null)
                 {
+                    if(newControl is ISortableDisplayComponent sortableDisplayComponent)
+                    {
+                        if (sortOrder != null)
+                        {
+                            var sortDetails = sortOrder.FirstOrDefault(x => x.ContentId == newControl.ContentId);
+                            if (sortDetails != null)
+                            {
+                                sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
+                            }
+                        }
+                        sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
+                    }
+
                     newControl.Title = item.Title;
                     var layout = new LayoutDisplay(newControl, _dialogs, CustomLayoutEventRouter)
                     {
@@ -225,13 +276,25 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 if (layoutPane is ICustomLayoutPane customPane)
                 {
+                    var sortChildren = sortOrder?.FirstOrDefault(x => x.ContentId == customPane.ContentId);
+
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
                     await customPane
-                        .InitAsync(controlId, controlItems.ChildItems)
+                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries)
                         .ConfigureAwait(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Occurs when a <see cref="ISortableDisplayComponent"/> sort order changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event argument</param>
+        private void SortableDisplayComponent_SortChanged(object? sender, EventArgs e)
+        {
+            CustomLayoutEventRouter.SetSortOrderChanged();
         }
 
         /// <inheritdoc />

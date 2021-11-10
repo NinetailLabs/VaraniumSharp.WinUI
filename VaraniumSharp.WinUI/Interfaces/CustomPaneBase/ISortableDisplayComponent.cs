@@ -17,8 +17,8 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <summary>
         /// Initialize sorting of the list by property names
         /// </summary>
-        /// <param name="propertyNames">Names of the properties to sort by</param>
-        void InitSortOrder(string[] propertyNames);
+        /// <param name="sortEntries">Collection of entries to sort by</param>
+        void InitSortOrder(List<SortEntryStorageModel> sortEntries);
 
         /// <summary>
         /// Occurs when the sort order of the control has changed

@@ -7,6 +7,7 @@ using Windows.UI.Core;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.VerticalPane;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.VerticalPane
 {
@@ -101,11 +102,11 @@ namespace VaraniumSharp.WinUI.VerticalPane
         }
 
         /// <inheritdoc />
-        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls)
+        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
         {
             Context.LayoutIdentifier = contentGuid;
 
-            await Context.HandleControlLoadAsync(controls);
+            await Context.HandleControlLoadAsync(controls, sortOrder);
             await Context.SetControlResizingAsync();
             await Context.UpdateChildrenSizeAsync(Width, Height);
         }
@@ -146,6 +147,12 @@ namespace VaraniumSharp.WinUI.VerticalPane
                 display.Control.Height += e.VerticalChange;
                 await Context.ResizeControlsWithDragHandleAsync(display);
             }
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<SortStorageModel>> GetSortStorageModelsAsync()
+        {
+            return await Context.GetControlSortOrdersAsync();
         }
 
         #endregion

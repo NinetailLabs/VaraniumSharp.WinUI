@@ -31,6 +31,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <inheritdoc/>
         public event EventHandler? LayoutChanged;
 
+        /// <inheritdoc/>
+        public event EventHandler? SortChanged;
+
         #endregion
 
         #region Properties
@@ -57,6 +60,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             LayoutChanged?.Invoke(this, EventArgs.Empty);
 
             return Task.CompletedTask;
+        }
+
+        public void SetSortOrderChanged()
+        {
+            SortChanged?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

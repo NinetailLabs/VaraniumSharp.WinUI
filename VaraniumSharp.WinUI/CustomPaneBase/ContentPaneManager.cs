@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
@@ -10,6 +11,7 @@ using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
 {
@@ -31,6 +33,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             _layoutStorageOptions = layoutStorageOptions;
             _fileWrapper = fileWrapper;
             _customLayoutEventRouter = customLayoutEventRouter;
+            _customLayoutEventRouter.SortChanged += _customLayoutEventRouter_SortChanged;
             _logger = StaticLogger.GetLogger<ContentPaneManager>();
         }
 
@@ -64,6 +67,28 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             await _fileWrapper.WriteAllTextAsync(path, jsonLayout);
         }
 
+        /// <summary>
+        /// Occurs when the BasePane fires an event to indicate that a controls sort order has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private async void _customLayoutEventRouter_SortChanged(object? sender, EventArgs e)
+        {
+            try
+            {
+                await _sortStorageSemaphore.WaitAsync();
+                var layoutId = BasePane.GetIdentifier();
+                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_sort.json");
+                var wrapper = new SortStorageWrapperModel(layoutId, await BasePane.GetSortStorageModelsAsync().ConfigureAwait(false));
+                var jsonSort = JsonSerializer.Serialize(wrapper, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
+                await _fileWrapper.WriteAllTextAsync(path, jsonSort);
+            }
+            finally
+            {
+                _sortStorageSemaphore.Release();
+            }
+        }
+
         /// <inheritdoc />
         public async Task ShowSettingPageAsync()
         {
@@ -81,7 +106,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 Width = 100
             };
 
-            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control });
+            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null);
         }
 
         /// <inheritdoc/>
@@ -104,6 +129,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
             if (_fileWrapper.FileExists(path))
             {
+                SortStorageWrapperModel? sortWrapper = null;
+                var sortPath = _layoutStorageOptions.GetJsonPath($"{tabName}_sort.json");
+                if(_fileWrapper.FileExists(sortPath))
+                {
+                    var sortJson = await _fileWrapper.ReadAllTextAsync(sortPath);
+                    sortWrapper = JsonSerializer.Deserialize<SortStorageWrapperModel>(sortJson, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
+                }
+
                 var jsonData = await _fileWrapper.ReadAllTextAsync(path);
                 var wrapper = JsonSerializer.Deserialize<LayoutWrapperModel>(jsonData, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
 
@@ -114,7 +147,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
 
                 await BasePane
-                    .InitAsync(Guid.Parse(tabName), wrapper.Controls)
+                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.SortStorage)
                     .ConfigureAwait(false);
             }
             else
@@ -148,6 +181,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// Logger instance
         /// </summary>
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// Semaphore used to lock write to the sort storage json file
+        /// </summary>
+        private readonly SemaphoreSlim _sortStorageSemaphore = new(1);
 
         #endregion
     }

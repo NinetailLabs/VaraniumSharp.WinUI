@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.TabPane;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.TabPane
 {
@@ -98,11 +99,11 @@ namespace VaraniumSharp.WinUI.TabPane
         }
 
         /// <inheritdoc />
-        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls)
+        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
         {
             Context.LayoutIdentifier = contentGuid;
 
-            await Context.HandleControlLoadAsync(controls);
+            await Context.HandleControlLoadAsync(controls, sortOrder);
             await Context.SetControlResizingAsync();
             await Context.UpdateChildrenSizeAsync(Width, Height);
         }
@@ -124,6 +125,12 @@ namespace VaraniumSharp.WinUI.TabPane
             TabContainer.Height = height + 12;
 
             await Context.UpdateChildrenSizeAsync(width, height);
+        }
+
+        /// <inheritdoc />
+        public async Task<List<SortStorageModel>> GetSortStorageModelsAsync()
+        {
+            return await Context.GetControlSortOrdersAsync();
         }
 
         #endregion

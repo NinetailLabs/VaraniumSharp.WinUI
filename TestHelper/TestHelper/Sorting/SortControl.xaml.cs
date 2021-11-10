@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
@@ -23,6 +24,7 @@ namespace TestHelper.Sorting
             Entries = new();
             CollectionView = new ExtendedAdvancedCollectionView(Entries, true);
             SortablePropertyModule = new SortablePropertyModule(CollectionView);
+            SortablePropertyModule.DisableDefaultSort = true;
             SortablePropertyModule.SortChanged += SortablePropertyModule_SortChanged;
             SortablePropertyModule.GenerateSortEntries(typeof(SortableEntry));
             SortablePropertyModule.RemoveSortEntry("AccidentalSort");
@@ -120,9 +122,18 @@ namespace TestHelper.Sorting
         }
 
         /// <inheritdoc/>
-        public void InitSortOrder(string[] propertyNames)
+        public void InitSortOrder(List<SortEntryStorageModel> sortEntries)
         {
-            SortablePropertyModule.SortByMultipleProperties(propertyNames);
+            foreach(var entry in sortEntries)
+            {
+                var availableEntry = SortablePropertyModule.AvailableSortEntries.FirstOrDefault(x => x.PropertyName == entry.PropertyName);
+                if(availableEntry != null)
+                {
+                    availableEntry.SortDirection = entry.SortDirection;
+                }
+            }
+
+            SortablePropertyModule.SortByMultipleProperties(sortEntries.Select(x => x.PropertyName).ToArray());
         }
 
         #endregion
