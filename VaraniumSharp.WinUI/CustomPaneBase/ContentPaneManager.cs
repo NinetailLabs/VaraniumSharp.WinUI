@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ABI.Microsoft.UI.Xaml.Shapes;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
@@ -11,7 +10,6 @@ using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
-using Path = System.IO.Path;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
 {

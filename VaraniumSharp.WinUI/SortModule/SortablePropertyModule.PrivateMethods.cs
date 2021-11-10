@@ -71,6 +71,8 @@ namespace VaraniumSharp.WinUI.SortModule
                     }
                 }
             }
+
+            IsSorted = EntriesSortedBy.Count > 0;
         }
 
         /// <summary>
@@ -175,8 +177,7 @@ namespace VaraniumSharp.WinUI.SortModule
             {
                 var index = _viewSourceToSort.SortDescriptions.IndexOf(sortProperty);
                 _viewSourceToSort.SortDescriptions.RemoveAt(index);
-                _viewSourceToSort.SortDescriptions.Insert(index,
-                    new SortDescription(propertyName, entryToSortBy.SortDirection));
+                _viewSourceToSort.SortDescriptions.Insert(index, new SortDescription(propertyName, entryToSortBy.SortDirection));
             }
             else
             {
@@ -191,6 +192,8 @@ namespace VaraniumSharp.WinUI.SortModule
                         entryToSortBy.SortDirection));
                 }
             }
+
+            SortChanged?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion

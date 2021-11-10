@@ -36,6 +36,11 @@ namespace VaraniumSharp.WinUI.SortModule
         public event PropertyChangedEventHandler? PropertyChanged;
 #pragma warning restore CS0067
 
+        /// <summary>
+        /// Occurs when the sort has changed
+        /// </summary>
+        public event EventHandler? SortChanged;
+
         #endregion
 
         #region Properties
@@ -94,6 +99,11 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Indicate if the UI button to move entries from the <see cref="EntriesSortedBy"/> to the <see cref="AvailableSortEntries"/> collection should be enabled
         /// </summary>
         public bool MoveSortedByEnabled { get; private set; }
+
+        /// <summary>
+        /// Indicate if the collection is sorted
+        /// </summary>
+        public bool IsSorted { get; private set; }
 
         #endregion
 

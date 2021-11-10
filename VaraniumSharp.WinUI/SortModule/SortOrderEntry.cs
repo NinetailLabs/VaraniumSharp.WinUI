@@ -1,13 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
 using CommunityToolkit.WinUI.UI;
+using VaraniumSharp.WinUI.DragAndDrop;
 
 namespace VaraniumSharp.WinUI.SortModule
 {
     /// <summary>
     /// Data about properties used for sorting
     /// </summary>
-    public class SortOrderEntry : INotifyPropertyChanged
+    public class SortOrderEntry : IStringDragItem, INotifyPropertyChanged
     {
         #region Constructor
 
@@ -78,6 +79,12 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         public string SortTooltip { get; init; }
 
+        /// <inheritdoc/>
+        public string Identifier => PropertyName;
+
+        /// <inheritdoc/>
+        public string EntryType => "SortEntry";
+
         #endregion
 
         #region Public Methods
@@ -102,7 +109,6 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         private void SetSortIcon()
         {
-            // TODO - Update with icons
             SortIcon = SortDirection == SortDirection.Ascending
                 ? "Asc"
                 : "Desc";
