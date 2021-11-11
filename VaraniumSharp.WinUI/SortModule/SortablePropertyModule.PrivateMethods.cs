@@ -44,7 +44,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="e">Event arguments</param>
         private void EntriesSortedByOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Remove)
+            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Move)
             {
                 foreach (var item in e.OldItems ?? new List<object>())
                 {
@@ -52,6 +52,7 @@ namespace VaraniumSharp.WinUI.SortModule
                     {
                         var descriptionToRemove = _viewSourceToSort.SortDescriptions.First(x => x.PropertyName == sortItem.PropertyName);
                         _viewSourceToSort.SortDescriptions.Remove(descriptionToRemove);
+                        SortChanged?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
@@ -61,7 +62,7 @@ namespace VaraniumSharp.WinUI.SortModule
                 _viewSourceToSort.SortDescriptions.Clear();
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Move)
             {
                 foreach (var entry in e.NewItems ?? new List<object>())
                 {

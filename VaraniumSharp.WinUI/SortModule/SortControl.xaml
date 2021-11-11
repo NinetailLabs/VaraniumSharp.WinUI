@@ -15,26 +15,28 @@
         </Grid.ColumnDefinitions>
 
         <GridView
-                AllowDrop="True"
-                BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
-                BorderThickness="1"
-                CanDragItems="True"
-                CanReorderItems="True"
-                CornerRadius="5"
-                DragItemsStarting="{x:Bind Path=SortDragModule.OnStringTypeDragItemStarting}"
-                Drop="{x:Bind Path=AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
-                DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
-                Grid.Column="0"
-                ItemContainerStyle="{ThemeResource SortEntryContainer}"
-                ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
-                ItemTemplate="{ThemeResource SortEntry}"
-                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
-                Width="270">
+            AllowDrop="True"
+            BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
+            BorderThickness="1"
+            CanDragItems="True"
+            CanReorderItems="True"
+            CornerRadius="5"
+            DragItemsStarting="{x:Bind Path=SortDragModule.OnStringTypeDragItemStarting}"
+            Drop="{x:Bind Path=AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
+            DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
+            Grid.Column="0"
+            ItemContainerStyle="{ThemeResource SortEntryContainer}"
+            ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
+            ItemTemplate="{ThemeResource SortEntry}"
+            KeyUp="GridView_KeyUp"
+            Name="AvailableGrid"
+            SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
+            Width="270">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid 
-                            HorizontalAlignment="Center"
-                            Orientation="Vertical"/>
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
@@ -46,83 +48,175 @@
                 <RowDefinition Height="38" />
                 <RowDefinition Height="38" />
                 <RowDefinition Height="38" />
+                <RowDefinition Height="38" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <Button 
-                    Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromAvailableToSortedBy}"
-                    Grid.Row="1"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    IsEnabled="{x:Bind Path=SortablePropertyModule.MoveAvailableEnabled, Mode=OneWay}"
-                    Margin="4,8,2,2"
-                    ToolTipService.ToolTip="Add entry to sort"
-                    Width="30">
+                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromAvailableToSortedBy}"
+                Grid.Row="1"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=SortablePropertyModule.MoveAvailableEnabled, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Add entry to sort"
+                Width="30">
                 <Button.Content>
-                    <FontIcon 
-                            FontFamily="Segoe MDL2 Assets" 
-                            FontSize="12"
-                            Glyph="&#xE970;"/>
+                    <FontIcon
+                        FontFamily="Segoe MDL2 Assets" 
+                        FontSize="12"
+                        Glyph="&#xE970;"/>
                 </Button.Content>
             </Button>
 
             <Button 
-                    Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromSortedByToAvailable}"
-                    Grid.Row="2"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    IsEnabled="{x:Bind Path=SortablePropertyModule.MoveSortedByEnabled, Mode=OneWay}"
-                    Margin="4,8,2,2"
-                    ToolTipService.ToolTip="Remove entry from sort"
-                    Width="30">
+                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromSortedByToAvailable}"
+                Grid.Row="2"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=SortablePropertyModule.MoveSortedByEnabled, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Remove entry from sort"
+                Width="30">
                 <Button.Content>
                     <FontIcon 
-                            FontFamily="Segoe MDL2 Assets" 
-                            FontSize="12"
-                            Glyph="&#xE96F;"/>
+                        FontFamily="Segoe MDL2 Assets" 
+                        FontSize="12"
+                        Glyph="&#xE96F;"/>
                 </Button.Content>
             </Button>
 
             <Button 
-                    Click="{x:Bind Path=SortablePropertyModule.ClearSortOnClick}"
-                    Grid.Row="3"
-                    Height="30"
-                    HorizontalAlignment="Center"
-                    IsEnabled="{x:Bind Path=SortablePropertyModule.IsSorted, Mode=OneWay}"
-                    Margin="4,8,2,2"
-                    ToolTipService.ToolTip="Clear sort"
-                    Width="30">
+                Click="{x:Bind Path=SortablePropertyModule.ClearSortOnClick}"
+                Grid.Row="3"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=SortablePropertyModule.IsSorted, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Clear sort"
+                Width="30">
                 <Button.Content>
                     <FontIcon 
-                            FontFamily="Segoe MDL2 Assets" 
-                            FontSize="12"
-                            Glyph="&#xED62;"/>
+                        FontFamily="Segoe MDL2 Assets" 
+                        FontSize="12"
+                        Glyph="&#xED62;"/>
                 </Button.Content>
             </Button>
+
+            <FontIcon 
+                FontFamily="Segoe MDL2 Assets" 
+                FontSize="26"
+                Glyph="&#xF142;"
+                Grid.Row="4">
+                <ToolTipService.ToolTip>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition Height="10" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2">
+                            <TextBlock
+                                Grid.Row="0"
+                                Text="Keyboard Shortcuts"
+                                TextAlignment="Center"
+                                FontWeight="Bold" />
+                        </Grid>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1"
+                            Text="When an item is selected in one of the two lists the following keyboard shortcuts are available"
+                            TextAlignment="Left"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="3"
+                            Text="Enter"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            Text="Move the entry from one list to the other" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="4"
+                            Text="-"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            Text="Move the entry up in the list" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="5"
+                            Text="+"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            Text="Move the entry down in the list" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="6"
+                            Text="[ or ]"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="6"
+                            Text="Change the sort order of the entry" />
+
+
+
+                    </Grid>
+                </ToolTipService.ToolTip>
+            </FontIcon>
 
         </Grid>
 
         <GridView
-                AllowDrop="True"
-                BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
-                BorderThickness="1"
-                CanDragItems="True"
-                CanReorderItems="True"
-                CornerRadius="5"
-                DragItemsStarting="{x:Bind Path=AvailableDragModule.OnStringTypeDragItemStarting}"
-                Drop="{x:Bind Path=SortDragModule.OnStringTypeVerticalDataGridDrop}"
-                DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
-                Grid.Column="2"
-                ItemContainerStyle="{ThemeResource SortEntryContainer}"
-                ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
-                ItemTemplate="{ThemeResource SortEntry}"
-                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedSortByEntry, Mode=TwoWay}"
-                Width="270">
+            AllowDrop="True"
+            BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
+            BorderThickness="1"
+            CanDragItems="True"
+            CanReorderItems="True"
+            CornerRadius="5"
+            DragItemsStarting="{x:Bind Path=AvailableDragModule.OnStringTypeDragItemStarting}"
+            Drop="{x:Bind Path=SortDragModule.OnStringTypeVerticalDataGridDrop}"
+            DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
+            Grid.Column="2"
+            ItemContainerStyle="{ThemeResource SortEntryContainer}"
+            ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
+            ItemTemplate="{ThemeResource SortEntry}"
+            KeyUp="GridView_KeyUp"
+            Name="SortGrid"
+            SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedSortByEntry, Mode=TwoWay}"
+            Width="270">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid
-                            HorizontalAlignment="Center"
-                            Orientation="Vertical"/>
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
