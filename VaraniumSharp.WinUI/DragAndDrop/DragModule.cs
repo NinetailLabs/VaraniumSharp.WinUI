@@ -74,7 +74,7 @@ namespace VaraniumSharp.WinUI.DragAndDrop
             {
                 var jsonData = await e.DataView.GetTextAsync();
                 var dragData = JsonSerializer.Deserialize(jsonData, DragDataCollectionJsonContext.Default.DragDataCollection);
-                if (dragData.EntryType == _entryTypeToHandler)
+                if (dragData?.EntryType == _entryTypeToHandler)
                 {
                     e.AcceptedOperation = _acceptedOperation;
                 }
@@ -132,7 +132,7 @@ namespace VaraniumSharp.WinUI.DragAndDrop
                     index = Math.Min(target.Items.Count, index);
                 }
 
-                foreach (var item in dragData.Collection)
+                foreach (var item in dragData?.Collection ?? new())
                 {
                     var entryToMove = _sourceCollection.FirstOrDefault(x => x.Identifier == item.StringIdentifier);
                     if (entryToMove != null)

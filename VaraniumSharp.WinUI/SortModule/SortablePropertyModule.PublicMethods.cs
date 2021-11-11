@@ -64,7 +64,7 @@ namespace VaraniumSharp.WinUI.SortModule
             foreach (var collectionType in collectionTypes)
             {
                 var sortableProperties = GetPropertiesForType(collectionType);
-                GenerateSortEntries(string.Empty, sortableProperties);
+                HandleSortEntriesGeneration(string.Empty, sortableProperties);
             }
 
             if (!string.IsNullOrEmpty(_defaultSortProperty)
@@ -85,7 +85,7 @@ namespace VaraniumSharp.WinUI.SortModule
             var removedFromAvailable = RemoveSortEntryFromCollection(AvailableSortEntries, propertyName);
             var removedFromSorted = RemoveSortEntryFromCollection(EntriesSortedBy, propertyName);
 
-            if (removedFromAvailable == false && removedFromSorted == false)
+            if (!removedFromAvailable && !removedFromSorted)
             {
                 throw new InvalidOperationException($"Property {propertyName} could not be found - Check that the provided name is valid and try again");
             }

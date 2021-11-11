@@ -96,7 +96,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         /// <param name="propertyPrefix">Prefix of property for nested types</param>
         /// <param name="propertiesToCreateButtonsFor">Properties that buttons should be created for</param>
-        private void GenerateSortEntries(string propertyPrefix, IEnumerable<PropertyInfo> propertiesToCreateButtonsFor)
+        private void HandleSortEntriesGeneration(string propertyPrefix, IEnumerable<PropertyInfo> propertiesToCreateButtonsFor)
         {
             propertiesToCreateButtonsFor = propertiesToCreateButtonsFor
                 .OrderBy(x => ((SortablePropertyAttribute?)x.GetCustomAttribute(typeof(SortablePropertyAttribute)))?.Header);
@@ -112,17 +112,8 @@ namespace VaraniumSharp.WinUI.SortModule
 
                 if (attribute.HasNestedSorts)
                 {
-                    var nestedTypes = attribute.UseModuleDictionaryToGetSortTypes
-                        ? NestedTypeList[attribute.ModuleDictionaryIndex]
-                        : attribute.NestedTypes;
-
-                    foreach (var attributeNestedType in nestedTypes)
-                    {
-                        var nestedProperties = GetPropertiesForType(attributeNestedType);
-                        GenerateSortEntries($"{propertyPrefix}{property.Name}.", nestedProperties);
-                    }
+                    HandleNestedAttributeEntryGeneration(attribute, propertyPrefix, property);
                 }
-
                 else
                 {
                     var fullPropertyName = $"{propertyPrefix}{property.Name}";
@@ -136,11 +127,30 @@ namespace VaraniumSharp.WinUI.SortModule
         }
 
         /// <summary>
+        /// Handle the generation of sort entries for nested attributes
+        /// </summary>
+        /// <param name="attribute">Attribute for which sort entries should be created</param>
+        /// <param name="propertyPrefix">Prefix to get to the attribute</param>
+        /// <param name="property">Property info for the attribute</param>
+        private void HandleNestedAttributeEntryGeneration(SortablePropertyAttribute attribute, string propertyPrefix, PropertyInfo property)
+        {
+            var nestedTypes = attribute.UseModuleDictionaryToGetSortTypes
+                        ? NestedTypeList[attribute.ModuleDictionaryIndex]
+                        : attribute.NestedTypes;
+
+            foreach (var attributeNestedType in nestedTypes)
+            {
+                var nestedProperties = GetPropertiesForType(attributeNestedType);
+                HandleSortEntriesGeneration($"{propertyPrefix}{property.Name}.", nestedProperties);
+            }
+        }
+
+        /// <summary>
         /// Get the properties that are decorated with <see cref="SortablePropertyAttribute"/> for a type
         /// </summary>
         /// <param name="type">Type properties should be retrieved for</param>
         /// <returns>Matching properties</returns>
-        private IEnumerable<PropertyInfo> GetPropertiesForType(Type type)
+        private static IEnumerable<PropertyInfo> GetPropertiesForType(Type type)
         {
             return type
                 .GetProperties()
@@ -153,7 +163,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="collection">Collection the entry should be removed from</param>
         /// <param name="propertyName">Property name of the entry to remove</param>
         /// <returns>Indicate if the entry could be found in the collection</returns>
-        private bool RemoveSortEntryFromCollection(ObservableCollection<SortOrderEntry> collection, string propertyName)
+        private static bool RemoveSortEntryFromCollection(ObservableCollection<SortOrderEntry> collection, string propertyName)
         {
             var entryToRemove = collection.FirstOrDefault(x => x.PropertyName == propertyName);
             if (entryToRemove == null)

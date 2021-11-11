@@ -168,7 +168,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="entryToMove">The entry that should be moved</param>
         /// <param name="direction">The direction in which the entry should be moved</param>
         /// <returns>New index of the entry, unless no entry was moved in which case -1 is returned</returns>
-        private int HandleMove(ObservableCollection<SortOrderEntry> collection, SortOrderEntry entryToMove, MoveDirection direction)
+        private static int HandleMove(ObservableCollection<SortOrderEntry> collection, SortOrderEntry entryToMove, MoveDirection direction)
         {
             var index = collection.IndexOf(entryToMove);
             var newIndex = index + (direction == MoveDirection.Up ? -1 : 1);

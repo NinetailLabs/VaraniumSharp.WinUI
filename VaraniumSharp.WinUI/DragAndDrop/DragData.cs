@@ -6,6 +6,14 @@
     public class DragData
     {
         /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public DragData()
+        {
+            DataType = string.Empty;
+        }
+
+        /// <summary>
         /// The type of data being dragged
         /// </summary>
         public string DataType { get; set; }

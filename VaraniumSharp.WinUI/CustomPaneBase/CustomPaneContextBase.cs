@@ -196,9 +196,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             var resultList = new List<SortStorageModel>();
 
-            foreach(var component in Components)
+            foreach(var component in Components.Select(x => x.Control))
             {
-                if(component.Control is ICustomLayoutPane customPane)
+                if(component is ICustomLayoutPane customPane)
                 {
                     var storageEntry = new SortStorageModel
                     {
@@ -209,7 +209,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
                 else
                 {
-                    if(component.Control is ISortableDisplayComponent sortableDisplayComponent)
+                    if(component is ISortableDisplayComponent sortableDisplayComponent)
                     {
                         resultList.Add(new()
                         {
@@ -240,42 +240,21 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         .ConfigureAwait(false);
                 }
 
-                if (newControl != null)
-                {
-                    newControl.InstanceId = item.InstanceId == Guid.Empty
-                        ? Guid.NewGuid()
-                        : item.InstanceId;
-
-                    if(newControl is ISortableDisplayComponent sortableDisplayComponent)
-                    {
-                        if (sortOrder != null)
-                        {
-                            var sortDetails = sortOrder.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
-                            if (sortDetails != null)
-                            {
-                                sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
-                            }
-                        }
-                        sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
-                    }
-
-                    newControl.Title = item.Title;
-                    var layout = new LayoutDisplay(newControl, _dialogs, CustomLayoutEventRouter)
-                    {
-                        CanMove = _moveControls,
-                        ShowResizeHandle = _resizeControls,
-                        LayoutBeingEdited = _showControls
-                    };
-
-                    layout.Control.Width = item.Width;
-                    layout.Control.Height = item.Height;
-                    Logger.LogDebug("Adding control {ControlId}", newControl.ContentId);
-                    Components.Add(layout);
-                }
+                SetupNewControl(newControl, item, sortOrder);
             }
 
             await ResizeAllControlsAsync().ConfigureAwait(false);
+            await InitializeCustomLayoutPaneAsync(controls, sortOrder).ConfigureAwait(false);
+            
+        }
 
+        /// <summary>
+        /// Initialize <see cref="ICustomLayoutPane"/> entries in the <see cref="Component"/> collection
+        /// </summary>
+        /// <param name="controls">Storage models that contains the control details</param>
+        /// <param name="sortOrder">Collection of sort order entries that might contains sort details for the control</param>
+        private async Task InitializeCustomLayoutPaneAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
+        {
             foreach (var layoutPane in Components.Where(x => x.Control is ICustomLayoutPane).Select(x => x.Control))
             {
                 if (layoutPane is ICustomLayoutPane customPane)
@@ -288,6 +267,48 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries)
                         .ConfigureAwait(false);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Handle the setup of a new control.
+        /// </summary>
+        /// <param name="newControl">Control entry to set up</param>
+        /// <param name="storageModel">Storage model that contains the control details</param>
+        /// <param name="sortOrder">Collection of sort order entries that might contains sort details for the control</param>
+        private void SetupNewControl(IDisplayComponent? newControl, ControlStorageModel storageModel, List<SortStorageModel>? sortOrder)
+        {
+            if (newControl != null)
+            {
+                newControl.InstanceId = storageModel.InstanceId == Guid.Empty
+                    ? Guid.NewGuid()
+                    : storageModel.InstanceId;
+
+                if (newControl is ISortableDisplayComponent sortableDisplayComponent)
+                {
+                    if (sortOrder != null)
+                    {
+                        var sortDetails = sortOrder.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
+                        if (sortDetails != null)
+                        {
+                            sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
+                        }
+                    }
+                    sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
+                }
+
+                newControl.Title = storageModel.Title;
+                var layout = new LayoutDisplay(newControl, _dialogs, CustomLayoutEventRouter)
+                {
+                    CanMove = _moveControls,
+                    ShowResizeHandle = _resizeControls,
+                    LayoutBeingEdited = _showControls
+                };
+
+                layout.Control.Width = storageModel.Width;
+                layout.Control.Height = storageModel.Height;
+                Logger.LogDebug("Adding control {ControlId}", newControl.ContentId);
+                Components.Add(layout);
             }
         }
 

@@ -6,6 +6,11 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
 {
     public class SortableFixture
     {
+        public SortableFixture()
+        {
+            NotSortable = string.Empty;
+        }
+
         #region Properties
 
         [SortableProperty("DateSort", "Sort by date")]
@@ -21,6 +26,12 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
 
     public class SortableFixtureWithNestedEntry
     {
+        public SortableFixtureWithNestedEntry()
+        {
+            NotSortable = string.Empty;
+            Nested = new NestedFixture();
+        }
+
         public string NotSortable { get; set; }
 
         [SortableProperty(typeof(NestedFixture))]

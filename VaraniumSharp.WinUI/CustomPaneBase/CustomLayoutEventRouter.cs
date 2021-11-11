@@ -62,6 +62,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc/>
         public void SetSortOrderChanged()
         {
             SortChanged?.Invoke(this, EventArgs.Empty);

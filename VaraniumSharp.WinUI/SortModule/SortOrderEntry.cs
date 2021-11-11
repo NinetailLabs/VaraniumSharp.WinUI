@@ -72,7 +72,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <summary>
         /// Icon to indicate sort direction
         /// </summary>
-        public string SortIcon { get; private set; } = null!; // TODO - Replace with icon
+        public string SortIcon { get; private set; } = null!;
 
         /// <summary>
         /// Tooltip for the sort order
