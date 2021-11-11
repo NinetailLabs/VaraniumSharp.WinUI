@@ -68,6 +68,9 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         /// <inheritdoc />
         public Guid UniqueIdentifier { get; set; }
 
+        /// <inheritdoc />
+        public Guid InstanceId { get; set; }
+
         /// <inheritdoc/>
         public async Task CleanPaneAsync()
         {

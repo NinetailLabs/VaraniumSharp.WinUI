@@ -21,18 +21,21 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <summary>
         /// Construct and populate
         /// </summary>
-        /// <param name="contentId">Guid of the control the sort is for</param>
+        /// <param name="instanceId">Instance id of the control the sort is for</param>
         /// <param name="sortEntries">Entries that the control is sorted by</param>
-        public SortStorageModel(Guid contentId, List<SortOrderEntry> sortEntries)
+        public SortStorageModel(Guid instanceId, List<SortOrderEntry> sortEntries)
         {
-            ContentId = contentId;
-            SortEntries = sortEntries.Select(x => new SortEntryStorageModel(x)).ToList();
+            InstanceId = instanceId;
+            SortEntries = sortEntries
+                .Select(x => new SortEntryStorageModel(x))
+                .ToList();
+            SubEntries = new();
         }
 
         /// <summary>
-        /// Content Id of the control that the sort is for
+        /// The unqiue identifier of the control that the sort is for
         /// </summary>
-        public Guid ContentId { get; set; }
+        public Guid InstanceId { get; set; }
 
         /// <summary>
         /// Sort entries to store

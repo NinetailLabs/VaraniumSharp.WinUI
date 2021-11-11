@@ -56,6 +56,9 @@ namespace VaraniumSharp.WinUI.SettingPane
         /// <inheritdoc />
         public string Title { get; set; }
 
+        /// <inheritdoc />
+        public Guid InstanceId { get; set; }
+
         #endregion
 
         #region Public Methods

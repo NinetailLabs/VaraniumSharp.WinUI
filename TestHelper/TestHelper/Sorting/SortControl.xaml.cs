@@ -68,6 +68,7 @@ namespace TestHelper.Sorting
         public SortablePropertyModule SortablePropertyModule { get; }
         public bool StartupLoad { get; set; }
         public string Title { get; set; } = "Sort Control";
+        public Guid InstanceId { get; set; }
 
         #endregion
 

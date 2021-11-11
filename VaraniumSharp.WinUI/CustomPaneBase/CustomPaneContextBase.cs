@@ -202,7 +202,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 {
                     var storageEntry = new SortStorageModel
                     {
-                        ContentId = customPane.ContentId
+                        InstanceId = customPane.InstanceId
                     };
                     storageEntry.SubEntries.AddRange(await customPane.GetSortStorageModelsAsync());
                     resultList.Add(storageEntry);
@@ -213,7 +213,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     {
                         resultList.Add(new()
                         {
-                            ContentId = sortableDisplayComponent.ContentId,
+                            InstanceId = sortableDisplayComponent.InstanceId,
                             SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesSortedBy.Select(x => new SortEntryStorageModel(x)).ToList()
                         });
                     }
@@ -242,11 +242,15 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
                 if (newControl != null)
                 {
+                    newControl.InstanceId = item.InstanceId == Guid.Empty
+                        ? Guid.NewGuid()
+                        : item.InstanceId;
+
                     if(newControl is ISortableDisplayComponent sortableDisplayComponent)
                     {
                         if (sortOrder != null)
                         {
-                            var sortDetails = sortOrder.FirstOrDefault(x => x.ContentId == newControl.ContentId);
+                            var sortDetails = sortOrder.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
                             if (sortDetails != null)
                             {
                                 sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
@@ -276,7 +280,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 if (layoutPane is ICustomLayoutPane customPane)
                 {
-                    var sortChildren = sortOrder?.FirstOrDefault(x => x.ContentId == customPane.ContentId);
+                    var sortChildren = sortOrder?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
 
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
@@ -458,6 +462,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     Components.Add(layout);
                     await CustomLayoutEventRouter.SetLayoutChanged().ConfigureAwait(false);
                     await ResizeAllControlsAsync().ConfigureAwait(false);
+                    if (newControl is ISortableDisplayComponent sortableDisplayComponent)
+                    {
+                        sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
+                    }
                 }
             }
         }

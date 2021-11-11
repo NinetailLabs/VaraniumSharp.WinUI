@@ -65,6 +65,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var wrapper = new LayoutWrapperModel(layoutId, await BasePane.GetComponentsForStorageAsync().ConfigureAwait(false));
             var jsonLayout = JsonSerializer.Serialize(wrapper, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
             await _fileWrapper.WriteAllTextAsync(path, jsonLayout);
+
+            await SaveSortOrderAsync();
         }
 
         /// <summary>
@@ -73,6 +75,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
         private async void _customLayoutEventRouter_SortChanged(object? sender, EventArgs e)
+        {
+            await SaveSortOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Save the sort order for the control pane
+        /// </summary>
+        private async Task SaveSortOrderAsync()
         {
             try
             {

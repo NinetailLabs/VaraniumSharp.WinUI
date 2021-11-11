@@ -48,6 +48,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var control = (IDisplayComponent)_container.Resolve(controlToCreate.Value.RegisteredInterface);
             control.Width = controlToCreate.Value.MinWidth;
             control.Height = controlToCreate.Value.MinHeight;
+            control.InstanceId = Guid.NewGuid();
             await control
                 .InitAsync()
                 .ConfigureAwait(false);
