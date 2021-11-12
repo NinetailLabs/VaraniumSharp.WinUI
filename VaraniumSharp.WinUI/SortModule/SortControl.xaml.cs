@@ -80,7 +80,8 @@ namespace VaraniumSharp.WinUI.SortModule
             {
                 SortablePropertyModule?.SelectedAvailableEntry?.ChangeDirectionClick();
             }
-            else if (sender is GridView { Name: "SortGrid" })
+            
+            if (sender is GridView { Name: "SortGrid" })
             {
                 SortablePropertyModule?.SelectedSortByEntry?.ChangeDirectionClick();
             }
