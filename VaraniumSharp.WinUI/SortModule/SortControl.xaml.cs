@@ -11,6 +11,8 @@ namespace VaraniumSharp.WinUI.SortModule
     /// </summary>
     public sealed partial class SortControl : INotifyPropertyChanged
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -18,6 +20,24 @@ namespace VaraniumSharp.WinUI.SortModule
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Events
+
+        /// <inheritdoc />
+#pragma warning disable CS0067 // Is used via Fody
+        public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// DragModule used for drag and drop from the sorted by entries to the available entries
+        /// </summary>
+        public DragModule<SortOrderEntry>? AvailableDragModule { get; private set; }
 
         /// <summary>
         /// Module that contains the sortable properties
@@ -42,24 +62,29 @@ namespace VaraniumSharp.WinUI.SortModule
         }
 
         /// <summary>
-        /// DragModule used for drag and drop from the <see cref="SortablePropertyModule.AvailableSortEntries"/> to the <see cref="SortablePropertyModule.EntriesSortedBy"/>
+        /// DragModule used for drag and drop from the available entries to the sorted by entries
         /// </summary>
         public DragModule<SortOrderEntry>? SortDragModule { get; private set; }
 
-        /// <summary>
-        /// DragModule used for drag and drop from the <see cref="SortablePropertyModule.EntriesSortedBy"/> to the <see cref="SortablePropertyModule.AvailableSortEntries"/>
-        /// </summary>
-        public DragModule<SortOrderEntry>? AvailableDragModule { get; private set; }
+        #endregion
 
-        /// <inheritdoc />
-#pragma warning disable CS0067 // Is used via Fody
-        public event PropertyChangedEventHandler? PropertyChanged;
-#pragma warning restore CS0067
+        #region Private Methods
 
         /// <summary>
-        /// Backing variable for the <see cref="SortablePropertyModule"/> property
+        /// Change the direction in which the selected item is sorted
         /// </summary>
-        private SortablePropertyModule? _sortablePropertyModule;
+        /// <param name="sender">Sender of the event</param>
+        private void FlipSortDirection(object sender)
+        {
+            if (sender is GridView { Name: "AvailableGrid" })
+            {
+                SortablePropertyModule?.SelectedAvailableEntry?.ChangeDirectionClick();
+            }
+            else if (sender is GridView { Name: "SortGrid" })
+            {
+                SortablePropertyModule?.SelectedSortByEntry?.ChangeDirectionClick();
+            }
+        }
 
         /// <summary>
         /// Occurs when a key is pressed while the user is in either of the sort grids
@@ -92,54 +117,13 @@ namespace VaraniumSharp.WinUI.SortModule
         }
 
         /// <summary>
-        /// Change the direction in which the selected item is sorted
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        private void FlipSortDirection(object sender)
-        {
-            if (sender is GridView sgw
-             && sgw.Name == "AvailableGrid")
-            {
-                SortablePropertyModule?.SelectedAvailableEntry?.ChangeDirectionClick();
-            }
-            else if (sender is GridView agw
-                && agw.Name == "SortGrid")
-            {
-                SortablePropertyModule?.SelectedSortByEntry?.ChangeDirectionClick();
-            }
-        }
-
-        /// <summary>
-        /// Handle the movement of the selected entry between the <see cref="SortablePropertyModule.AvailableSortEntries"/> and the <see cref="SortablePropertyModule.EntriesSortedBy"/>
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        private void HandleSelectedItemMove(object sender)
-        {
-            if (sender is GridView sgw
-               && sgw.Name == "AvailableGrid"
-               && SortablePropertyModule?.MoveAvailableEnabled == true)
-            {
-                SortablePropertyModule.MoveEntryFromAvailableToSortedBy();
-            }
-            else if (sender is GridView agw
-                && agw.Name == "SortGrid"
-                && SortablePropertyModule?.MoveSortedByEnabled == true)
-            {
-                SortablePropertyModule.MoveEntryFromSortedByToAvailable();
-            }
-        }
-
-        /// <summary>
-        /// Handle moving items in one of the two datagrids
+        /// Handle moving items in one of the two data grids
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="direction">Direction that the entry should be moved</param>
         private void HandleMove(object sender, MoveDirection direction)
         {
-            if (sender is GridView sgw
-                && sgw.Name == "AvailableGrid"
-                && SortablePropertyModule?.AvailableSortEntries.Count > 1
-                && SortablePropertyModule?.SelectedAvailableEntry != null)
+            if (sender is GridView { Name: "AvailableGrid" } sgw && SortablePropertyModule?.AvailableSortEntries.Count > 1 && SortablePropertyModule?.SelectedAvailableEntry != null)
             {
                 var result = HandleMove(SortablePropertyModule.AvailableSortEntries, SortablePropertyModule.SelectedAvailableEntry, direction);
                 if (result >= 0)
@@ -148,10 +132,7 @@ namespace VaraniumSharp.WinUI.SortModule
                 }
             }
 
-            if (sender is GridView agw
-                && agw.Name == "SortGrid"
-                && SortablePropertyModule?.EntriesSortedBy.Count > 1
-                && SortablePropertyModule?.SelectedSortByEntry != null)
+            if (sender is GridView { Name: "SortGrid" } agw && SortablePropertyModule?.EntriesSortedBy.Count > 1 && SortablePropertyModule?.SelectedSortByEntry != null)
             {
                 var result = HandleMove(SortablePropertyModule.EntriesSortedBy, SortablePropertyModule.SelectedSortByEntry, direction);
                 if (result >= 0)
@@ -180,5 +161,32 @@ namespace VaraniumSharp.WinUI.SortModule
 
             return -1;
         }
+
+        /// <summary>
+        /// Handle the movement of the selected entry between the available entries and the sorted by entries
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        private void HandleSelectedItemMove(object sender)
+        {
+            if (sender is GridView { Name: "AvailableGrid" } && SortablePropertyModule?.MoveAvailableEnabled == true)
+            {
+                SortablePropertyModule.MoveEntryFromAvailableToSortedBy();
+            }
+            else if (sender is GridView { Name: "SortGrid" } && SortablePropertyModule?.MoveSortedByEnabled == true)
+            {
+                SortablePropertyModule.MoveEntryFromSortedByToAvailable();
+            }
+        }
+
+        #endregion
+
+        #region Variables
+
+        /// <summary>
+        /// Backing variable for the <see cref="SortablePropertyModule"/> property
+        /// </summary>
+        private SortablePropertyModule? _sortablePropertyModule;
+
+        #endregion
     }
 }

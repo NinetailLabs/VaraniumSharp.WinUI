@@ -7,6 +7,5 @@ namespace VaraniumSharp.WinUI.SortModule
     /// </summary>
     [JsonSerializable(typeof(SortStorageWrapperModel))]
     public partial class SortStorageWrapperModelJsonContext : JsonSerializerContext
-    {
-    }
+    {}
 }

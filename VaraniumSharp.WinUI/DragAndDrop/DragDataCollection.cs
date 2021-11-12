@@ -8,6 +8,8 @@ namespace VaraniumSharp.WinUI.DragAndDrop
     /// </summary>
     public sealed class DragDataCollection
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -31,15 +33,21 @@ namespace VaraniumSharp.WinUI.DragAndDrop
             }
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Collection containing the <see cref="DragData"/> entries
+        /// </summary>
+        public List<DragData> Collection { get; set; }
+
         /// <summary>
         /// The type of entries in the collection.
         /// Should only be set if the entries are of the same type
         /// </summary>
         public string EntryType { get; set; }
 
-        /// <summary>
-        /// Collection containing the <see cref="DragData"/> entries
-        /// </summary>
-        public List<DragData> Collection { get; set; }
+        #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
     /// </summary>
     public interface IControlDiscoveryHelper
     {
-         #region Properties
+        #region Properties
 
         /// <summary>
         /// Controls that are available for creation

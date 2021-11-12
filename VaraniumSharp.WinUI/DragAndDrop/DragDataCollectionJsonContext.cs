@@ -7,5 +7,5 @@ namespace VaraniumSharp.WinUI.DragAndDrop
     /// </summary>
     [JsonSerializable(typeof(DragDataCollection))]
     public partial class DragDataCollectionJsonContext : JsonSerializerContext
-    { }
+    {}
 }

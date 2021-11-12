@@ -6,13 +6,30 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid
-            Grid.Row="1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280" />
             <ColumnDefinition Width="60" />
             <ColumnDefinition Width="280" />
         </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            FontSize="12"
+            Text="Available for sort"
+            Grid.Row="0" />
+
+        <TextBlock
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            FontSize="12"
+            Text="Sorted by"
+            Grid.Row="0" />
 
         <GridView
             AllowDrop="True"
@@ -25,6 +42,7 @@
             Drop="{x:Bind Path=AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
             DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
             Grid.Column="0"
+            Grid.Row="1"
             ItemContainerStyle="{ThemeResource SortEntryContainer}"
             ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
             ItemTemplate="{ThemeResource SortEntry}"
@@ -42,7 +60,8 @@
         </GridView>
 
         <Grid
-                Grid.Column="1">
+                Grid.Column="1"
+                Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="38" />
@@ -62,10 +81,13 @@
                 ToolTipService.ToolTip="Add entry to sort"
                 Width="30">
                 <Button.Content>
-                    <FontIcon
-                        FontFamily="Segoe MDL2 Assets" 
-                        FontSize="12"
-                        Glyph="&#xE970;"/>
+                    <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,2"
+                        Text="»"
+                        VerticalAlignment="Center"/>
                 </Button.Content>
             </Button>
 
@@ -79,10 +101,13 @@
                 ToolTipService.ToolTip="Remove entry from sort"
                 Width="30">
                 <Button.Content>
-                    <FontIcon 
-                        FontFamily="Segoe MDL2 Assets" 
-                        FontSize="12"
-                        Glyph="&#xE96F;"/>
+                    <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,2"
+                        Text="«"
+                        VerticalAlignment="Center"/>
                 </Button.Content>
             </Button>
 
@@ -99,7 +124,7 @@
                     <FontIcon 
                         FontFamily="Segoe MDL2 Assets" 
                         FontSize="12"
-                        Glyph="&#xED62;"/>
+                        Glyph="&#xE894;"/>
                 </Button.Content>
             </Button>
 
@@ -205,6 +230,7 @@
             Drop="{x:Bind Path=SortDragModule.OnStringTypeVerticalDataGridDrop}"
             DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
             Grid.Column="2"
+            Grid.Row="1"
             ItemContainerStyle="{ThemeResource SortEntryContainer}"
             ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
             ItemTemplate="{ThemeResource SortEntry}"

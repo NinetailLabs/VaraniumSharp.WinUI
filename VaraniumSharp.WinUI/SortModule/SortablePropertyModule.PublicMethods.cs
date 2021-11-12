@@ -25,6 +25,30 @@ namespace VaraniumSharp.WinUI.SortModule
         }
 
         /// <summary>
+        /// Generate the buttons for sorting the collection
+        /// </summary>
+        /// <param name="collectionTypes">
+        /// Type(s) of entries in the collection.
+        /// Multiple types are allowed in case the interface implements another interface(s) so that those can also contribute sorting properties
+        /// </param>
+        public void GenerateSortEntries(params Type[] collectionTypes)
+        {
+            foreach (var collectionType in collectionTypes)
+            {
+                var sortableProperties = GetPropertiesForType(collectionType);
+                HandleSortEntriesGeneration(string.Empty, sortableProperties);
+            }
+
+            if (!string.IsNullOrEmpty(_defaultSortProperty)
+                && !DisableDefaultSort)
+            {
+                var availableEntry = AvailableSortEntries.First(x => x.PropertyName == _defaultSortProperty);
+                AvailableSortEntries.Remove(availableEntry);
+                EntriesSortedBy.Add(availableEntry);
+            }
+        }
+
+        /// <summary>
         /// Move the <see cref="SelectedAvailableEntry"/> to the <see cref="EntriesSortedBy"/> collection to sort by it.
         /// Note that the entry will be added to the end.
         /// </summary>
@@ -49,30 +73,6 @@ namespace VaraniumSharp.WinUI.SortModule
             {
                 EntriesSortedBy.Remove(entry);
                 AvailableSortEntries.Add(entry);
-            }
-        }
-
-        /// <summary>
-        /// Generate the buttons for sorting the collection
-        /// </summary>
-        /// <param name="collectionTypes">
-        /// Type(s) of entries in the collection.
-        /// Multiple types are allowed in case the interface implements another interface(s) so that those can also contribute sorting properties
-        /// </param>
-        public void GenerateSortEntries(params Type[] collectionTypes)
-        {
-            foreach (var collectionType in collectionTypes)
-            {
-                var sortableProperties = GetPropertiesForType(collectionType);
-                HandleSortEntriesGeneration(string.Empty, sortableProperties);
-            }
-
-            if (!string.IsNullOrEmpty(_defaultSortProperty)
-                && !DisableDefaultSort)
-            {
-                var availableEntry = AvailableSortEntries.First(x => x.PropertyName == _defaultSortProperty);
-                AvailableSortEntries.Remove(availableEntry);
-                EntriesSortedBy.Add(availableEntry);
             }
         }
 

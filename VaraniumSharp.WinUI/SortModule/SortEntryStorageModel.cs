@@ -7,6 +7,8 @@ namespace VaraniumSharp.WinUI.SortModule
     /// </summary>
     public class SortEntryStorageModel
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -25,6 +27,10 @@ namespace VaraniumSharp.WinUI.SortModule
             SortDirection = sortEntry.SortDirection;
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// The name of the property to sort by
         /// </summary>
@@ -34,5 +40,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// The direction to sort by
         /// </summary>
         public SortDirection SortDirection { get; set; }
+
+        #endregion
     }
 }

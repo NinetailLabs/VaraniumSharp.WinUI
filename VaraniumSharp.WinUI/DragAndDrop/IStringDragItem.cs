@@ -5,14 +5,18 @@
     /// </summary>
     public interface IStringDragItem
     {
-        /// <summary>
-        /// The string used to identify the drag item
-        /// </summary>
-        string Identifier { get; }
+        #region Properties
 
         /// <summary>
         /// The type of entry
         /// </summary>
         string EntryType { get; }
+
+        /// <summary>
+        /// The string used to identify the drag item
+        /// </summary>
+        string Identifier { get; }
+
+        #endregion
     }
 }

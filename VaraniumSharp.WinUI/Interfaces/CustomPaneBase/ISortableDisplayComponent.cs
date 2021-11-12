@@ -9,10 +9,25 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
     /// </summary>
     public interface ISortableDisplayComponent : IDisplayComponent
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when the sort order of the control has changed
+        /// </summary>
+        event EventHandler? SortChanged;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Module that is used to handle the sorting of components
         /// </summary>
         SortablePropertyModule SortablePropertyModule { get; }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Initialize sorting of the list by property names
@@ -20,9 +35,6 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <param name="sortEntries">Collection of entries to sort by</param>
         void InitSortOrder(List<SortEntryStorageModel> sortEntries);
 
-        /// <summary>
-        /// Occurs when the sort order of the control has changed
-        /// </summary>
-        event EventHandler? SortChanged;
+        #endregion
     }
 }

@@ -46,6 +46,12 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         public SortDirection DefaultSortDirection { get; init; }
 
+        /// <inheritdoc/>
+        public string EntryType => "SortEntry";
+
+        /// <inheritdoc/>
+        public string Identifier => PropertyName;
+
         /// <summary>
         /// Name of the property that the information is for
         /// </summary>
@@ -78,12 +84,6 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Tooltip for the sort order
         /// </summary>
         public string SortTooltip { get; init; }
-
-        /// <inheritdoc/>
-        public string Identifier => PropertyName;
-
-        /// <inheritdoc/>
-        public string EntryType => "SortEntry";
 
         #endregion
 

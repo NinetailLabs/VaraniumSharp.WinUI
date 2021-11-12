@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using CommunityToolkit.WinUI.UI;
 
 namespace VaraniumSharp.WinUI.SortModule
@@ -78,6 +77,11 @@ namespace VaraniumSharp.WinUI.SortModule
         public bool HasNestedSorts { get; }
 
         /// <summary>
+        /// The text to display on the sort entry
+        /// </summary>
+        public string Header { get; }
+
+        /// <summary>
         /// Index of the dictionary entries that should be used to resolve the type.
         /// This should be used in conjunction with the <see cref="UseModuleDictionaryToGetSortTypes"/> property
         /// </summary>
@@ -87,11 +91,6 @@ namespace VaraniumSharp.WinUI.SortModule
         /// The typeof of the nested property - This is used because some types can be composed from multiple types
         /// </summary>
         public Type[] NestedTypes { get; }
-
-        /// <summary>
-        /// The text to display on the sort entry
-        /// </summary>
-        public string Header { get; }
 
         /// <summary>
         /// The tooltip to display on the sorting button

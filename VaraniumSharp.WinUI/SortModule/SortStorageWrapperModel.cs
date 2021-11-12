@@ -9,6 +9,8 @@ namespace VaraniumSharp.WinUI.SortModule
     /// </summary>
     public class SortStorageWrapperModel
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -28,6 +30,10 @@ namespace VaraniumSharp.WinUI.SortModule
             SortStorage = storageModels;
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// The name of the layout being stored
         /// </summary>
@@ -39,5 +45,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         [JsonInclude]
         public List<SortStorageModel> SortStorage { get; set; }
+
+        #endregion
     }
 }

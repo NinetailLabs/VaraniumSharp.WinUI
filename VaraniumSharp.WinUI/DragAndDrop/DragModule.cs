@@ -16,6 +16,8 @@ namespace VaraniumSharp.WinUI.DragAndDrop
     /// </summary>
     public class DragModule<T> where T: IStringDragItem
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -31,6 +33,10 @@ namespace VaraniumSharp.WinUI.DragAndDrop
             _sourceCollection = sourceCollection;
             _targetCollection = targetCollection;
         }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Start the dragging of an entry that implements the <see cref="IStringDragItem"/> type
@@ -74,18 +80,13 @@ namespace VaraniumSharp.WinUI.DragAndDrop
             {
                 var jsonData = await e.DataView.GetTextAsync();
                 var dragData = JsonSerializer.Deserialize(jsonData, DragDataCollectionJsonContext.Default.DragDataCollection);
-                if (dragData?.EntryType == _entryTypeToHandler)
-                {
-                    e.AcceptedOperation = _acceptedOperation;
-                }
-                else
-                {
-                    e.AcceptedOperation = DataPackageOperation.None;
-                }
+                e.AcceptedOperation = dragData?.EntryType == _entryTypeToHandler 
+                    ? _acceptedOperation 
+                    : DataPackageOperation.None;
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "An error occured during the DragOver operation");
+                _logger.LogError(exception, "An error occurred during the DragOver operation");
                 e.AcceptedOperation = DataPackageOperation.None;
             }
 
@@ -114,7 +115,7 @@ namespace VaraniumSharp.WinUI.DragAndDrop
 
                 var target = (GridView)sender;
                 var pos = e.GetPosition(target.ItemsPanelRoot);
-                var sampleItem = (GridViewItem)target.ContainerFromIndex(0);
+                var sampleItem = target.ContainerFromIndex(0) as GridViewItem;
                 var index = 0;
                 if (sampleItem != null)
                 {
@@ -147,11 +148,30 @@ namespace VaraniumSharp.WinUI.DragAndDrop
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "An error occured during the drop operation");
+                _logger.LogError(exception, "An error occurred during the drop operation");
             }
 
             def.Complete();
         }
+
+        #endregion
+
+        #region Variables
+
+        /// <summary>
+        /// The type of operation that is accepted
+        /// </summary>
+        private readonly DataPackageOperation _acceptedOperation;
+
+        /// <summary>
+        /// The type of entries that the DragModule handles
+        /// </summary>
+        private readonly string _entryTypeToHandler;
+
+        /// <summary>
+        /// Logger instance
+        /// </summary>
+        private readonly ILogger _logger;
 
         /// <summary>
         /// The collection that items should be moved from
@@ -163,19 +183,6 @@ namespace VaraniumSharp.WinUI.DragAndDrop
         /// </summary>
         private readonly ObservableCollection<T> _targetCollection;
 
-        /// <summary>
-        /// Logger instance
-        /// </summary>
-        private readonly ILogger _logger;
-        
-        /// <summary>
-        /// The type of entries that the DragModule handles
-        /// </summary>
-        private readonly string _entryTypeToHandler;
-
-        /// <summary>
-        /// The type of operation that is accepted
-        /// </summary>
-        private readonly DataPackageOperation _acceptedOperation;
+        #endregion
     }
 }

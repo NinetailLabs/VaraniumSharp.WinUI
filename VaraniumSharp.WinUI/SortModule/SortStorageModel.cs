@@ -9,6 +9,8 @@ namespace VaraniumSharp.WinUI.SortModule
     /// </summary>
     public class SortStorageModel
     {
+        #region Constructor
+
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -32,6 +34,10 @@ namespace VaraniumSharp.WinUI.SortModule
             SubEntries = new();
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// The unqiue identifier of the control that the sort is for
         /// </summary>
@@ -47,5 +53,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// These entries are used for controls that are part of a sub layout pane
         /// </summary>
         public List<SortStorageModel> SubEntries { get; set; }
+
+        #endregion
     }
 }

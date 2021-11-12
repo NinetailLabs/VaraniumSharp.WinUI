@@ -61,6 +61,21 @@ namespace VaraniumSharp.WinUI.SortModule
         public ObservableCollection<SortOrderEntry> EntriesSortedBy { get; }
 
         /// <summary>
+        /// Indicate if the collection is sorted
+        /// </summary>
+        public bool IsSorted { get; private set; }
+
+        /// <summary>
+        /// Indicate if the UI button to move entries from the <see cref="AvailableSortEntries"/> to the <see cref="EntriesSortedBy"/> collection should be enabled
+        /// </summary>
+        public bool MoveAvailableEnabled { get; private set; }
+
+        /// <summary>
+        /// Indicate if the UI button to move entries from the <see cref="EntriesSortedBy"/> to the <see cref="AvailableSortEntries"/> collection should be enabled
+        /// </summary>
+        public bool MoveSortedByEnabled { get; private set; }
+
+        /// <summary>
         /// List containing the nested types for generic properties
         /// </summary>
         public List<Type[]> NestedTypeList { get; }
@@ -89,21 +104,6 @@ namespace VaraniumSharp.WinUI.SortModule
                 MoveSortedByEnabled = value != null;
             }
         }
-
-        /// <summary>
-        /// Indicate if the UI button to move entries from the <see cref="AvailableSortEntries"/> to the <see cref="EntriesSortedBy"/> collection should be enabled
-        /// </summary>
-        public bool MoveAvailableEnabled { get; private set; }
-
-        /// <summary>
-        /// Indicate if the UI button to move entries from the <see cref="EntriesSortedBy"/> to the <see cref="AvailableSortEntries"/> collection should be enabled
-        /// </summary>
-        public bool MoveSortedByEnabled { get; private set; }
-
-        /// <summary>
-        /// Indicate if the collection is sorted
-        /// </summary>
-        public bool IsSorted { get; private set; }
 
         #endregion
 

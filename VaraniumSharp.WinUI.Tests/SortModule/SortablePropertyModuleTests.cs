@@ -296,5 +296,75 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             entry.SortHeader.Should().Be("DateSort");
             entry.SortTooltip.Should().Be("Sort by date");
         }
+
+        [Fact]
+        public void SelectingAnAvailableEntryEnablesItForMove()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateSortEntries(typeof(SortableFixture));
+
+            // act
+            sut.SelectedAvailableEntry = sut.AvailableSortEntries.First();
+
+            // assert
+            sut.SelectedAvailableEntry.Should().NotBeNull();
+            sut.MoveAvailableEnabled.Should().BeTrue();
+        }
+
+        [Fact]
+        public void SelectingSortByEntryEnablesItForMove()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateSortEntries(typeof(SortableFixture));
+
+            // act
+            sut.SelectedSortByEntry = sut.EntriesSortedBy.First();
+
+            // assert
+            sut.SelectedSortByEntry.Should().NotBeNull();
+            sut.MoveSortedByEnabled.Should().BeTrue();
+        }
+
+        [Fact]
+        public void RequestingMoveOfAvailableEntryToSortMovesTheEntry()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.SelectedAvailableEntry = sut.AvailableSortEntries.First();
+
+            // act
+            sut.MoveEntryFromAvailableToSortedBy();
+
+            // assert
+            sut.AvailableSortEntries.Count.Should().Be(0);
+            sut.EntriesSortedBy.Count.Should().Be(2);
+        }
+
+        [Fact]
+        public void RequestingMoveOfSortedEntryMovesItToAvailableEntries()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.SelectedSortByEntry = sut.EntriesSortedBy.First();
+
+            // act
+            sut.MoveEntryFromSortedByToAvailable();
+
+            // assert
+            sut.EntriesSortedBy.Count.Should().Be(0);
+            sut.AvailableSortEntries.Count.Should().Be(2);
+        }
     }
 }
