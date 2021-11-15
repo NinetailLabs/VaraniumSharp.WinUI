@@ -17,6 +17,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Guid ContentId { get; }
 
         /// <summary>
+        /// Unique Id for the instance of the control.
+        /// This can be used to associated additional stored information with the correct instance during control initialization.
+        /// </summary>
+        Guid InstanceId { get; set; }
+
+        /// <summary>
         /// The height of the control
         /// </summary>
         double Height { get; set; }

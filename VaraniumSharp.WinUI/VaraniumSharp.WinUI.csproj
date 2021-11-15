@@ -28,6 +28,8 @@
     <None Remove="CustomPaneBase\GridViewStyles.xaml" />
     <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
     <None Remove="SettingPane\SettingPane.xaml" />
+    <None Remove="SharedStyles\GridViewTemplates.xaml" />
+    <None Remove="SortModule\SortControl.xaml" />
     <None Remove="TabPane\TabLayoutLayoutPane.xaml" />
     <None Remove="TabWindow\TabWindow.xaml" />
     <None Remove="VerticalPane\VerticalLayoutPane.xaml" />
@@ -39,10 +41,10 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.0.3" />
-    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.3" />
-    <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.3" />
-    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.3" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+    <PackageReference Include="Microsoft.ProjectReunion" Version="0.8.5" />
+    <PackageReference Include="Microsoft.ProjectReunion.Foundation" Version="0.8.5" />
+    <PackageReference Include="Microsoft.ProjectReunion.WinUI" Version="0.8.5" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -51,14 +53,26 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.7.21377.19" />
-    <PackageReference Include="VaraniumSharp" Version="3.12.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.0" />
+    <PackageReference Include="VaraniumSharp" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
     <Folder Include="Pickers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SortModule\SortControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SharedStyles\GridViewTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -92,7 +106,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="CustomPaneBase\GridViewStyles.xaml">
+    <Page Update="SharedStyles\GridViewStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

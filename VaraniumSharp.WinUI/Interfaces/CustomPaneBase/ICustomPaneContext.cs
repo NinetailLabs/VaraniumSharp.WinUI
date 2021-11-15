@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
 {
@@ -63,7 +64,7 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <summary>
         /// Handle the loading of controls
         /// </summary>
-        Task HandleControlLoadAsync(List<ControlStorageModel> controls);
+        Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder);
 
         /// <summary>
         /// Set the size of the parent container and resize any controls after the current control.
@@ -93,6 +94,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <param name="height">The height of the parent container</param>
         /// <param name="width">The width of the parent container</param>
         Task UpdateChildrenSizeAsync(double width, double height);
+
+        /// <summary>
+        /// Retrieve collection of sortable controls and their current sort order
+        /// </summary>
+        /// <returns>Collection of sort storage models</returns>
+        Task<List<SortStorageModel>> GetControlSortOrdersAsync();
 
         #endregion
     }

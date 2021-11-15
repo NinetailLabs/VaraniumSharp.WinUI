@@ -33,6 +33,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             Width = displayComponent.Width;
             Height = displayComponent.Height;
             Title = displayComponent.Title;
+            InstanceId = displayComponent.InstanceId;
         }
 
         #endregion
@@ -56,6 +57,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// </summary>
         [JsonInclude]
         public double Height { get; set; }
+
+        /// <summary>
+        /// The instance Id for the control
+        /// </summary>
+        [JsonInclude]
+        public Guid InstanceId { get; set; }
 
         /// <summary>
         /// The title for the control

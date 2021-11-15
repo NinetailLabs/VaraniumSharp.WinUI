@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
 {
@@ -32,6 +33,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Task<List<ControlStorageModel>> GetComponentsForStorageAsync();
 
         /// <summary>
+        /// Retrieve sort storage models for sub-components
+        /// </summary>
+        /// <returns>Collection of sort storage models for sub components</returns>
+        Task<List<SortStorageModel>> GetSortStorageModelsAsync();
+
+        /// <summary>
         /// Get the layout identifier
         /// </summary>
         /// <returns>The control's identifier</returns>
@@ -42,7 +49,8 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// </summary>
         /// <param name="contentGuid">Guid of the content that should be loaded</param>
         /// <param name="controls">List of controls that should be loaded</param>
-        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls);
+        /// <param name="sortOrder">The default order in which the control content should be sorted</param>
+        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder);
 
         /// <summary>
         /// Initialize the pane when it doesn't have any controls
