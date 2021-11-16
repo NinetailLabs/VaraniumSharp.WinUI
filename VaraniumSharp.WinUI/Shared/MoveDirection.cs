@@ -1,4 +1,4 @@
-﻿namespace VaraniumSharp.WinUI.SortModule
+﻿namespace VaraniumSharp.WinUI.Shared
 {
     /// <summary>
     /// Indicate the direction in which a control should be moved

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using VaraniumSharp.WinUI.DragAndDrop;
 using Windows.ApplicationModel.DataTransfer;
+using VaraniumSharp.WinUI.Shared;
 
 namespace VaraniumSharp.WinUI.SortModule
 {

@@ -141,7 +141,7 @@ namespace VaraniumSharp.WinUI.SortModule
                     continue;
                 }
 
-                if (attribute.HasNestedSorts)
+                if (attribute.HasNestedProperties)
                 {
                     HandleNestedAttributeEntryGeneration(attribute, propertyPrefix, property);
                 }
@@ -149,7 +149,7 @@ namespace VaraniumSharp.WinUI.SortModule
                 {
                     var fullPropertyName = $"{propertyPrefix}{property.Name}";
                     CreateSortEntry(fullPropertyName, attribute.Header, attribute.ToolTip, attribute.DefaultSortDirection);
-                    if (attribute.DefaultSort && string.IsNullOrEmpty(_defaultSortProperty))
+                    if (attribute.IsDefault && string.IsNullOrEmpty(_defaultSortProperty))
                     {
                         _defaultSortProperty = fullPropertyName;
                     }

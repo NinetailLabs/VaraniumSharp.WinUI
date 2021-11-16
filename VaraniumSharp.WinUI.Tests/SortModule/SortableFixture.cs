@@ -18,7 +18,7 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
 
         public string NotSortable { get; set; }
 
-        [SortableProperty("SortByMe", "Sort by me", DefaultSort = true, DefaultSortDirection = SortDirection.Descending)]
+        [SortableProperty("SortByMe", "Sort by me", IsDefault = true, DefaultSortDirection = SortDirection.Descending)]
         public int SortByMe { get; set; }
 
         #endregion

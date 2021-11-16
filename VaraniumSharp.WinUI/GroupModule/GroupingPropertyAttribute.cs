@@ -1,64 +1,48 @@
 ﻿using System;
-using CommunityToolkit.WinUI.UI;
 using VaraniumSharp.WinUI.Shared;
 
-namespace VaraniumSharp.WinUI.SortModule
+namespace VaraniumSharp.WinUI.GroupModule
 {
     /// <summary>
-    /// Attribute used to mark properties in a ViewModel as sortable
+    /// Attribute that is used to indicate that the property can be used for grouping
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public sealed class SortablePropertyAttribute : ShapingPropertyAttributeBase
+    public class GroupingPropertyAttribute : ShapingPropertyAttributeBase
     {
         #region Constructor
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        private SortablePropertyAttribute()
-        {
-            DefaultSortDirection = SortDirection.Ascending;
-        }
+        private GroupingPropertyAttribute()
+        { }
 
         /// <summary>
         /// Construct the attribute
         /// </summary>
         /// <param name="header">The title to display on the sort control</param>
         /// <param name="toolTip">Tooltip to display on the search button</param>
-        public SortablePropertyAttribute(string header, string toolTip)
+        public GroupingPropertyAttribute(string header, string toolTip)
             : base(header, toolTip)
         {
-            DefaultSortDirection = SortDirection.Ascending;
         }
 
         /// <summary>
         /// Constructor used for properties that contain nested sortable properties
         /// </summary>
         /// <param name="nestedTypes">The types that should be included in the sort</param>
-        public SortablePropertyAttribute(params Type[] nestedTypes)
+        public GroupingPropertyAttribute(params Type[] nestedTypes)
             : base(nestedTypes)
         {
-            DefaultSortDirection = SortDirection.Ascending;
         }
 
         /// <summary>
         /// Constructor used for properties that are generic and that contain nested sortable properties
         /// </summary>
         /// <param name="dictionaryIndex">Index in the module dictionary that contains the sort types</param>
-        public SortablePropertyAttribute(int dictionaryIndex)
+        public GroupingPropertyAttribute(int dictionaryIndex)
             : base(dictionaryIndex)
         {
-            DefaultSortDirection = SortDirection.Ascending;
         }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the default sort direction for the property
-        /// </summary>
-        public SortDirection DefaultSortDirection { get; set; }
 
         #endregion
     }

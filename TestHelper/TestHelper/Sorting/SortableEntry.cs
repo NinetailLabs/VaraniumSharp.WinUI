@@ -7,7 +7,7 @@ namespace TestHelper.Sorting
     {
         #region Properties
 
-        [SortableProperty("Id", "Sort by Id", DefaultSort = true)]
+        [SortableProperty("Id", "Sort by Id", IsDefault = true)]
         public int Id { get; init; }
 
         [SortableProperty("Position", "Sort by Position", DefaultSortDirection = SortDirection.Descending)]
