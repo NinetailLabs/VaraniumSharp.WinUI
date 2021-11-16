@@ -19,6 +19,15 @@ namespace TestHelper.Sorting
         [SortableProperty("Accidental Sort", "Sort by accident")]
         public string AccidentalSort { get; set; }
 
+        [SortableProperty("MoreSorting", "More sorting")]
+        public string MoreSorting { get; set; }
+
+        [SortableProperty("Even More", "Even more sorting")]
+        public string EvenMore { get; set; }
+
+        [SortableProperty("And another", "And another sort")]
+        public string AndAnother { get; set; }
+
         #endregion
     }
 }

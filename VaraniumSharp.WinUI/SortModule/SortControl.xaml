@@ -31,33 +31,37 @@
             Text="Sorted by"
             Grid.Row="0" />
 
-        <GridView
-            AllowDrop="True"
+        <ScrollViewer
             BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
             BorderThickness="1"
-            CanDragItems="True"
-            CanReorderItems="True"
             CornerRadius="5"
-            DragItemsStarting="{x:Bind Path=SortDragModule.OnStringTypeDragItemStarting}"
-            Drop="{x:Bind Path=AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
-            DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
             Grid.Column="0"
             Grid.Row="1"
-            ItemContainerStyle="{ThemeResource SortEntryContainer}"
-            ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
-            ItemTemplate="{ThemeResource SortEntry}"
-            KeyUp="GridView_KeyUp"
-            Name="AvailableGrid"
-            SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
-            Width="270">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid 
-                        HorizontalAlignment="Center"
-                        Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-        </GridView>
+            Width="280">
+            <GridView
+                AllowDrop="True"            
+                CanDragItems="True"
+                CanReorderItems="True"
+                DragItemsStarting="{x:Bind Path=SortDragModule.OnStringTypeDragItemStarting}"
+                Drop="{x:Bind Path=AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
+                DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
+                HorizontalAlignment="Left"
+                ItemContainerStyle="{ThemeResource SortEntryContainer}"
+                ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
+                ItemTemplate="{ThemeResource SortEntry}"
+                KeyUp="GridView_KeyUp"
+                Name="AvailableGrid"
+                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
+                Width="270">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid 
+                            HorizontalAlignment="Center"
+                            Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </ScrollViewer>
 
         <Grid
                 Grid.Column="1"
@@ -219,33 +223,37 @@
 
         </Grid>
 
-        <GridView
-            AllowDrop="True"
+        <ScrollViewer
             BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
             BorderThickness="1"
-            CanDragItems="True"
-            CanReorderItems="True"
             CornerRadius="5"
-            DragItemsStarting="{x:Bind Path=AvailableDragModule.OnStringTypeDragItemStarting}"
-            Drop="{x:Bind Path=SortDragModule.OnStringTypeVerticalDataGridDrop}"
-            DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
             Grid.Column="2"
             Grid.Row="1"
-            ItemContainerStyle="{ThemeResource SortEntryContainer}"
-            ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
-            ItemTemplate="{ThemeResource SortEntry}"
-            KeyUp="GridView_KeyUp"
-            Name="SortGrid"
-            SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedSortByEntry, Mode=TwoWay}"
-            Width="270">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid
-                        HorizontalAlignment="Center"
-                        Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-        </GridView>
+            Width="280">
+            <GridView
+                AllowDrop="True"
+                CanDragItems="True"
+                CanReorderItems="True"
+                DragItemsStarting="{x:Bind Path=AvailableDragModule.OnStringTypeDragItemStarting}"
+                Drop="{x:Bind Path=SortDragModule.OnStringTypeVerticalDataGridDrop}"
+                DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
+                HorizontalAlignment="Left"
+                ItemContainerStyle="{ThemeResource SortEntryContainer}"
+                ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
+                ItemTemplate="{ThemeResource SortEntry}"
+                KeyUp="GridView_KeyUp"
+                Name="SortGrid"
+                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedSortByEntry, Mode=TwoWay}"
+                Width="270">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid
+                            HorizontalAlignment="Center"
+                            Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </ScrollViewer>
 
     </Grid>
 </UserControl>
