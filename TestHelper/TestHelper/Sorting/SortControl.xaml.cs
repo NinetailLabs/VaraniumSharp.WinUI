@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml.Data;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.CustomPaneBase;
@@ -22,13 +23,21 @@ namespace TestHelper.Sorting
         {
             InitializeComponent();
             Entries = new();
-            CollectionView = new ExtendedAdvancedCollectionView(Entries, true);
+            CollectionView = new GroupingAdvancedCollectionView(Entries);
             SortablePropertyModule = new SortablePropertyModule(CollectionView);
             SortablePropertyModule.DisableDefaultSort = true;
             SortablePropertyModule.SortChanged += SortablePropertyModule_SortChanged;
             SortablePropertyModule.GenerateSortEntries(typeof(SortableEntry));
             SortablePropertyModule.RemoveSortEntry("AccidentalSort");
             SetupCollection();
+
+            CollectionView.Group = Group;
+        }
+
+        private object Group(object arg)
+        {
+            var obj = arg as SortableEntry;
+            return $"Group: {obj?.Id ?? 0}";
         }
 
         /// <summary>
@@ -57,7 +66,7 @@ namespace TestHelper.Sorting
 
         #region Properties
 
-        public ExtendedAdvancedCollectionView CollectionView { get; }
+        public GroupingAdvancedCollectionView CollectionView { get; }
 
         public Guid ContentId => Guid.Parse("84dc893c-f7f0-4e74-9922-b059c0d234b7");
 

@@ -27,7 +27,22 @@
         <GridView
             Grid.Row="2"
             Margin="10"
+            Name="SortableGrid"
             ItemsSource="{x:Bind Path=CollectionView}">
+            <GridView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+
+                            <Grid>
+                                <TextBlock
+                                    Text="{Binding}"/>
+                            </Grid>
+                            
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </GridView.GroupStyle>
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="local:SortableEntry">
                     <Border

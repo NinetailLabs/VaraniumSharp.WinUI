@@ -60,6 +60,7 @@
   <ItemGroup>
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
+    <Folder Include="GroupModule\" />
     <Folder Include="Pickers\" />
   </ItemGroup>
 
