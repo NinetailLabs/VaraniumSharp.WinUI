@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.WinUI.UI;
+using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.SortModule
 {
@@ -21,7 +22,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Construct and populate
         /// </summary>
         /// <param name="sortEntry">Sort entry to populate from</param>
-        public SortEntryStorageModel(SortOrderEntry sortEntry)
+        public SortEntryStorageModel(SortableShapingEntry sortEntry)
         {
             PropertyName = sortEntry.PropertyName;
             SortDirection = sortEntry.SortDirection;

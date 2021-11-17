@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VaraniumSharp.WinUI.Shared
+namespace VaraniumSharp.WinUI.Shared.ShapingModule
 {
     /// <summary>
     /// Base class for attributes that assist with live shaping of collections

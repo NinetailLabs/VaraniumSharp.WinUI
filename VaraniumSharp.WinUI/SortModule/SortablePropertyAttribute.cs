@@ -1,6 +1,6 @@
 ﻿using System;
 using CommunityToolkit.WinUI.UI;
-using VaraniumSharp.WinUI.Shared;
+using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.SortModule
 {

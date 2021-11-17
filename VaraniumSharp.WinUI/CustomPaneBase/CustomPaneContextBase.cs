@@ -192,7 +192,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         resultList.Add(new()
                         {
                             InstanceId = sortableDisplayComponent.InstanceId,
-                            SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesSortedBy.Select(x => new SortEntryStorageModel(x)).ToList()
+                            SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesShapedBy.Select(x => new SortEntryStorageModel(x as SortableShapingEntry)).ToList()
                         });
                     }
                 }

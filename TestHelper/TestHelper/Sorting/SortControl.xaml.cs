@@ -25,10 +25,10 @@ namespace TestHelper.Sorting
             Entries = new();
             CollectionView = new GroupingAdvancedCollectionView(Entries);
             SortablePropertyModule = new SortablePropertyModule(CollectionView);
-            SortablePropertyModule.DisableDefaultSort = true;
-            SortablePropertyModule.SortChanged += SortablePropertyModule_SortChanged;
-            SortablePropertyModule.GenerateSortEntries(typeof(SortableEntry));
-            SortablePropertyModule.RemoveSortEntry("AccidentalSort");
+            SortablePropertyModule.DisableDefaultShaping = true;
+            SortablePropertyModule.ShapingChanged += SortablePropertyModuleShapingChanged;
+            SortablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
+            SortablePropertyModule.RemoveShapingEntry("AccidentalSort");
             SetupCollection();
 
             CollectionView.Group = Group;
@@ -45,7 +45,7 @@ namespace TestHelper.Sorting
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
-        private void SortablePropertyModule_SortChanged(object sender, EventArgs e)
+        private void SortablePropertyModuleShapingChanged(object sender, EventArgs e)
         {
             SortChanged?.Invoke(this, e);
         }
@@ -136,14 +136,13 @@ namespace TestHelper.Sorting
         {
             foreach(var entry in sortEntries)
             {
-                var availableEntry = SortablePropertyModule.AvailableSortEntries.FirstOrDefault(x => x.PropertyName == entry.PropertyName);
-                if(availableEntry != null)
+                if(SortablePropertyModule.AvailableShapingEntries.FirstOrDefault(x => x.PropertyName == entry.PropertyName) is SortableShapingEntry availableEntry)
                 {
                     availableEntry.SortDirection = entry.SortDirection;
                 }
             }
 
-            SortablePropertyModule.SortByMultipleProperties(sortEntries.Select(x => x.PropertyName).ToArray());
+            SortablePropertyModule.ShapeByMultipleProperties(sortEntries.Select(x => x.PropertyName).ToArray());
         }
 
         #endregion

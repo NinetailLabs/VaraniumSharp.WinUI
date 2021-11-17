@@ -47,7 +47,7 @@
                 DragOver="{x:Bind Path=AvailableDragModule.OnStringTypeDragOver}"
                 HorizontalAlignment="Left"
                 ItemContainerStyle="{ThemeResource SortEntryContainer}"
-                ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableSortEntries}"
+                ItemsSource="{x:Bind Path=SortablePropertyModule.AvailableShapingEntries}"
                 ItemTemplate="{ThemeResource SortEntry}"
                 KeyUp="GridView_KeyUp"
                 Name="AvailableGrid"
@@ -76,7 +76,7 @@
             </Grid.RowDefinitions>
 
             <Button 
-                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromAvailableToSortedBy}"
+                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromAvailableToShapedBy}"
                 Grid.Row="1"
                 Height="30"
                 HorizontalAlignment="Center"
@@ -96,11 +96,11 @@
             </Button>
 
             <Button 
-                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromSortedByToAvailable}"
+                Click="{x:Bind Path=SortablePropertyModule.MoveEntryFromShapedByToAvailable}"
                 Grid.Row="2"
                 Height="30"
                 HorizontalAlignment="Center"
-                IsEnabled="{x:Bind Path=SortablePropertyModule.MoveSortedByEnabled, Mode=OneWay}"
+                IsEnabled="{x:Bind Path=SortablePropertyModule.MoveShapedByEnabled, Mode=OneWay}"
                 Margin="4,8,2,2"
                 ToolTipService.ToolTip="Remove entry from sort"
                 Width="30">
@@ -116,11 +116,11 @@
             </Button>
 
             <Button 
-                Click="{x:Bind Path=SortablePropertyModule.ClearSortOnClick}"
+                Click="{x:Bind Path=SortablePropertyModule.ClearShapingOnClick}"
                 Grid.Row="3"
                 Height="30"
                 HorizontalAlignment="Center"
-                IsEnabled="{x:Bind Path=SortablePropertyModule.IsSorted, Mode=OneWay}"
+                IsEnabled="{x:Bind Path=SortablePropertyModule.IsShaped, Mode=OneWay}"
                 Margin="4,8,2,2"
                 ToolTipService.ToolTip="Clear sort"
                 Width="30">
@@ -239,11 +239,11 @@
                 DragOver="{x:Bind Path=SortDragModule.OnStringTypeDragOver}"
                 HorizontalAlignment="Left"
                 ItemContainerStyle="{ThemeResource SortEntryContainer}"
-                ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesSortedBy}"
+                ItemsSource="{x:Bind Path=SortablePropertyModule.EntriesShapedBy}"
                 ItemTemplate="{ThemeResource SortEntry}"
                 KeyUp="GridView_KeyUp"
                 Name="SortGrid"
-                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedSortByEntry, Mode=TwoWay}"
+                SelectedItem="{x:Bind Path=SortablePropertyModule.SelectedShapedByEntry, Mode=TwoWay}"
                 Width="270">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
