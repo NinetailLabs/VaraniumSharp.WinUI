@@ -1,5 +1,4 @@
 ﻿using System;
-using VaraniumSharp.WinUI.Shared;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.GroupModule

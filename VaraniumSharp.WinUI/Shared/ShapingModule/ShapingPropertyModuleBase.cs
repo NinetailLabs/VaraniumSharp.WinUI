@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.WinUI.UI;
+using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.Shared.ShapingModule
 {
     /// <summary>
-    /// Base module that can be used to create collection shaping modules (eg SortablePropertyModule)
+    /// Base module that can be used to create collection shaping modules (eg GroupingPropertyModule)
     /// </summary>
-    public abstract partial class ShapingPropertyModuleBase : INotifyPropertyChanged
+    public abstract partial class ShapingPropertyModuleBase<T> : INotifyPropertyChanged where T : ShapingPropertyAttributeBase
     {
         #region Constructor
 

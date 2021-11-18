@@ -4,10 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.SortModule;
 
@@ -24,36 +25,27 @@ namespace TestHelper.Sorting
             InitializeComponent();
             Entries = new();
             CollectionView = new GroupingAdvancedCollectionView(Entries);
-            SortablePropertyModule = new SortablePropertyModule(CollectionView);
-            SortablePropertyModule.DisableDefaultShaping = true;
+            SortablePropertyModule = new SortablePropertyModule(CollectionView)
+            {
+                DisableDefaultShaping = true
+            };
             SortablePropertyModule.ShapingChanged += SortablePropertyModuleShapingChanged;
             SortablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
             SortablePropertyModule.RemoveShapingEntry("AccidentalSort");
+
+            GroupingPropertyModule = new GroupingPropertyModule(CollectionView)
+            {
+                DisableDefaultShaping = true
+            };
+            GroupingPropertyModule.GenerateShapingEntries(typeof(SortableEntry));
+            GroupingPropertyModule.ShapeByMultipleProperties("Title");
+
             SetupCollection();
-
-            CollectionView.Group = Group;
-        }
-
-        private object Group(object arg)
-        {
-            var obj = arg as SortableEntry;
-            return $"Group: {obj?.Id ?? 0}";
-        }
-
-        /// <summary>
-        /// Occurs when the <see cref="SortablePropertyModule"/> sort has changed
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        /// <param name="e">Event arguments</param>
-        private void SortablePropertyModuleShapingChanged(object sender, EventArgs e)
-        {
-            SortChanged?.Invoke(this, e);
         }
 
         #endregion
 
         #region Events
-
 
         /// <inheritdoc/>
 #pragma warning disable CS0067 // Is used via Fody
@@ -72,12 +64,15 @@ namespace TestHelper.Sorting
 
         private ObservableCollection<SortableEntry> Entries { get; }
 
+        public GroupingPropertyModule GroupingPropertyModule { get; }
+        public Guid InstanceId { get; set; }
+
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
+
         public bool StartupLoad { get; set; }
         public string Title { get; set; } = "Sort Control";
-        public Guid InstanceId { get; set; }
 
         #endregion
 
@@ -87,6 +82,20 @@ namespace TestHelper.Sorting
         {
             // Not used for now
             return Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public void InitSortOrder(List<SortEntryStorageModel> sortEntries)
+        {
+            foreach(var entry in sortEntries)
+            {
+                if(SortablePropertyModule.AvailableShapingEntries.FirstOrDefault(x => x.PropertyName == entry.PropertyName) is SortableShapingEntry availableEntry)
+                {
+                    availableEntry.SortDirection = entry.SortDirection;
+                }
+            }
+
+            SortablePropertyModule.ShapeByMultipleProperties(sortEntries.Select(x => x.PropertyName).ToArray());
         }
 
         public Task SetControlSizeAsync(double width, double height)
@@ -99,6 +108,12 @@ namespace TestHelper.Sorting
         #endregion
 
         #region Private Methods
+
+        private object Group(object arg)
+        {
+            var obj = arg as SortableEntry;
+            return $"Group: {obj?.Id ?? 0}";
+        }
 
         private void SetupCollection()
         {
@@ -129,20 +144,23 @@ namespace TestHelper.Sorting
                 Title = "A",
                 Position = 1
             });
+
+            Entries.Add(new SortableEntry
+            {
+                Id = 4,
+                Title = "A",
+                Position = 3
+            });
         }
 
-        /// <inheritdoc/>
-        public void InitSortOrder(List<SortEntryStorageModel> sortEntries)
+        /// <summary>
+        /// Occurs when the <see cref="SortablePropertyModule"/> sort has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void SortablePropertyModuleShapingChanged(object sender, EventArgs e)
         {
-            foreach(var entry in sortEntries)
-            {
-                if(SortablePropertyModule.AvailableShapingEntries.FirstOrDefault(x => x.PropertyName == entry.PropertyName) is SortableShapingEntry availableEntry)
-                {
-                    availableEntry.SortDirection = entry.SortDirection;
-                }
-            }
-
-            SortablePropertyModule.ShapeByMultipleProperties(sortEntries.Select(x => x.PropertyName).ToArray());
+            SortChanged?.Invoke(this, e);
         }
 
         #endregion

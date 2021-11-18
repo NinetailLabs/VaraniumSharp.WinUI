@@ -6,7 +6,7 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
     /// <summary>
     /// Public methods of the ShapingPropertyModuleBase
     /// </summary>
-    public abstract partial class ShapingPropertyModuleBase
+    public abstract partial class ShapingPropertyModuleBase<T>
     {
         #region Public Methods
 

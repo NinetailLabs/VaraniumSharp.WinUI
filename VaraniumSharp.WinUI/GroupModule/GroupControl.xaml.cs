@@ -1,23 +1,23 @@
-﻿using Microsoft.UI.Xaml.Controls;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using VaraniumSharp.WinUI.DragAndDrop;
 using Windows.ApplicationModel.DataTransfer;
+using Microsoft.UI.Xaml.Controls;
+using VaraniumSharp.WinUI.DragAndDrop;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
 
-namespace VaraniumSharp.WinUI.SortModule
+namespace VaraniumSharp.WinUI.GroupModule
 {
     /// <summary>
-    /// Control that provides drag and drop sorting
+    /// Control that provides drag and drop grouping
     /// </summary>
-    public sealed partial class SortControl : INotifyPropertyChanged
+    public sealed partial class GroupControl : INotifyPropertyChanged
     {
         #region Constructor
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public SortControl()
+        public GroupControl()
         {
             InitializeComponent();
         }
@@ -36,57 +36,40 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Properties
 
         /// <summary>
-        /// DragModule used for drag and drop from the sorted by entries to the available entries
+        /// DragModule used for drag and drop from the grouped by entries to the available entries
         /// </summary>
         public DragModule<ShapingEntry>? AvailableDragModule { get; private set; }
 
         /// <summary>
-        /// Module that contains the sortable properties
+        /// DragModule used for drag and drop from the available entries to the grouped by entries
         /// </summary>
-        public SortablePropertyModule? SortablePropertyModule 
+        public DragModule<ShapingEntry>? GroupDragModule { get; private set; }
+
+        /// <summary>
+        /// Module that contains the grouping properties
+        /// </summary>
+        public GroupingPropertyModule? GroupingPropertyModule
         {
-            get => _sortablePropertyModule;
+            get => _groupingPropertyModule;
             set
             {
-                _sortablePropertyModule = value;
+                _groupingPropertyModule = value;
                 if (value != null)
                 {
-                    SortDragModule = new("SortEntry", DataPackageOperation.Move, value.AvailableShapingEntries, value.EntriesShapedBy);
-                    AvailableDragModule = new("SortEntry", DataPackageOperation.Move, value.EntriesShapedBy, value.AvailableShapingEntries);
+                    GroupDragModule = new("GroupEntry", DataPackageOperation.Move, value.AvailableShapingEntries, value.EntriesShapedBy);
+                    AvailableDragModule = new("GroupEntry", DataPackageOperation.Move, value.EntriesShapedBy, value.AvailableShapingEntries);
                 }
                 else
                 {
-                    SortDragModule = null;
+                    GroupDragModule = null;
                     AvailableDragModule = null;
                 }
             }
         }
 
-        /// <summary>
-        /// DragModule used for drag and drop from the available entries to the sorted by entries
-        /// </summary>
-        public DragModule<ShapingEntry>? SortDragModule { get; private set; }
-
         #endregion
 
         #region Private Methods
-
-        /// <summary>
-        /// Change the direction in which the selected item is sorted
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        private void FlipSortDirection(object sender)
-        {
-            if (sender is GridView { Name: "AvailableGrid" })
-            {
-                (SortablePropertyModule?.SelectedAvailableEntry as SortableShapingEntry)?.ChangeDirectionClick();
-            }
-            
-            if (sender is GridView { Name: "SortGrid" })
-            {
-                (SortablePropertyModule?.SelectedShapedByEntry as SortableShapingEntry)?.ChangeDirectionClick();
-            }
-        }
 
         /// <summary>
         /// Occurs when a key is pressed while the user is in either of the sort grids
@@ -95,26 +78,20 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="e"></param>
         private void GridView_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            if(e.Key == Windows.System.VirtualKey.Enter)
+            if (e.Key == Windows.System.VirtualKey.Enter)
             {
                 HandleSelectedItemMove(sender);
                 return;
             }
 
-            if(e.Key.ToString() == "221" || e.Key.ToString() == "219")
+            var moveDown = e.Key == Windows.System.VirtualKey.Add || e.Key.ToString() == "187";
+            var moveUp = e.Key == Windows.System.VirtualKey.Subtract || e.Key.ToString() == "189";
+
+            if (!moveUp && !moveDown)
             {
-                FlipSortDirection(sender);
                 return;
             }
 
-            var moveDown = e.Key == Windows.System.VirtualKey.Add || e.Key.ToString() == "187";
-            var moveUp = e.Key == Windows.System.VirtualKey.Subtract || e.Key.ToString() == "189";
-            
-            if(!moveUp && !moveDown)
-            {
-                return;
-            }
-                        
             HandleMove(sender, moveUp ? MoveDirection.Up : MoveDirection.Down);
         }
 
@@ -125,18 +102,18 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="direction">Direction that the entry should be moved</param>
         private void HandleMove(object sender, MoveDirection direction)
         {
-            if (sender is GridView { Name: "AvailableGrid" } sgw && SortablePropertyModule?.AvailableShapingEntries.Count > 1 && SortablePropertyModule?.SelectedAvailableEntry != null)
+            if (sender is GridView { Name: "AvailableGrid" } sgw && GroupingPropertyModule?.AvailableShapingEntries.Count > 1 && GroupingPropertyModule?.SelectedAvailableEntry != null)
             {
-                var result = HandleMove(SortablePropertyModule.AvailableShapingEntries, SortablePropertyModule.SelectedAvailableEntry, direction);
+                var result = HandleMove(GroupingPropertyModule.AvailableShapingEntries, GroupingPropertyModule.SelectedAvailableEntry, direction);
                 if (result >= 0)
                 {
                     sgw.SelectedIndex = result;
                 }
             }
 
-            if (sender is GridView { Name: "SortGrid" } agw && SortablePropertyModule?.EntriesShapedBy.Count > 1 && SortablePropertyModule?.SelectedShapedByEntry != null)
+            if (sender is GridView { Name: "SortGrid" } agw && GroupingPropertyModule?.EntriesShapedBy.Count > 1 && GroupingPropertyModule?.SelectedShapedByEntry != null)
             {
-                var result = HandleMove(SortablePropertyModule.EntriesShapedBy, SortablePropertyModule.SelectedShapedByEntry, direction);
+                var result = HandleMove(GroupingPropertyModule.EntriesShapedBy, GroupingPropertyModule.SelectedShapedByEntry, direction);
                 if (result >= 0)
                 {
                     agw.SelectedIndex = result;
@@ -170,13 +147,13 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="sender">Sender of the event</param>
         private void HandleSelectedItemMove(object sender)
         {
-            if (sender is GridView { Name: "AvailableGrid" } && SortablePropertyModule?.MoveAvailableEnabled == true)
+            if (sender is GridView { Name: "AvailableGrid" } && GroupingPropertyModule?.MoveAvailableEnabled == true)
             {
-                SortablePropertyModule.MoveEntryFromAvailableToShapedBy();
+                GroupingPropertyModule.MoveEntryFromAvailableToShapedBy();
             }
-            else if (sender is GridView { Name: "SortGrid" } && SortablePropertyModule?.MoveShapedByEnabled == true)
+            else if (sender is GridView { Name: "SortGrid" } && GroupingPropertyModule?.MoveShapedByEnabled == true)
             {
-                SortablePropertyModule.MoveEntryFromShapedByToAvailable();
+                GroupingPropertyModule.MoveEntryFromShapedByToAvailable();
             }
         }
 
@@ -185,9 +162,9 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Variables
 
         /// <summary>
-        /// Backing variable for the <see cref="SortablePropertyModule"/> property
+        /// Backing variable for the <see cref="GroupingPropertyModule"/> property
         /// </summary>
-        private SortablePropertyModule? _sortablePropertyModule;
+        private GroupingPropertyModule? _groupingPropertyModule;
 
         #endregion
     }

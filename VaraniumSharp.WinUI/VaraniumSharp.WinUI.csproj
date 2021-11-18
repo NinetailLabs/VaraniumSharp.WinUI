@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Remove="CustomPaneBase\GridViewStyles.xaml" />
+    <None Remove="GroupModule\GroupControl.xaml" />
     <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
     <None Remove="SettingPane\SettingPane.xaml" />
     <None Remove="SharedStyles\GridViewTemplates.xaml" />
@@ -60,8 +61,14 @@
   <ItemGroup>
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
-    <Folder Include="GroupModule\" />
+    <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="GroupModule\GroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

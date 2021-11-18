@@ -4,11 +4,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
-using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.Shared.ShapingModule
 {
-    public abstract partial class ShapingPropertyModuleBase
+    public abstract partial class ShapingPropertyModuleBase<T>
     {
         #region Private Methods
 
@@ -17,14 +16,9 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// </summary>
         /// <param name="propertyName">Name of the property the button is for</param>
         /// <param name="attribute">Attribute containing the details of the shaping entry</param>
-        protected virtual ShapingEntry CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        protected virtual ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
         {
-            return new ShapingEntry("ShapingEntry")
-            {
-                PropertyName = propertyName,
-                Header = attribute.Header,
-                Tooltip = attribute.ToolTip
-            };
+            return null;
         }
 
         /// <summary>
@@ -97,11 +91,11 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         private void HandleShapingEntryGeneration(string propertyPrefix, IEnumerable<PropertyInfo> propertiesToCreateButtonsFor)
         {
             propertiesToCreateButtonsFor = propertiesToCreateButtonsFor
-                .OrderBy(x => ((SortablePropertyAttribute?)x.GetCustomAttribute(typeof(SortablePropertyAttribute)))?.Header);
+                .OrderBy(x => ((T?)x.GetCustomAttribute(typeof(T)))?.Header);
 
             foreach (var property in propertiesToCreateButtonsFor)
             {
-                var attribute = (SortablePropertyAttribute?)property.GetCustomAttribute(typeof(SortablePropertyAttribute));
+                var attribute = (T?)property.GetCustomAttribute(typeof(T));
 
                 if (attribute == null)
                 {
@@ -116,6 +110,11 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
                 {
                     var fullPropertyName = $"{propertyPrefix}{property.Name}";
                     var entry = CreateShapingEntry(fullPropertyName, attribute);
+                    if (entry == null)
+                    {
+                        continue;
+                    }
+
                     AvailableShapingEntries.Add(entry);
                     entry.RequestShapingUpdate += EntryOnRequestShapingUpdate;
                     

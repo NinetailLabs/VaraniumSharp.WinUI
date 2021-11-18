@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml.Data;
+using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.SortModule
@@ -11,14 +12,17 @@ namespace VaraniumSharp.WinUI.SortModule
     /// <summary>
     /// Assist with sorting a <see cref="ICollectionView"/> based on <see cref="SortablePropertyAttribute"/>s
     /// </summary>
-    public sealed class SortablePropertyModule : ShapingPropertyModuleBase
+    public sealed class SortablePropertyModule : ShapingPropertyModuleBase<SortablePropertyAttribute>
     {
         #region Constructor
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="viewSourceToSort">Advance Collection view to sort. Note the collection should have been constructed with isLiveShaping set to true</param>
+        /// <param name="viewSourceToSort">
+        /// Collection view to sort. Note the collection should have been constructed with isLiveShaping set to true.
+        /// The <see cref="ExtendedAdvancedCollectionView"/> or <see cref="GroupingAdvancedCollectionView"/> is recommended.
+        /// </param>
         public SortablePropertyModule(IAdvancedCollectionView viewSourceToSort)
             : base(viewSourceToSort)
         {
@@ -29,7 +33,7 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Private Methods
 
         /// <inheritdoc />
-        protected override ShapingEntry CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
         {
             if (attribute is SortablePropertyAttribute sortAttribute)
             {
@@ -43,7 +47,7 @@ namespace VaraniumSharp.WinUI.SortModule
                 };
             }
 
-            return base.CreateShapingEntry(propertyName, attribute);
+            return null;
         }
 
         /// <inheritdoc />
