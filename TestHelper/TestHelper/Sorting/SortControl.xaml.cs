@@ -33,7 +33,7 @@ namespace TestHelper.Sorting
             SortablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
             SortablePropertyModule.RemoveShapingEntry("AccidentalSort");
 
-            GroupingPropertyModule = new GroupingPropertyModule(CollectionView)
+            GroupingPropertyModule = new GroupingPropertyModule(CollectionView, SortableGrid)
             {
                 DisableDefaultShaping = true
             };

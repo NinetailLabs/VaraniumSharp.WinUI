@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
+using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.ExtensionMethods;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
@@ -18,9 +19,12 @@ namespace VaraniumSharp.WinUI.GroupModule
         /// Constructor
         /// </summary>
         /// <param name="viewSource">The collection to group.</param>
-        public GroupingPropertyModule(GroupingAdvancedCollectionView viewSource) 
+        /// <param name="gridView">The GridView that is used to display the grouped collection</param>
+        public GroupingPropertyModule(GroupingAdvancedCollectionView viewSource, GridView gridView) 
             : base(viewSource)
-        { }
+        {
+            _gridView = gridView;
+        }
 
         #endregion
 
@@ -83,7 +87,20 @@ namespace VaraniumSharp.WinUI.GroupModule
             var groupSource = (GroupingAdvancedCollectionView) ViewSource;
             groupSource.Group = null;
             groupSource.Group = Group;
+
+            // TODO - Issue #21
+            _gridView.ItemsSource = null;
+            _gridView.ItemsSource = ViewSource;
         }
+
+        #endregion
+
+        #region Variables
+
+        /// <summary>
+        /// The GridView that is used to display the grouped collection
+        /// </summary>
+        private readonly GridView _gridView;
 
         #endregion
     }

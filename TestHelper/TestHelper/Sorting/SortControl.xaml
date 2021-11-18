@@ -41,8 +41,7 @@
         <GridView
             Grid.Row="2"
             Margin="10"
-            Name="SortableGrid"
-            ItemsSource="{x:Bind Path=CollectionView, Mode=OneWay}">
+            Name="SortableGrid">
             <GridView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
