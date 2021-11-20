@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.CustomPaneBase;

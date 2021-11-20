@@ -192,7 +192,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         resultList.Add(new()
                         {
                             InstanceId = sortableDisplayComponent.InstanceId,
-                            SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesShapedBy.Select(x => new SortEntryStorageModel(x as SortableShapingEntry)).ToList()
+                            ShapingEntries = sortableDisplayComponent.SortablePropertyModule.EntriesShapedBy.Select(x => new SortEntryStorageModel(x as SortableShapingEntry)).ToList()
                         });
                     }
                 }
@@ -471,7 +471,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         var sortDetails = sortOrder.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
                         if (sortDetails != null)
                         {
-                            sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
+                            sortableDisplayComponent.InitSortOrder(sortDetails.ShapingEntries);
                         }
                     }
                     sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
