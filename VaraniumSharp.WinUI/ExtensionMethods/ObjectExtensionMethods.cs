@@ -5,7 +5,6 @@ using System.Reflection;
 
 namespace VaraniumSharp.WinUI.ExtensionMethods
 {
-    // TODO - Unit test
     /// <summary>
     /// Extension methods for <see cref="object"/>
     /// </summary>
@@ -64,43 +63,72 @@ namespace VaraniumSharp.WinUI.ExtensionMethods
                 {
                     if (!propertyName.Contains("."))
                     {
-                        var propType = type.GetProperty(propertyName);
-                        if (propType == null)
-                        {
-                            throw new InvalidOperationException($"{type.Name} does not have a property called {propertyName}.");
-                        }
-
-                        resultDictionary.Add(propertyName, propType);
+                        resultDictionary.Add(propertyName, RetrievePropertyInfo(type, propertyName));
                     }
                     else
                     {
-                        var path = propertyName.Split(".");
-                        var typeToUse = type;
-                        for (var r = 0; r < path.Length; r++)
-                        {
-                            var property = typeToUse
-                                .GetProperties()
-                                .FirstOrDefault(z => z.Name == path[r]);
-
-                            if (property == null)
-                            {
-                                throw new InvalidOperationException($"{typeToUse.Name} does not have a property called {path[r]}. Full requested path is {propertyName} and type is {type.Name}");
-                            }
-
-                            if (r == path.Length - 1)
-                            {
-                                resultDictionary.Add(propertyName, property);
-                            }
-                            else
-                            {
-                                typeToUse = property.PropertyType;
-                            }
-                        }
+                      resultDictionary.Add(propertyName, RetrieveNestedPropertyInfo(type, propertyName));
                     }
                 }
             }
 
             return resultDictionary;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Retrieve the property info for a nested property
+        /// </summary>
+        /// <param name="type">The type for which property info should be retrieved</param>
+        /// <param name="propertyName">The name of the property to retrieve</param>
+        /// <exception cref="InvalidOperationException">Thrown if the property could not be found</exception>
+        private static PropertyInfo RetrieveNestedPropertyInfo(Type type, string propertyName)
+        {
+            var path = propertyName.Split(".");
+            var typeToUse = type;
+            for (var r = 0; r < path.Length; r++)
+            {
+                var property = typeToUse
+                    .GetProperties()
+                    .FirstOrDefault(z => z.Name == path[r]);
+
+                if (property == null)
+                {
+                    throw new InvalidOperationException($"{typeToUse.Name} does not have a property called {path[r]}. Full requested path is {propertyName} and type is {type.Name}");
+                }
+
+                if (r == path.Length - 1)
+                {
+                    return property;
+                }
+                else
+                {
+                    typeToUse = property.PropertyType;
+                }
+            }
+
+            // We should never reach here but there is no other simple way to do this
+            throw new InvalidOperationException($"Could not find {propertyName} for {typeToUse.Name}");
+        }
+
+        /// <summary>
+        /// Retrieve the property info for a top level property
+        /// </summary>
+        /// <param name="type">The type for which property info should be retrieved</param>
+        /// <param name="propertyName">The name of the property to retrieve</param>
+        /// <exception cref="InvalidOperationException">Thrown if the property could not be found</exception>
+        private static PropertyInfo RetrievePropertyInfo(Type type, string propertyName)
+        {
+            var propType = type.GetProperty(propertyName);
+            if (propType == null)
+            {
+                throw new InvalidOperationException($"{type.Name} does not have a property called {propertyName}.");
+            }
+
+            return propType;
         }
 
         #endregion

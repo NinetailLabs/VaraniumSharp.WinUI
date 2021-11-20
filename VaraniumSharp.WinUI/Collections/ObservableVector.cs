@@ -11,24 +11,31 @@ using Windows.Foundation.Collections;
 
 namespace VaraniumSharp.WinUI.Collections
 {
-	public class ObservableVector<T> : IObservableVector<T>
+    /// <inheritdoc />
+    public class ObservableVector<T> : IObservableVector<T>
 	{
-        #region Events
+		#region Events
 
-        public event VectorChangedEventHandler<T> VectorChanged;
+		/// <inheritdoc />
+		public event VectorChangedEventHandler<T>? VectorChanged;
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        public int Count => _list.Count;
+		/// <inheritdoc />
+		public int Count => _list.Count;
 
-        public bool IsReadOnly => ((ICollection<T>)_list).IsReadOnly;
+        /// <inheritdoc />
+		public bool IsReadOnly => ((ICollection<T>)_list).IsReadOnly;
 
-        public bool IsVectorChangedDeferred
+		/// <summary>
+		/// Get or set whether vector changes are deferred or not
+		/// </summary>
+		public bool IsVectorChangedDeferred
 		{
-			get { return _isVectorChangedDeferred; }
-			set
+			get => _isVectorChangedDeferred;
+            set
 			{
 				if (value != _isVectorChangedDeferred)
 				{
@@ -41,10 +48,11 @@ namespace VaraniumSharp.WinUI.Collections
 			}
 		}
 
+        /// <inheritdoc />
         public T this[int index]
 		{
-			get { return _list[index]; }
-			set
+			get => _list[index];
+            set
 			{
 				var originalValue = _list[index];
 				if (!ReferenceEquals(originalValue, value))
@@ -55,37 +63,45 @@ namespace VaraniumSharp.WinUI.Collections
 			}
 		}
 
-        #endregion
+		#endregion
 
-        #region Public Methods
+		#region Public Methods
 
-        public void Add(T item)
+		/// <inheritdoc />
+		public void Add(T item)
 		{
 			_list.Add(item);
 			OnVectorChanged(CollectionChange.ItemInserted, _list.Count - 1);
 		}
 
-        public void Clear()
+        /// <inheritdoc />
+		public void Clear()
 		{
 			_list.Clear();
 			OnVectorChanged(CollectionChange.Reset, 0);
 		}
 
-        public bool Contains(T item) => _list.Contains(item);
+        /// <inheritdoc />
+		public bool Contains(T item) => _list.Contains(item);
 
-        public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
+        /// <inheritdoc />
+		public void CopyTo(T[] array, int arrayIndex) => _list.CopyTo(array, arrayIndex);
 
-        public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
+        /// <inheritdoc />
+		public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
 
-        public int IndexOf(T item) => _list.IndexOf(item);
+        /// <inheritdoc />
+		public int IndexOf(T item) => _list.IndexOf(item);
 
-        public void Insert(int index, T item)
+        /// <inheritdoc />
+		public void Insert(int index, T item)
 		{
 			_list.Insert(index, item);
 			OnVectorChanged(CollectionChange.ItemInserted, index);
 		}
 
-        public bool Remove(T item)
+        /// <inheritdoc />
+		public bool Remove(T item)
 		{
 			var index = _list.IndexOf(item);
 
@@ -101,7 +117,8 @@ namespace VaraniumSharp.WinUI.Collections
 			}
 		}
 
-        public void RemoveAt(int index)
+        /// <inheritdoc />
+		public void RemoveAt(int index)
 		{
 			_list.RemoveAt(index);
 			OnVectorChanged(CollectionChange.ItemRemoved, index);
@@ -130,7 +147,7 @@ namespace VaraniumSharp.WinUI.Collections
 
         #region Variables
 
-        private readonly List<T> _list = new List<T>();
+        private readonly List<T> _list = new();
 
         private bool _isVectorChangedDeferred;
         private int _numChangesPending;
@@ -141,8 +158,8 @@ namespace VaraniumSharp.WinUI.Collections
 		{
             #region Properties
 
-            public CollectionChange CollectionChange { get; internal set; }
-            public uint Index { get; internal set; }
+            public CollectionChange CollectionChange { get; internal init; }
+            public uint Index { get; internal init; }
 
             #endregion
         }

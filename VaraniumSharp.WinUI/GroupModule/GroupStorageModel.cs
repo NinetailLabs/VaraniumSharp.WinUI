@@ -25,8 +25,10 @@ namespace VaraniumSharp.WinUI.GroupModule
         /// <param name="instanceId">Instance Id of the control the sort is for</param>
         /// <param name="groupShapingEntries">Entries that the control is sorted by</param>
         public GroupStorageModel(Guid instanceId, List<GroupShapingEntry> groupShapingEntries)
-            : base(instanceId, groupShapingEntries) 
-        { }
+            : base(instanceId, groupShapingEntries)
+        {
+            SubEntries = new();
+        }
 
         #endregion
 

@@ -76,8 +76,6 @@ namespace VaraniumSharp.WinUI.Collections
             }
         }
 
-        private Func<object, object>? _group;
-
         #endregion
 
         #region Private Methods
@@ -103,7 +101,7 @@ namespace VaraniumSharp.WinUI.Collections
             col.GroupItems.Add(item);
         }
 
-        private object GetItemGroup(object item)
+        private object? GetItemGroup(object item)
         {
             return Group?.Invoke(item);
         }
@@ -115,10 +113,18 @@ namespace VaraniumSharp.WinUI.Collections
             {
                 case CollectionChange.ItemChanged:
                     RemoveGroupedItem(this[ndx]);
-                    AddGroupedItem(GetItemGroup(this[ndx]), this[ndx]);
+                    var entry = GetItemGroup(this[ndx]);
+                    if (entry != null)
+                    {
+                        AddGroupedItem(entry, this[ndx]);
+                    }
                     break;
                 case CollectionChange.ItemInserted:
-                    AddGroupedItem(GetItemGroup(this[ndx]), this[ndx]);
+                    var insertEntry = GetItemGroup(this[ndx]);
+                    if (insertEntry != null)
+                    {
+                        AddGroupedItem(insertEntry, this[ndx]);
+                    }
                     break;
                 case CollectionChange.ItemRemoved:
                     RebuildGroups();
@@ -183,10 +189,10 @@ namespace VaraniumSharp.WinUI.Collections
                 throw new InvalidOperationException("Cannot group items as the internal collection group is null");
             }
 
-            foreach (CollectionViewGroup g in _collectionGroups)
+            foreach (var g in _collectionGroups.Select(x => ((CollectionViewGroup)x).Items))
             {
-                g.Items.IsVectorChangedDeferred = _collectionGroups.IsVectorChangedDeferred;
-                g.Items.Remove(item);
+                g.IsVectorChangedDeferred = _collectionGroups.IsVectorChangedDeferred;
+                g.Remove(item);
             }
         }
 
@@ -195,6 +201,8 @@ namespace VaraniumSharp.WinUI.Collections
         #region Variables
 
         private ObservableVector<object>? _collectionGroups;
+
+        private Func<object, object>? _group;
 
         #endregion
     }

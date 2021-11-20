@@ -13,14 +13,6 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Constructor
 
         /// <summary>
-        /// Default Constructor
-        /// </summary>
-        private SortablePropertyAttribute()
-        {
-            DefaultSortDirection = SortDirection.Ascending;
-        }
-
-        /// <summary>
         /// Construct the attribute
         /// </summary>
         /// <param name="header">The title to display on the sort control</param>

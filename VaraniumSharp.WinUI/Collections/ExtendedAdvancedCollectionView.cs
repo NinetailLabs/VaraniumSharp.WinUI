@@ -753,6 +753,9 @@ namespace VaraniumSharp.WinUI.Collections
 
         private readonly Dictionary<string, PropertyInfo> _sortProperties;
 
+        /// <summary>
+        /// The view storing the collection of items
+        /// </summary>
         protected readonly List<object> _view;
 
         private int _deferCounter;

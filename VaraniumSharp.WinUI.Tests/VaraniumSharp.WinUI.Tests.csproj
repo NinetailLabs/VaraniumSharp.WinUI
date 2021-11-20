@@ -27,4 +27,8 @@
     <ProjectReference Include="..\VaraniumSharp.WinUI\VaraniumSharp.WinUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExtensionMethods\" />
+  </ItemGroup>
+
 </Project>

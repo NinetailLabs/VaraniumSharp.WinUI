@@ -7,7 +7,6 @@ using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.GroupModule
 {
-    // TODO - Unit test
     /// <summary>
     /// Assists with grouping a <see cref="GroupingAdvancedCollectionView"/>
     /// </summary>
