@@ -51,6 +51,7 @@ namespace VaraniumSharp.WinUI.GroupModule
         {
             Shape("");
             IsShaped = EntriesShapedBy.Count > 0;
+            FireShapingChangedEvent();
         }
 
         /// <summary>

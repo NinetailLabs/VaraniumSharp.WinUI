@@ -21,7 +21,7 @@ namespace VaraniumSharp.WinUI.GroupModule
         /// Construct and populate
         /// </summary>
         /// <param name="layoutName">Name of the layout being stored</param>
-        /// <param name="storageModels">SortStorage models to store</param>
+        /// <param name="storageModels">ShapingStorage models to store</param>
         public GroupStorageWrapperModel(Guid layoutName, List<GroupStorageModel> storageModels)
             : base(layoutName, storageModels)
         { }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.TabPane;
 using VaraniumSharp.WinUI.SortModule;
 
@@ -50,6 +51,9 @@ namespace VaraniumSharp.WinUI.TabPane
         public ITabLayoutPaneContext Context { get; }
 
         /// <inheritdoc />
+        public Guid InstanceId { get; set; }
+
+        /// <inheritdoc />
         public bool ShowResizeHandle { get; set; }
 
         /// <inheritdoc />
@@ -58,15 +62,12 @@ namespace VaraniumSharp.WinUI.TabPane
         /// <inheritdoc />
         public string Title { get; set; }
 
-        #endregion
-
-        #region Public Methods
-
         /// <inheritdoc />
         public Guid UniqueIdentifier { get; set; }
 
-        /// <inheritdoc />
-        public Guid InstanceId { get; set; }
+        #endregion
+
+        #region Public Methods
 
         /// <inheritdoc />
         public async Task CleanPaneAsync()
@@ -92,7 +93,19 @@ namespace VaraniumSharp.WinUI.TabPane
         }
 
         /// <inheritdoc />
+        public async Task<List<GroupStorageModel>> GetGroupStorageModelsAsync()
+        {
+            return await Context.GetGroupStorageModelsAsync().ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public Guid GetIdentifier() => Context.LayoutIdentifier;
+
+        /// <inheritdoc />
+        public async Task<List<SortStorageModel>> GetSortStorageModelsAsync()
+        {
+            return await Context.GetControlSortOrdersAsync();
+        }
 
         /// <inheritdoc />
         public Task InitAsync()
@@ -102,11 +115,11 @@ namespace VaraniumSharp.WinUI.TabPane
         }
 
         /// <inheritdoc />
-        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
+        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
         {
             Context.LayoutIdentifier = contentGuid;
 
-            await Context.HandleControlLoadAsync(controls, sortOrder);
+            await Context.HandleControlLoadAsync(controls, sortOrder, groupOrder);
             await Context.SetControlResizingAsync();
             await Context.UpdateChildrenSizeAsync(Width, Height);
         }
@@ -128,12 +141,6 @@ namespace VaraniumSharp.WinUI.TabPane
             TabContainer.Height = height + 12;
 
             await Context.UpdateChildrenSizeAsync(width, height);
-        }
-
-        /// <inheritdoc />
-        public async Task<List<SortStorageModel>> GetSortStorageModelsAsync()
-        {
-            return await Context.GetControlSortOrdersAsync();
         }
 
         #endregion

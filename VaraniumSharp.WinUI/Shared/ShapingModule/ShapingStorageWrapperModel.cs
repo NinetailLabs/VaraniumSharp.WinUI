@@ -16,18 +16,18 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// </summary>
         protected ShapingStorageWrapperModel()
         {
-            SortStorage = new();
+            ShapingStorage = new();
         }
 
         /// <summary>
         /// Construct and populate
         /// </summary>
         /// <param name="layoutName">Name of the layout being stored</param>
-        /// <param name="storageModels">SortStorage models to store</param>
+        /// <param name="storageModels">ShapingStorage models to store</param>
         protected ShapingStorageWrapperModel(Guid layoutName, List<T> storageModels)
         {
             LayoutName = layoutName;
-            SortStorage = storageModels;
+            ShapingStorage = storageModels;
         }
 
         #endregion
@@ -44,7 +44,7 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// Sort collection to store
         /// </summary>
         [JsonInclude]
-        public List<T> SortStorage { get; set; }
+        public List<T> ShapingStorage { get; set; }
 
         #endregion
     }

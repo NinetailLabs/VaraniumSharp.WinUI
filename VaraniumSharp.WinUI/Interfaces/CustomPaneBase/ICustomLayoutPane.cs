@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
@@ -33,10 +34,10 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Task<List<ControlStorageModel>> GetComponentsForStorageAsync();
 
         /// <summary>
-        /// Retrieve sort storage models for sub-components
+        /// Retrieve group storage models for sub-components
         /// </summary>
-        /// <returns>Collection of sort storage models for sub components</returns>
-        Task<List<SortStorageModel>> GetSortStorageModelsAsync();
+        /// <returns>Collection of group storage models for sub components</returns>
+        Task<List<GroupStorageModel>> GetGroupStorageModelsAsync();
 
         /// <summary>
         /// Get the layout identifier
@@ -45,12 +46,19 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Guid GetIdentifier();
 
         /// <summary>
+        /// Retrieve sort storage models for sub-components
+        /// </summary>
+        /// <returns>Collection of sort storage models for sub components</returns>
+        Task<List<SortStorageModel>> GetSortStorageModelsAsync();
+
+        /// <summary>
         /// Loads the component details from disk and places them in the collection
         /// </summary>
         /// <param name="contentGuid">Guid of the content that should be loaded</param>
         /// <param name="controls">List of controls that should be loaded</param>
         /// <param name="sortOrder">The default order in which the control content should be sorted</param>
-        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder);
+        /// <param name="groupOrder">The default order in which the control content should be grouped</param>
+        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder);
 
         /// <summary>
         /// Initialize the pane when it doesn't have any controls

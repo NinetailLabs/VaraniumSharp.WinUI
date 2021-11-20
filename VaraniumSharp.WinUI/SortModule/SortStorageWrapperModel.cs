@@ -22,7 +22,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Construct and populate
         /// </summary>
         /// <param name="layoutName">Name of the layout being stored</param>
-        /// <param name="storageModels">SortStorage models to store</param>
+        /// <param name="storageModels">ShapingStorage models to store</param>
         public SortStorageWrapperModel(Guid layoutName, List<SortStorageModel> storageModels)
             : base(layoutName, storageModels)
         { }

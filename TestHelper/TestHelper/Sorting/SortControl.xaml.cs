@@ -15,7 +15,7 @@ namespace TestHelper.Sorting
 {
     [AutomaticContainerRegistration(typeof(SortControl))]
     [DisplayComponent("Sort Control", "84dc893c-f7f0-4e74-9922-b059c0d234b7", "Sorting", 100, 100, typeof(SortControl))]
-    public sealed partial class SortControl: ISortableDisplayComponent
+    public sealed partial class SortControl: ISortableDisplayComponent, IGroupingDisplayComponent
     {
         #region Constructor
 
@@ -32,12 +32,12 @@ namespace TestHelper.Sorting
             SortablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
             SortablePropertyModule.RemoveShapingEntry("AccidentalSort");
 
-            GroupingPropertyModule = new GroupingPropertyModule(CollectionView, SortableGrid)
+            GroupingPropertyModule = new(CollectionView, SortableGrid)
             {
                 DisableDefaultShaping = true
             };
+            GroupingPropertyModule.ShapingChanged += GroupingPropertyModuleOnShapingChanged;
             GroupingPropertyModule.GenerateShapingEntries(typeof(SortableEntry));
-            GroupingPropertyModule.ShapeByMultipleProperties("Title");
 
             SetupCollection();
         }
@@ -45,6 +45,8 @@ namespace TestHelper.Sorting
         #endregion
 
         #region Events
+
+        public event EventHandler? GroupChanged;
 
         /// <inheritdoc/>
 #pragma warning disable CS0067 // Is used via Fody
@@ -62,8 +64,8 @@ namespace TestHelper.Sorting
         public Guid ContentId => Guid.Parse("84dc893c-f7f0-4e74-9922-b059c0d234b7");
 
         private ObservableCollection<SortableEntry> Entries { get; }
-
         public GroupingPropertyModule GroupingPropertyModule { get; }
+
         public Guid InstanceId { get; set; }
 
         public bool ShowResizeHandle { get; set; }
@@ -81,6 +83,11 @@ namespace TestHelper.Sorting
         {
             // Not used for now
             return Task.CompletedTask;
+        }
+
+        public void InitGroupOrder(List<GroupEntryStorageModel> groupEntries)
+        {
+            GroupingPropertyModule.ShapeByMultipleProperties(groupEntries.Select(x => x.PropertyName).ToArray());
         }
 
         /// <inheritdoc/>
@@ -112,6 +119,16 @@ namespace TestHelper.Sorting
         {
             var obj = arg as SortableEntry;
             return $"Group: {obj?.Id ?? 0}";
+        }
+
+        /// <summary>
+        /// Occurs when the <see cref="GroupingPropertyModule"/> groups has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void GroupingPropertyModuleOnShapingChanged(object? sender, EventArgs e)
+        {
+            GroupChanged?.Invoke(this, e);
         }
 
         private void SetupCollection()
@@ -157,7 +174,7 @@ namespace TestHelper.Sorting
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
-        private void SortablePropertyModuleShapingChanged(object sender, EventArgs e)
+        private void SortablePropertyModuleShapingChanged(object? sender, EventArgs e)
         {
             SortChanged?.Invoke(this, e);
         }
