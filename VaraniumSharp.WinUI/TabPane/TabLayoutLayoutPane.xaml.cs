@@ -11,7 +11,7 @@ namespace VaraniumSharp.WinUI.TabPane
     /// </summary>
     [AutomaticContainerRegistration(typeof(ITabLayoutPane))]
     [DisplayComponent("Tab Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(ITabLayoutPane))]
-    public sealed partial class TabLayoutLayoutPane : ITabLayoutPane, IAsyncDisposable
+    public sealed partial class TabLayoutLayoutPane : ITabLayoutPane
     {
         #region Constructor
 
@@ -37,17 +37,6 @@ namespace VaraniumSharp.WinUI.TabPane
         #endregion
 
         #region Public Methods
-
-        /// <inheritdoc />
-        public async ValueTask DisposeAsync()
-        {
-            if (Context is IAsyncDisposable disposableContext)
-            {
-                await disposableContext.DisposeAsync();
-            }
-
-            await CleanPaneAsync();
-        }
 
         /// <inheritdoc />
         public override Task SetControlSizeAsync(double width, double height)

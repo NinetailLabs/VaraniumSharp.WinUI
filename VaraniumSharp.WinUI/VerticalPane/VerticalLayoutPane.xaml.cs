@@ -13,7 +13,7 @@ namespace VaraniumSharp.WinUI.VerticalPane
     /// </summary>
     [AutomaticContainerRegistration(typeof(IVerticalLayoutPane))]
     [DisplayComponent("Vertical Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(IVerticalLayoutPane))]
-    public sealed partial class VerticalLayoutPane : IVerticalLayoutPane, IAsyncDisposable
+    public sealed partial class VerticalLayoutPane : IVerticalLayoutPane
     {
         #region Constructor
 
@@ -40,16 +40,7 @@ namespace VaraniumSharp.WinUI.VerticalPane
 
         #region Public Methods
 
-        /// <inheritdoc />
-        public async ValueTask DisposeAsync()
-        {
-            if (Context is IAsyncDisposable disposableContext)
-            {
-                await disposableContext.DisposeAsync();
-            }
-
-            await CleanPaneAsync();
-        }
+       
 
         /// <inheritdoc />
         public override Task SetControlSizeAsync(double width, double height)

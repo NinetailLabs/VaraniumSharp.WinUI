@@ -12,8 +12,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
     /// <summary>
     /// Base class for use with custom layout pane UI
     /// </summary>
-    public class LayoutPaneBase : UserControl, ICustomLayoutPane
+    public class LayoutPaneBase : UserControl, ICustomLayoutPane, IAsyncDisposable
     {
+        #region Constructor
+
         /// <summary>
         /// Construct and set required properties
         /// </summary>
@@ -26,6 +28,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             GenericContext = context;
             Title = title;
         }
+
+        #endregion
 
         #region Events
 
@@ -72,6 +76,17 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
+        public async ValueTask DisposeAsync()
+        {
+            if (GenericContext is IAsyncDisposable disposableContext)
+            {
+                await disposableContext.DisposeAsync();
+            }
+
+            await CleanPaneAsync();
+        }
+
+        /// <inheritdoc />
         public async Task<List<ControlStorageModel>> GetComponentsForStorageAsync()
         {
             return await GenericContext.GetControlsToSaveAsync();
@@ -110,18 +125,18 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
+        public virtual Task InitAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
         public virtual async Task SetControlSizeAsync(double width, double height)
         {
             Width = width;
             Height = height;
             
             await GenericContext.UpdateChildrenSizeAsync(width, height);
-        }
-
-        /// <inheritdoc />
-        public virtual Task InitAsync()
-        {
-            return Task.CompletedTask;
         }
 
         #endregion

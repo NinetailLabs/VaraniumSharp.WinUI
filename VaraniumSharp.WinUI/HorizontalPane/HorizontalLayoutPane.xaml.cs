@@ -13,7 +13,7 @@ namespace VaraniumSharp.WinUI.HorizontalPane
     /// </summary>
     [AutomaticContainerRegistration(typeof(IHorizontalLayoutPane))]
     [DisplayComponent("Horizontal Layout Pane", ContentIdentifier, "Layout", 100, 100, typeof(IHorizontalLayoutPane))]
-    public sealed partial class CustomLayoutPane : IHorizontalLayoutPane, IAsyncDisposable
+    public sealed partial class CustomLayoutPane : IHorizontalLayoutPane
     {
         #region Constructor
 
@@ -39,17 +39,6 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         #endregion
 
         #region Public Methods
-
-        /// <inheritdoc/>
-        public async ValueTask DisposeAsync()
-        {
-            if (Context is IAsyncDisposable disposableContext)
-            {
-                await disposableContext.DisposeAsync();
-            }
-
-            await CleanPaneAsync();
-        }
 
         /// <inheritdoc />
         public override Task SetControlSizeAsync(double width, double height)

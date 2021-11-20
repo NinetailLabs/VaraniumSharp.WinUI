@@ -23,6 +23,7 @@ namespace VaraniumSharp.WinUI.GroupModule
             : base(viewSource)
         {
             _gridView = gridView;
+            _gridView.ItemsSource = ViewSource;
         }
 
         #endregion
