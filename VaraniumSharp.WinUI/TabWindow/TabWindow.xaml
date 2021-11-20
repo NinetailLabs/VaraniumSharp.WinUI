@@ -26,9 +26,11 @@
         </Grid>
 
         <TabView
+            Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
             x:Name="TabViewer"
             AddTabButtonClick="{x:Bind Path=Context.OnAddClickedAsync}"
             Grid.Column="0"            
+            Grid.Row="0"
             MaxWidth="{x:Bind Path=Context.MaxTabViewSize, Mode=OneWay}"
             Loaded="{x:Bind Path=Context.OnLoadedAsync, Mode=OneWay}"
             SelectionChanged="{x:Bind Path=Context.OnSelectionChangedAsync}"
@@ -42,9 +44,9 @@
             </TabView.Resources>
             <TabView.TabStripHeader>
                 <Button 
-                    Height="30"
-                    Margin="4,8,2,2"
-                    Width="30">
+                    Height="24"
+                    Margin="4,6,2,0"
+                    Width="36">
                     <Button.Content>
                         <FontIcon 
                             FontFamily="Segoe MDL2 Assets" 
@@ -94,6 +96,7 @@
         </TabView>
 
         <Grid
+            Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
             x:Name="LayoutPane"
             Grid.Column="0"
             Grid.ColumnSpan="3"

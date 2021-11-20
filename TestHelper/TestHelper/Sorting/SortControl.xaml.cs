@@ -114,13 +114,7 @@ namespace TestHelper.Sorting
         #endregion
 
         #region Private Methods
-
-        private object Group(object arg)
-        {
-            var obj = arg as SortableEntry;
-            return $"Group: {obj?.Id ?? 0}";
-        }
-
+        
         /// <summary>
         /// Occurs when the <see cref="GroupingPropertyModule"/> groups has changed
         /// </summary>

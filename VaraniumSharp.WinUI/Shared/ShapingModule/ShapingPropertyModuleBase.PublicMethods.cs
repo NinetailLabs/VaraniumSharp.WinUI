@@ -121,6 +121,12 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// <param name="propertiesToSortBy">The properties that the collection should be sorted by</param>
         public void ShapeByMultipleProperties(params string[] propertiesToSortBy)
         {
+            if (propertiesToSortBy.Length == 0)
+            {
+                Shape(string.Empty);
+                return;
+            }
+
             foreach (var property in propertiesToSortBy)
             {
                 var entry = AvailableShapingEntries.FirstOrDefault(x => x.PropertyName == property);

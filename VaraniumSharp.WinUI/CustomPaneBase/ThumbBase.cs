@@ -69,7 +69,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 return;
             }
-            ProtectedCursor = new CoreCursor(_cursorType, 0);
+            //ProtectedCursor = new CoreCursor(_cursorType, 0);
         }
 
         /// <summary>
