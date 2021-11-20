@@ -14,22 +14,22 @@ namespace VaraniumSharp.WinUI.Collections
     /// <inheritdoc />
     public class ObservableVector<T> : IObservableVector<T>
 	{
-		#region Events
+        #region Events
 
-		/// <inheritdoc />
+        /// <inheritdoc />
 		public event VectorChangedEventHandler<T>? VectorChanged;
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <inheritdoc />
+        /// <inheritdoc />
 		public int Count => _list.Count;
 
         /// <inheritdoc />
 		public bool IsReadOnly => ((ICollection<T>)_list).IsReadOnly;
 
-		/// <summary>
+        /// <summary>
 		/// Get or set whether vector changes are deferred or not
 		/// </summary>
 		public bool IsVectorChangedDeferred
@@ -63,11 +63,11 @@ namespace VaraniumSharp.WinUI.Collections
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region Public Methods
+        #region Public Methods
 
-		/// <inheritdoc />
+        /// <inheritdoc />
 		public void Add(T item)
 		{
 			_list.Add(item);
@@ -150,11 +150,12 @@ namespace VaraniumSharp.WinUI.Collections
         private readonly List<T> _list = new();
 
         private bool _isVectorChangedDeferred;
+
         private int _numChangesPending;
 
         #endregion
 
-        private class VectorChangedEventArgs : IVectorChangedEventArgs
+        private sealed class VectorChangedEventArgs : IVectorChangedEventArgs
 		{
             #region Properties
 

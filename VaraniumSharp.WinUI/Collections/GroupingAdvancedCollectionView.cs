@@ -153,6 +153,11 @@ namespace VaraniumSharp.WinUI.Collections
                     foreach (var item in _view)
                     {
                         var key = GetItemGroup(item);
+                        if (key == null)
+                        {
+                            throw new InvalidOperationException("Cannot group items if the key is null");
+                        }
+
                         if (!groupKeys.ContainsKey(key))
                         {
                             groupKeys.Add(key, new List<object>{ item });
