@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
-using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.TabPane;
-using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.TabPane
 {
@@ -23,57 +19,24 @@ namespace VaraniumSharp.WinUI.TabPane
         /// DI Constructor
         /// </summary>
         public TabLayoutLayoutPane(ITabLayoutPaneContext tabLayoutPaneContext)
+            : base(Guid.Parse(ContentIdentifier), tabLayoutPaneContext, "Tab Pane")
         {
-            Title = "Tab Pane";
             Context = tabLayoutPaneContext;
             InitializeComponent();
         }
 
         #endregion
 
-        #region Events
-
-        /// <inheritdoc />
-#pragma warning disable CS0067 // Is used via Fody
-        public event PropertyChangedEventHandler? PropertyChanged;
-#pragma warning restore CS0067
-
-        #endregion
-
         #region Properties
-
-        /// <inheritdoc />
-        public Guid ContentId => Guid.Parse(ContentIdentifier);
 
         /// <summary>
         /// TabLayoutPaneContext instance
         /// </summary>
         public ITabLayoutPaneContext Context { get; }
 
-        /// <inheritdoc />
-        public Guid InstanceId { get; set; }
-
-        /// <inheritdoc />
-        public bool ShowResizeHandle { get; set; }
-
-        /// <inheritdoc />
-        public bool StartupLoad { get; set; }
-
-        /// <inheritdoc />
-        public string Title { get; set; }
-
-        /// <inheritdoc />
-        public Guid UniqueIdentifier { get; set; }
-
         #endregion
 
         #region Public Methods
-
-        /// <inheritdoc />
-        public async Task CleanPaneAsync()
-        {
-            await Context.ClearComponentsAsync();
-        }
 
         /// <inheritdoc />
         public async ValueTask DisposeAsync()
@@ -87,60 +50,12 @@ namespace VaraniumSharp.WinUI.TabPane
         }
 
         /// <inheritdoc />
-        public async Task<List<ControlStorageModel>> GetComponentsForStorageAsync()
+        public override Task SetControlSizeAsync(double width, double height)
         {
-            return await Context.GetControlsToSaveAsync();
-        }
-
-        /// <inheritdoc />
-        public async Task<List<GroupStorageModel>> GetGroupStorageModelsAsync()
-        {
-            return await Context.GetGroupStorageModelsAsync().ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Guid GetIdentifier() => Context.LayoutIdentifier;
-
-        /// <inheritdoc />
-        public async Task<List<SortStorageModel>> GetSortStorageModelsAsync()
-        {
-            return await Context.GetControlSortOrdersAsync();
-        }
-
-        /// <inheritdoc />
-        public Task InitAsync()
-        {
-            // Not used for this control
-            return Task.CompletedTask;
-        }
-
-        /// <inheritdoc />
-        public async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
-        {
-            Context.LayoutIdentifier = contentGuid;
-
-            await Context.HandleControlLoadAsync(controls, sortOrder, groupOrder);
-            await Context.SetControlResizingAsync();
-            await Context.UpdateChildrenSizeAsync(Width, Height);
-        }
-
-        /// <inheritdoc />
-        public Task InitAsync(Guid contentGuid)
-        {
-            Context.LayoutIdentifier = contentGuid;
-            return Task.CompletedTask;
-        }
-
-        /// <inheritdoc />
-        public async Task SetControlSizeAsync(double width, double height)
-        {
-            Width = width;
-            Height = height;
-
             TabContainer.Width = width;
             TabContainer.Height = height + 12;
 
-            await Context.UpdateChildrenSizeAsync(width, height);
+            return base.SetControlSizeAsync(width, height);
         }
 
         #endregion

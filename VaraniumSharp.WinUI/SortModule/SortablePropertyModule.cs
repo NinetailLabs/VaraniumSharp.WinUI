@@ -88,6 +88,11 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <inheritdoc />
         protected override void Shape(string propertyName)
         {
+            if (propertyName == string.Empty)
+            {
+                return;
+            }
+
             if (EntriesShapedBy.First(x => x.PropertyName == propertyName) is not SortableShapingEntry entryToSortBy)
             {
                 throw new InvalidOperationException($"{typeof(SortablePropertyModule)} cannot deal with the provided attribute as it is not a SortableShapingEntry");
