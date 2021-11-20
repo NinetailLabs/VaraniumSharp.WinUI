@@ -1,6 +1,5 @@
-﻿using Windows.UI.Core;
+﻿using System;
 using Microsoft.UI.Input;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 
@@ -9,7 +8,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
     /// <summary>
     /// Base class that contains logic to help with <see cref="Thumb"/> resizing
     /// </summary>
-    public abstract class ThumbBase : UserControl
+    public abstract class ThumbBase : LayoutPaneBase
     {
         #region Constructor
 
@@ -18,7 +17,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// </summary>
         /// <param name="customPaneContext">CustomPane context used for resizing</param>
         /// <param name="cursorType">The type of cursor to display for resizing</param>
-        protected ThumbBase(ICustomPaneContext customPaneContext, InputSystemCursorShape cursorType)
+        /// <param name="contentId">Content Id for the control</param>
+        /// <param name="title">Control's title</param>
+        protected ThumbBase(ICustomPaneContext customPaneContext, InputSystemCursorShape cursorType, Guid contentId, string title)
+            : base(contentId, customPaneContext, title)
         {
             _customPaneContext = customPaneContext;
             _cursorType = cursorType;

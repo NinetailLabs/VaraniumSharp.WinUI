@@ -9,13 +9,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-
-        <AcrylicBrush 
-            x:Key="CustomAcrylicBrush" 
-            TintOpacity="0" 
-            TintColor="#FF000000" 
-            FallbackColor="#FF008000" />
-
+        
         <DataTemplate x:Key="ResizableControl" x:DataType="customPaneBase:LayoutDisplay">
             <ContentControl>
                 <Grid>
@@ -36,7 +30,6 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
                         <Grid
-                            Background="{ThemeResource CustomAcrylicBrush}"
                             Grid.Column="1"
                             Grid.Row="0">
                             <Button 
@@ -46,7 +39,7 @@
                             HorizontalAlignment="Right"
                             Margin="5,5,5,5"
                             VerticalAlignment="Top"
-                            Width="30">
+                            Width="35">
                                 <Button.Content>
                                     <FontIcon
                                         FontFamily="Segoe MDL2 Assets"
@@ -57,7 +50,7 @@
                         </Grid>
                     </Grid>
                     <Grid 
-                        Background="{ThemeResource SystemControlAcrylicElementBrush}"                        
+                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
                         BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
                         BorderThickness="1"
                         Margin="2"
@@ -84,7 +77,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="{x:Bind converter:BindConverters.ConvertBoolToDisplaySize(Context.ShowControls, 48), Mode=OneWay}" />
+            <RowDefinition Height="{x:Bind converter:BindConverters.ConvertBoolToDisplaySize(GenericContext.ShowControls, 48), Mode=OneWay}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -128,7 +121,7 @@
             x:Name="ListControlContainer"
             AllowDrop="{x:Bind Context.MoveControls, Mode=OneWay}" 
             CanDrag="{x:Bind Context.MoveControls, Mode=OneWay}"
-            CanReorderItems="{x:Bind Context.MoveControls, Mode=OneWay}"            
+            CanReorderItems="{x:Bind Context.MoveControls, Mode=OneWay}"
             Grid.Row="1"
             IsItemClickEnabled="False"
             ItemContainerStyle="{ThemeResource NoSelect}"
