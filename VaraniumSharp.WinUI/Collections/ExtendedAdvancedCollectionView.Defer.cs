@@ -27,7 +27,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Notification deferrer helper class
         /// </summary>
-        public class NotificationDeferrer : IDisposable
+        public sealed class NotificationDeferrer : IDisposable
         {
             #region Constructor
 
@@ -62,7 +62,8 @@ namespace VaraniumSharp.WinUI.Collections
             #region Variables
 
             private readonly ExtendedAdvancedCollectionView _acvs;
-            private readonly object _currentItem;
+
+            private readonly object? _currentItem;
 
             #endregion
         }
