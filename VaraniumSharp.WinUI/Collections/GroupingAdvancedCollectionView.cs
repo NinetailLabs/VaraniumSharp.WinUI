@@ -147,33 +147,35 @@ namespace VaraniumSharp.WinUI.Collections
             {
                 _collectionGroups.Clear();
 
-                if (Source != null)
+                if (Source == null)
                 {
-                    var groupKeys = new Dictionary<object, List<object>>();
-                    foreach (var item in _view)
-                    {
-                        var key = GetItemGroup(item);
-                        if (key == null)
-                        {
-                            throw new InvalidOperationException("Cannot group items if the key is null");
-                        }
+                    return;
+                }
 
-                        if (!groupKeys.ContainsKey(key))
-                        {
-                            groupKeys.Add(key, new List<object>{ item });
-                        }
-                        else
-                        {
-                            groupKeys[key].Add(item);
-                        }
+                var groupKeys = new Dictionary<object, List<object>>();
+                foreach (var item in _view)
+                {
+                    var key = GetItemGroup(item);
+                    if (key == null)
+                    {
+                        throw new InvalidOperationException("Cannot group items if the key is null");
                     }
 
-                    foreach (var item in groupKeys.OrderBy(x => x.Key))
+                    if (!groupKeys.ContainsKey(key))
                     {
-                        foreach (var subItem in item.Value)
-                        {
-                            AddGroupedItem(item.Key, subItem);
-                        }
+                        groupKeys.Add(key, new List<object>{ item });
+                    }
+                    else
+                    {
+                        groupKeys[key].Add(item);
+                    }
+                }
+
+                foreach (var item in groupKeys.OrderBy(x => x.Key))
+                {
+                    foreach (var subItem in item.Value)
+                    {
+                        AddGroupedItem(item.Key, subItem);
                     }
                 }
             }
@@ -186,7 +188,7 @@ namespace VaraniumSharp.WinUI.Collections
                 _collectionGroups.IsVectorChangedDeferred = false;
             }
         }
-
+        
         private void RemoveGroupedItem(object item)
         {
             if (_collectionGroups == null)
