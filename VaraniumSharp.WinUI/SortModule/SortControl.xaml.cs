@@ -1,9 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using VaraniumSharp.WinUI.DragAndDrop;
-using Windows.ApplicationModel.DataTransfer;
-using VaraniumSharp.WinUI.Shared.ShapingModule;
+using VaraniumSharp.WinUI.Shared.ShapingControlHelper;
 
 namespace VaraniumSharp.WinUI.SortModule
 {
@@ -20,6 +17,7 @@ namespace VaraniumSharp.WinUI.SortModule
         public SortControl()
         {
             InitializeComponent();
+            ControlHelper = new("SortEntry");
         }
 
         #endregion
@@ -36,36 +34,18 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Properties
 
         /// <summary>
-        /// DragModule used for drag and drop from the sorted by entries to the available entries
+        /// Control helper instance
         /// </summary>
-        public DragModule<ShapingEntry>? AvailableDragModule { get; private set; }
+        public ShapingControlHelper<SortablePropertyModule, SortablePropertyAttribute> ControlHelper { get; }
 
         /// <summary>
-        /// Module that contains the sortable properties
+        /// Pass-through for the sortable module
         /// </summary>
-        public SortablePropertyModule? SortablePropertyModule 
+        public SortablePropertyModule? SortablePropertyModule
         {
-            get => _sortablePropertyModule;
-            set
-            {
-                _sortablePropertyModule = value;
-                if (value != null)
-                {
-                    SortDragModule = new("SortEntry", DataPackageOperation.Move, value.AvailableShapingEntries, value.EntriesShapedBy);
-                    AvailableDragModule = new("SortEntry", DataPackageOperation.Move, value.EntriesShapedBy, value.AvailableShapingEntries);
-                }
-                else
-                {
-                    SortDragModule = null;
-                    AvailableDragModule = null;
-                }
-            }
+            get => ControlHelper.ShapingPropertyModule;
+            set => ControlHelper.ShapingPropertyModule = value;
         }
-
-        /// <summary>
-        /// DragModule used for drag and drop from the available entries to the sorted by entries
-        /// </summary>
-        public DragModule<ShapingEntry>? SortDragModule { get; private set; }
 
         #endregion
 
@@ -79,12 +59,12 @@ namespace VaraniumSharp.WinUI.SortModule
         {
             if (sender is GridView { Name: "AvailableGrid" })
             {
-                (SortablePropertyModule?.SelectedAvailableEntry as SortableShapingEntry)?.ChangeDirectionClick();
+                (ControlHelper.ShapingPropertyModule?.SelectedAvailableEntry as SortableShapingEntry)?.ChangeDirectionClick();
             }
             
             if (sender is GridView { Name: "SortGrid" })
             {
-                (SortablePropertyModule?.SelectedShapedByEntry as SortableShapingEntry)?.ChangeDirectionClick();
+                (ControlHelper.ShapingPropertyModule?.SelectedShapedByEntry as SortableShapingEntry)?.ChangeDirectionClick();
             }
         }
 
@@ -95,99 +75,13 @@ namespace VaraniumSharp.WinUI.SortModule
         /// <param name="e"></param>
         private void GridView_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            if(e.Key == Windows.System.VirtualKey.Enter)
-            {
-                HandleSelectedItemMove(sender);
-                return;
-            }
+            ControlHelper.SharedKeyUpAction(sender, e);
 
             if(e.Key.ToString() == "221" || e.Key.ToString() == "219")
             {
                 FlipSortDirection(sender);
-                return;
-            }
-
-            var moveDown = e.Key == Windows.System.VirtualKey.Add || e.Key.ToString() == "187";
-            var moveUp = e.Key == Windows.System.VirtualKey.Subtract || e.Key.ToString() == "189";
-            
-            if(!moveUp && !moveDown)
-            {
-                return;
-            }
-                        
-            HandleMove(sender, moveUp ? MoveDirection.Up : MoveDirection.Down);
-        }
-
-        /// <summary>
-        /// Handle moving items in one of the two data grids
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        /// <param name="direction">Direction that the entry should be moved</param>
-        private void HandleMove(object sender, MoveDirection direction)
-        {
-            if (sender is GridView { Name: "AvailableGrid" } sgw && SortablePropertyModule?.AvailableShapingEntries.Count > 1 && SortablePropertyModule?.SelectedAvailableEntry != null)
-            {
-                var result = HandleMove(SortablePropertyModule.AvailableShapingEntries, SortablePropertyModule.SelectedAvailableEntry, direction);
-                if (result >= 0)
-                {
-                    sgw.SelectedIndex = result;
-                }
-            }
-
-            if (sender is GridView { Name: "SortGrid" } agw && SortablePropertyModule?.EntriesShapedBy.Count > 1 && SortablePropertyModule?.SelectedShapedByEntry != null)
-            {
-                var result = HandleMove(SortablePropertyModule.EntriesShapedBy, SortablePropertyModule.SelectedShapedByEntry, direction);
-                if (result >= 0)
-                {
-                    agw.SelectedIndex = result;
-                }
             }
         }
-
-        /// <summary>
-        /// Handle moving an item in the collection up and down.
-        /// </summary>
-        /// <param name="collection">Collection in which the resides</param>
-        /// <param name="entryToMove">The entry that should be moved</param>
-        /// <param name="direction">The direction in which the entry should be moved</param>
-        /// <returns>New index of the entry, unless no entry was moved in which case -1 is returned</returns>
-        private static int HandleMove(ObservableCollection<ShapingEntry> collection, ShapingEntry entryToMove, MoveDirection direction)
-        {
-            var index = collection.IndexOf(entryToMove);
-            var newIndex = index + (direction == MoveDirection.Up ? -1 : 1);
-            if (newIndex >= 0 && newIndex < collection.Count)
-            {
-                collection.Move(index, newIndex);
-                return newIndex;
-            }
-
-            return -1;
-        }
-
-        /// <summary>
-        /// Handle the movement of the selected entry between the available entries and the sorted by entries
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        private void HandleSelectedItemMove(object sender)
-        {
-            if (sender is GridView { Name: "AvailableGrid" } && SortablePropertyModule?.MoveAvailableEnabled == true)
-            {
-                SortablePropertyModule.MoveEntryFromAvailableToShapedBy();
-            }
-            else if (sender is GridView { Name: "SortGrid" } && SortablePropertyModule?.MoveShapedByEnabled == true)
-            {
-                SortablePropertyModule.MoveEntryFromShapedByToAvailable();
-            }
-        }
-
-        #endregion
-
-        #region Variables
-
-        /// <summary>
-        /// Backing variable for the <see cref="SortablePropertyModule"/> property
-        /// </summary>
-        private SortablePropertyModule? _sortablePropertyModule;
 
         #endregion
     }

@@ -61,6 +61,7 @@
     <Folder Include="Interfaces\VerticalPane\" />
     <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
+    <Folder Include="Shared\ShapingControlHelper\" />
   </ItemGroup>
 
   <ItemGroup>
