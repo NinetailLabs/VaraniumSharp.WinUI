@@ -2,9 +2,10 @@
     x:Class="VaraniumSharp.WinUI.SharedStyles.GridViewTemplates"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:sortModule="using:VaraniumSharp.WinUI.SortModule">
+    xmlns:sortModule="using:VaraniumSharp.WinUI.SortModule"
+    xmlns:groupModule="using:VaraniumSharp.WinUI.GroupModule">
 
-    <DataTemplate x:Key="SortEntry" x:DataType="sortModule:SortOrderEntry">
+    <DataTemplate x:Key="SortEntry" x:DataType="sortModule:SortableShapingEntry">
         <Border
             BorderBrush="{ThemeResource ToggleSwitchOuterBorderBorderThemeBrush}"
             BorderThickness="1"
@@ -20,17 +21,41 @@
                 <TextBlock
                     HorizontalTextAlignment="Left"
                     Margin="5,0"
-                    Text="{x:Bind Path=SortHeader}"
-                    ToolTipService.ToolTip="{x:Bind Path=SortTooltip}"
+                    Text="{x:Bind Path=Header}"
+                    ToolTipService.ToolTip="{x:Bind Path=Tooltip}"
                     VerticalAlignment="Center"/>
 
                 <Button
-                    Content="{x:Bind Path=SortIcon, Mode=OneWay}"
+                    Content="{x:Bind Path=DirectionIcon, Mode=OneWay}"
                     Click="{x:Bind Path=ChangeDirectionClick}"
                     Grid.Column="1"
                     Height="38"
                     HorizontalAlignment="Right"
                     Width="60"/>
+
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="GroupEntry" x:DataType="groupModule:GroupShapingEntry">
+        <Border
+            BorderBrush="{ThemeResource ToggleSwitchOuterBorderBorderThemeBrush}"
+            BorderThickness="1"
+            CornerRadius="3"
+            Height="38"
+            Width="250">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    HorizontalTextAlignment="Left"
+                    Margin="5,0"
+                    Text="{x:Bind Path=Header}"
+                    ToolTipService.ToolTip="{x:Bind Path=Tooltip}"
+                    VerticalAlignment="Center"/>
 
             </Grid>
         </Border>

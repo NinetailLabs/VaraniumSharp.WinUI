@@ -28,6 +28,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <inheritdoc/>
         public event EventHandler<bool>? ControlDisplayChanged;
 
+        /// <inheritdoc />
+        public event EventHandler? GroupChanged;
+
         /// <inheritdoc/>
         public event EventHandler? LayoutChanged;
 
@@ -52,6 +55,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             ControlDisplayChanged?.Invoke(this, value);
 
             return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public void SetGroupOrderChanged()
+        {
+            GroupChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc/>

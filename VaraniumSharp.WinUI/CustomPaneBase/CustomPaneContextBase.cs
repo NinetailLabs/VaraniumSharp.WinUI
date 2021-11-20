@@ -13,6 +13,7 @@ using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
 using VaraniumSharp.Extensions;
+using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
 
 namespace VaraniumSharp.WinUI.CustomPaneBase
@@ -138,6 +139,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     sortableDisplayComponent.SortChanged -= SortableDisplayComponent_SortChanged;
                 }
 
+                if (control is IGroupingDisplayComponent groupingDisplayComponent)
+                {
+                    groupingDisplayComponent.GroupChanged -= GroupingDisplayComponentOnGroupChanged;
+                }
+
                 if (control.Control is IAsyncDisposable disposableControl)
                 {
                     Logger.LogDebug("Disposing {ContentId}", control.Control.ContentId);
@@ -192,7 +198,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         resultList.Add(new()
                         {
                             InstanceId = sortableDisplayComponent.InstanceId,
-                            SortEntries = sortableDisplayComponent.SortablePropertyModule.EntriesSortedBy.Select(x => new SortEntryStorageModel(x)).ToList()
+                            ShapingEntries = sortableDisplayComponent.SortablePropertyModule.EntriesShapedBy.Select(x => new SortEntryStorageModel((SortableShapingEntry)x)).ToList()
                         });
                     }
                 }
@@ -224,7 +230,39 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
-        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
+        public async Task<List<GroupStorageModel>> GetGroupStorageModelsAsync()
+        {
+            var resultList = new List<GroupStorageModel>();
+
+            foreach (var component in Components.Select(x => x.Control))
+            {
+                if (component is ICustomLayoutPane customPane)
+                {
+                    var storageEntry = new GroupStorageModel
+                    {
+                        InstanceId = customPane.InstanceId
+                    };
+                    storageEntry.SubEntries.AddRange(await customPane.GetGroupStorageModelsAsync());
+                    resultList.Add(storageEntry);
+                }
+                else
+                {
+                    if (component is IGroupingDisplayComponent groupDisplayComponent)
+                    {
+                        resultList.Add(new()
+                        {
+                            InstanceId = groupDisplayComponent.InstanceId,
+                            ShapingEntries = groupDisplayComponent.GroupingPropertyModule.EntriesShapedBy.Select(x => new GroupEntryStorageModel((GroupShapingEntry)x)).ToList()
+                        });
+                    }
+                }
+            }
+
+            return resultList;
+        }
+
+        /// <inheritdoc />
+        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
         {
             foreach (var item in controls)
             {
@@ -240,11 +278,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         .ConfigureAwait(false);
                 }
 
-                SetupNewControl(newControl, item, sortOrder);
+                SetupNewControl(newControl, item, sortOrder, groupOrder);
             }
 
             await ResizeAllControlsAsync().ConfigureAwait(false);
-            await InitializeCustomLayoutPaneAsync(controls, sortOrder).ConfigureAwait(false);
+            await InitializeCustomLayoutPaneAsync(controls, sortOrder, groupOrder).ConfigureAwait(false);
             
         }
 
@@ -377,6 +415,16 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <summary>
+        /// Occurs when a <see cref="IGroupingDisplayComponent"/> group order changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void GroupingDisplayComponentOnGroupChanged(object? sender, EventArgs e)
+        {
+            CustomLayoutEventRouter?.SetGroupOrderChanged();
+        }
+
+        /// <summary>
         ///     Handle the resizing of children controls
         /// </summary>
         /// <param name="componentBeingResized">The index of the control being resized</param>
@@ -391,19 +439,21 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// Initialize <see cref="ICustomLayoutPane"/> entries in the <see cref="Component"/> collection
         /// </summary>
         /// <param name="controls">Storage models that contains the control details</param>
-        /// <param name="sortOrder">Collection of sort order entries that might contains sort details for the control</param>
-        private async Task InitializeCustomLayoutPaneAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder)
+        /// <param name="sortOrder">Collection of sort order entries that might contain sort details for the control</param>
+        /// <param name="groupOrder">Collection of group order entries that might contain group details for the control</param>
+        private async Task InitializeCustomLayoutPaneAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
         {
             foreach (var layoutPane in Components.Where(x => x.Control is ICustomLayoutPane).Select(x => x.Control))
             {
                 if (layoutPane is ICustomLayoutPane customPane)
                 {
                     var sortChildren = sortOrder?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
+                    var groupChildren = groupOrder?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
 
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
                     await customPane
-                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries)
+                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries)
                         .ConfigureAwait(false);
                 }
             }
@@ -435,6 +485,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     {
                         sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
                     }
+
+                    if (newControl is IGroupingDisplayComponent groupingDisplayComponent)
+                    {
+                        groupingDisplayComponent.GroupChanged += GroupingDisplayComponentOnGroupChanged;
+                    }
                 }
             }
         }
@@ -455,8 +510,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// </summary>
         /// <param name="newControl">Control entry to set up</param>
         /// <param name="storageModel">Storage model that contains the control details</param>
-        /// <param name="sortOrder">Collection of sort order entries that might contains sort details for the control</param>
-        private void SetupNewControl(IDisplayComponent? newControl, ControlStorageModel storageModel, List<SortStorageModel>? sortOrder)
+        /// <param name="sortOrder">Collection of sort order entries that might contain sort details for the control</param>
+        /// <param name="groupOrder">Collection of group order entries that might contain group details for the control</param>
+        private void SetupNewControl(IDisplayComponent? newControl, ControlStorageModel storageModel, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
         {
             if (newControl != null)
             {
@@ -466,15 +522,22 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
 
                 if (newControl is ISortableDisplayComponent sortableDisplayComponent)
                 {
-                    if (sortOrder != null)
+                    var sortDetails = sortOrder?.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
+                    if (sortDetails != null)
                     {
-                        var sortDetails = sortOrder.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
-                        if (sortDetails != null)
-                        {
-                            sortableDisplayComponent.InitSortOrder(sortDetails.SortEntries);
-                        }
+                        sortableDisplayComponent.InitSortOrder(sortDetails.ShapingEntries);
                     }
                     sortableDisplayComponent.SortChanged += SortableDisplayComponent_SortChanged;
+                }
+
+                if (newControl is IGroupingDisplayComponent groupingDisplayComponent)
+                {
+                    var groupDetails = groupOrder?.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
+                    if (groupDetails != null)
+                    {
+                        groupingDisplayComponent.InitGroupOrder(groupDetails.ShapingEntries);
+                    }
+                    groupingDisplayComponent.GroupChanged += GroupingDisplayComponentOnGroupChanged;
                 }
 
                 newControl.Title = storageModel.Title;

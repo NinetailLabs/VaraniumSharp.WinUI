@@ -1,0 +1,259 @@
+﻿<UserControl
+    x:Class="VaraniumSharp.WinUI.GroupModule.GroupControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="280" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            FontSize="12"
+            Text="Available for grouping"
+            Grid.Row="0" />
+
+        <TextBlock
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            FontSize="12"
+            Text="Grouped by"
+            Grid.Row="0" />
+
+        <ScrollViewer
+            BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
+            BorderThickness="1"
+            CornerRadius="5"
+            Grid.Column="0"
+            Grid.Row="1"
+            Width="280">
+            <GridView
+                AllowDrop="True"            
+                CanDragItems="True"
+                CanReorderItems="True"
+                DragItemsStarting="{x:Bind Path=ControlHelper.ShapedDragModule.OnStringTypeDragItemStarting}"
+                Drop="{x:Bind Path=ControlHelper.AvailableDragModule.OnStringTypeVerticalDataGridDrop}"
+                DragOver="{x:Bind Path=ControlHelper.AvailableDragModule.OnStringTypeDragOver}"
+                HorizontalAlignment="Left"
+                ItemContainerStyle="{ThemeResource SortEntryContainer}"
+                ItemsSource="{x:Bind Path=GroupingPropertyModule.AvailableShapingEntries}"
+                ItemTemplate="{ThemeResource GroupEntry}"
+                KeyUp="GridView_KeyUp"
+                Name="AvailableGrid"
+                SelectedItem="{x:Bind Path=GroupingPropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
+                Width="270">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid 
+                            HorizontalAlignment="Center"
+                            Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </ScrollViewer>
+
+        <Grid
+                Grid.Column="1"
+                Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="38" />
+                <RowDefinition Height="38" />
+                <RowDefinition Height="38" />
+                <RowDefinition Height="38" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Button 
+                Click="{x:Bind Path=GroupingPropertyModule.MoveEntryFromAvailableToShapedBy}"
+                Grid.Row="1"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=GroupingPropertyModule.MoveAvailableEnabled, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Add entry to sort"
+                Width="30">
+                <Button.Content>
+                    <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,2"
+                        Text="»"
+                        VerticalAlignment="Center"/>
+                </Button.Content>
+            </Button>
+
+            <Button 
+                Click="{x:Bind Path=GroupingPropertyModule.MoveEntryFromShapedByToAvailable}"
+                Grid.Row="2"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=GroupingPropertyModule.MoveShapedByEnabled, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Remove entry from sort"
+                Width="30">
+                <Button.Content>
+                    <TextBlock
+                        FontSize="18"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,2"
+                        Text="«"
+                        VerticalAlignment="Center"/>
+                </Button.Content>
+            </Button>
+
+            <Button 
+                Click="{x:Bind Path=GroupingPropertyModule.ClearShapingOnClick}"
+                Grid.Row="3"
+                Height="30"
+                HorizontalAlignment="Center"
+                IsEnabled="{x:Bind Path=GroupingPropertyModule.IsShaped, Mode=OneWay}"
+                Margin="4,8,2,2"
+                ToolTipService.ToolTip="Clear sort"
+                Width="30">
+                <Button.Content>
+                    <FontIcon 
+                        FontFamily="Segoe MDL2 Assets" 
+                        FontSize="12"
+                        Glyph="&#xE894;"/>
+                </Button.Content>
+            </Button>
+
+            <FontIcon 
+                FontFamily="Segoe MDL2 Assets" 
+                FontSize="26"
+                Glyph="&#xF142;"
+                Grid.Row="4">
+                <ToolTipService.ToolTip>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition Height="10" />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2">
+                            <TextBlock
+                                Grid.Row="0"
+                                Text="Keyboard Shortcuts"
+                                TextAlignment="Center"
+                                FontWeight="Bold" />
+                        </Grid>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="1"
+                            Text="When an item is selected in one of the two lists the following keyboard shortcuts are available"
+                            TextAlignment="Left"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="3"
+                            Text="Enter"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            Text="Move the entry from one list to the other" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="4"
+                            Text="-"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            Text="Move the entry up in the list" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="5"
+                            Text="+"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="5"
+                            Text="Move the entry down in the list" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="6"
+                            Text="[ or ]"
+                            FontWeight="Bold" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Grid.Row="6"
+                            Text="Change the sort order of the entry" />
+
+
+
+                    </Grid>
+                </ToolTipService.ToolTip>
+            </FontIcon>
+
+        </Grid>
+
+        <ScrollViewer
+            BorderBrush="{ThemeResource ButtonBorderThemeBrush}"
+            BorderThickness="1"
+            CornerRadius="5"
+            Grid.Column="2"
+            Grid.Row="1"
+            Width="280">
+            <GridView
+                AllowDrop="True"
+                CanDragItems="True"
+                CanReorderItems="True"
+                DragItemsStarting="{x:Bind Path=ControlHelper.AvailableDragModule.OnStringTypeDragItemStarting}"
+                Drop="{x:Bind Path=ControlHelper.ShapedDragModule.OnStringTypeVerticalDataGridDrop}"
+                DragOver="{x:Bind Path=ControlHelper.ShapedDragModule.OnStringTypeDragOver}"
+                HorizontalAlignment="Left"
+                ItemContainerStyle="{ThemeResource SortEntryContainer}"
+                ItemsSource="{x:Bind Path=GroupingPropertyModule.EntriesShapedBy}"
+                ItemTemplate="{ThemeResource GroupEntry}"
+                KeyUp="GridView_KeyUp"
+                Name="SortGrid"
+                SelectedItem="{x:Bind Path=GroupingPropertyModule.SelectedShapedByEntry, Mode=TwoWay}"
+                Width="270">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid
+                            HorizontalAlignment="Center"
+                            Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

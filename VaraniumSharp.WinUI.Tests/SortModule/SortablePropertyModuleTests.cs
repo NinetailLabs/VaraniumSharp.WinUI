@@ -36,9 +36,9 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.DisableDefaultSort = true;
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            var act = new Action(() => sut.SortByMultipleProperties("DateSorValue", "IDoNotExist"));
+            sut.DisableDefaultShaping = true;
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            var act = new Action(() => sut.ShapeByMultipleProperties("DateSorValue", "IDoNotExist"));
 
             // act
             // assert
@@ -52,8 +52,8 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            var act = new Action(() => sut.RemoveSortEntry("IDoNotExist"));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            var act = new Action(() => sut.RemoveShapingEntry("IDoNotExist"));
 
             // act
             // assert
@@ -67,15 +67,15 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
             
             // act
-            sut.ClearSortOnClick();
+            sut.ClearShapingOnClick();
 
             // assert
             fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(0);
-            sut.EntriesSortedBy.Count.Should().Be(0);
-            sut.AvailableSortEntries.Count.Should().Be(2);
+            sut.EntriesShapedBy.Count.Should().Be(0);
+            sut.AvailableShapingEntries.Count.Should().Be(2);
         }
 
         [Fact]
@@ -85,13 +85,13 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.DisableDefaultSort = true;
+            sut.DisableDefaultShaping = true;
 
             // act
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(2);
+            sut.AvailableShapingEntries.Count.Should().Be(2);
             fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(0);
         }
 
@@ -104,13 +104,13 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var sut = fixture.GetInstance();
 
             // act
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(1);
-            sut.AvailableSortEntries.First().PropertyName.Should().Be("DateSorValue");
-            sut.EntriesSortedBy.Count.Should().Be(1);
-            sut.EntriesSortedBy.First().PropertyName.Should().Be("SortByMe");
+            sut.AvailableShapingEntries.Count.Should().Be(1);
+            sut.AvailableShapingEntries.First().PropertyName.Should().Be("DateSorValue");
+            sut.EntriesShapedBy.Count.Should().Be(1);
+            sut.EntriesShapedBy.First().PropertyName.Should().Be("SortByMe");
         }
 
         [Fact]
@@ -123,11 +123,11 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             sut.NestedTypeList.Add(new []{ typeof(NestedFixture) });
 
             // act
-            sut.GenerateSortEntries(typeof(SortableFixtureWithNestedEntry));
+            sut.GenerateShapingEntries(typeof(SortableFixtureWithNestedEntry));
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(1);
-            sut.AvailableSortEntries.First().PropertyName.Should().Be("Nested.NestedSortProp");
+            sut.AvailableShapingEntries.Count.Should().Be(1);
+            sut.AvailableShapingEntries.First().PropertyName.Should().Be("Nested.NestedSortProp");
         }
 
         [Fact]
@@ -139,11 +139,11 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var sut = fixture.GetInstance();
 
             // act
-            sut.GenerateSortEntries(typeof(SortableFixtureWithNestedEntry));
+            sut.GenerateShapingEntries(typeof(SortableFixtureWithNestedEntry));
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(1);
-            sut.AvailableSortEntries.First().PropertyName.Should().Be("Nested.NestedSortProp");
+            sut.AvailableShapingEntries.Count.Should().Be(1);
+            sut.AvailableShapingEntries.First().PropertyName.Should().Be("Nested.NestedSortProp");
         }
 
         [Fact]
@@ -153,14 +153,14 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.DisableDefaultSort = true;
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            sut.SortByMultipleProperties("DateSorValue", "SortByMe");
+            sut.DisableDefaultShaping = true;
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            sut.ShapeByMultipleProperties("DateSorValue", "SortByMe");
             
             // act
-            var entryToMove = sut.EntriesSortedBy.Last();
-            sut.EntriesSortedBy.Remove(entryToMove);
-            sut.EntriesSortedBy.Insert(0, entryToMove);
+            var entryToMove = sut.EntriesShapedBy.Last();
+            sut.EntriesShapedBy.Remove(entryToMove);
+            sut.EntriesShapedBy.Insert(0, entryToMove);
 
             // assert
             fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(2);
@@ -175,13 +175,13 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.RemoveSortEntry("SortByMe");
+            sut.RemoveShapingEntry("SortByMe");
 
             // assert
-            sut.EntriesSortedBy.Count.Should().Be(0);
+            sut.EntriesShapedBy.Count.Should().Be(0);
             fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(0);
         }
 
@@ -192,13 +192,13 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.RemoveSortEntry("DateSorValue");
+            sut.RemoveShapingEntry("DateSorValue");
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(0);
+            sut.AvailableShapingEntries.Count.Should().Be(0);
         }
 
         [Fact]
@@ -208,18 +208,54 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.RequestSort("DateSorValue");
+            sut.RequestShaping("DateSorValue");
 
             // assert
-            sut.EntriesSortedBy.Count.Should().Be(1);
-            sut.EntriesSortedBy.First().PropertyName.Should().Be("DateSorValue");
-            sut.AvailableSortEntries.Count.Should().Be(1);
-            sut.AvailableSortEntries.First().PropertyName.Should().Be("SortByMe");
+            sut.EntriesShapedBy.Count.Should().Be(1);
+            sut.EntriesShapedBy.First().PropertyName.Should().Be("DateSorValue");
+            sut.AvailableShapingEntries.Count.Should().Be(1);
+            sut.AvailableShapingEntries.First().PropertyName.Should().Be("SortByMe");
             fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(1);
             fixture.AdvancedCollectionView.SortDescriptions.First().PropertyName.Should().Be("DateSorValue");
+        }
+
+        [Fact]
+        public void RequestingMoveOfAvailableEntryToSortMovesTheEntry()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            sut.SelectedAvailableEntry = sut.AvailableShapingEntries.First();
+
+            // act
+            sut.MoveEntryFromAvailableToShapedBy();
+
+            // assert
+            sut.AvailableShapingEntries.Count.Should().Be(0);
+            sut.EntriesShapedBy.Count.Should().Be(2);
+        }
+
+        [Fact]
+        public void RequestingMoveOfSortedEntryMovesItToAvailableEntries()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            sut.SelectedShapedByEntry = sut.EntriesShapedBy.First();
+
+            // act
+            sut.MoveEntryFromShapedByToAvailable();
+
+            // assert
+            sut.EntriesShapedBy.Count.Should().Be(0);
+            sut.AvailableShapingEntries.Count.Should().Be(2);
         }
 
         [Fact]
@@ -229,72 +265,12 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            var act = new Action(() => sut.RequestSort("IDoNotExist"));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+            var act = new Action(() => sut.RequestShaping("IDoNotExist"));
 
             // act
             // assert
             act.Should().Throw<InvalidOperationException>();
-        }
-
-        [Fact]
-        public void SortingCollectionByMultipleEntriesCorrectlySortsTheCollection()
-        {
-            // arrange
-            var fixture = new SortablePropertyModuleFixture();
-
-            var sut = fixture.GetInstance();
-            sut.DisableDefaultSort = true;
-            sut.GenerateSortEntries(typeof(SortableFixture));
-
-            // act
-            sut.SortByMultipleProperties("DateSorValue", "SortByMe");
-
-            // assert
-            sut.AvailableSortEntries.Count.Should().Be(0);
-            sut.EntriesSortedBy.Count.Should().Be(2);
-            sut.EntriesSortedBy.First().PropertyName.Should().Be("DateSorValue");
-            sut.EntriesSortedBy.Last().PropertyName.Should().Be("SortByMe");
-            fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(2);
-            fixture.AdvancedCollectionView.SortDescriptions.First().PropertyName.Should().Be("DateSorValue");
-            fixture.AdvancedCollectionView.SortDescriptions.Last().PropertyName.Should().Be("SortByMe");
-        }
-
-        [Fact]
-        public void WhenASortedEntriesSortDirectionChangesTheSortIsUpdated()
-        {
-            // arrange
-            var fixture = new SortablePropertyModuleFixture();
-
-            var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
-
-            // act
-            sut.EntriesSortedBy.First().ChangeDirectionClick();
-            
-            // assert
-            sut.EntriesSortedBy.First().SortDirection.Should().Be(SortDirection.Ascending);
-            sut.EntriesSortedBy.First().SortIcon.Should().Be("Asc");
-            fixture.AdvancedCollectionView.SortDescriptions.First().Direction.Should().Be(SortDirection.Ascending);
-        }
-
-        [Fact]
-        public void SortOrderEntryIsCorrectlyPopulated()
-        {
-            // arrange
-            var fixture = new SortablePropertyModuleFixture();
-
-            var sut = fixture.GetInstance();
-
-            // act
-            sut.GenerateSortEntries(typeof(SortableFixture));
-
-            // assert
-            var entry = sut.AvailableSortEntries.First();
-            entry.PropertyName.Should().Be("DateSorValue");
-            entry.SortDirection.Should().Be(SortDirection.Ascending);
-            entry.SortHeader.Should().Be("DateSort");
-            entry.SortTooltip.Should().Be("Sort by date");
         }
 
         [Fact]
@@ -304,10 +280,10 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.SelectedAvailableEntry = sut.AvailableSortEntries.First();
+            sut.SelectedAvailableEntry = sut.AvailableShapingEntries.First();
 
             // assert
             sut.SelectedAvailableEntry.Should().NotBeNull();
@@ -321,50 +297,76 @@ namespace VaraniumSharp.WinUI.Tests.SortModule
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.SelectedSortByEntry = sut.EntriesSortedBy.First();
+            sut.SelectedShapedByEntry = sut.EntriesShapedBy.First();
 
             // assert
-            sut.SelectedSortByEntry.Should().NotBeNull();
-            sut.MoveSortedByEnabled.Should().BeTrue();
+            sut.SelectedShapedByEntry.Should().NotBeNull();
+            sut.MoveShapedByEnabled.Should().BeTrue();
         }
 
         [Fact]
-        public void RequestingMoveOfAvailableEntryToSortMovesTheEntry()
+        public void SortingCollectionByMultipleEntriesCorrectlySortsTheCollection()
         {
             // arrange
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            sut.SelectedAvailableEntry = sut.AvailableSortEntries.First();
+            sut.DisableDefaultShaping = true;
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // act
-            sut.MoveEntryFromAvailableToSortedBy();
+            sut.ShapeByMultipleProperties("DateSorValue", "SortByMe");
 
             // assert
-            sut.AvailableSortEntries.Count.Should().Be(0);
-            sut.EntriesSortedBy.Count.Should().Be(2);
+            sut.AvailableShapingEntries.Count.Should().Be(0);
+            sut.EntriesShapedBy.Count.Should().Be(2);
+            sut.EntriesShapedBy.First().PropertyName.Should().Be("DateSorValue");
+            sut.EntriesShapedBy.Last().PropertyName.Should().Be("SortByMe");
+            fixture.AdvancedCollectionView.SortDescriptions.Count.Should().Be(2);
+            fixture.AdvancedCollectionView.SortDescriptions.First().PropertyName.Should().Be("DateSorValue");
+            fixture.AdvancedCollectionView.SortDescriptions.Last().PropertyName.Should().Be("SortByMe");
         }
 
         [Fact]
-        public void RequestingMoveOfSortedEntryMovesItToAvailableEntries()
+        public void SortOrderEntryIsCorrectlyPopulated()
         {
             // arrange
             var fixture = new SortablePropertyModuleFixture();
 
             var sut = fixture.GetInstance();
-            sut.GenerateSortEntries(typeof(SortableFixture));
-            sut.SelectedSortByEntry = sut.EntriesSortedBy.First();
 
             // act
-            sut.MoveEntryFromSortedByToAvailable();
+            sut.GenerateShapingEntries(typeof(SortableFixture));
 
             // assert
-            sut.EntriesSortedBy.Count.Should().Be(0);
-            sut.AvailableSortEntries.Count.Should().Be(2);
+            var entry = sut.AvailableShapingEntries.First() as SortableShapingEntry;
+            entry.Should().NotBeNull();
+            entry?.PropertyName.Should().Be("DateSorValue");
+            entry?.SortDirection.Should().Be(SortDirection.Ascending);
+            entry?.Header.Should().Be("DateSort");
+            entry?.Tooltip.Should().Be("Sort by date");
+        }
+
+        [Fact]
+        public void WhenASortedEntriesSortDirectionChangesTheSortIsUpdated()
+        {
+            // arrange
+            var fixture = new SortablePropertyModuleFixture();
+
+            var sut = fixture.GetInstance();
+            sut.GenerateShapingEntries(typeof(SortableFixture));
+
+            // act
+            (sut.EntriesShapedBy.First() as SortableShapingEntry)?.ChangeDirectionClick();
+
+            // assert
+            (sut.EntriesShapedBy.First() as SortableShapingEntry)?.Should().NotBeNull();
+            (sut.EntriesShapedBy.First() as SortableShapingEntry)?.SortDirection.Should().Be(SortDirection.Ascending);
+            (sut.EntriesShapedBy.First() as SortableShapingEntry)?.DirectionIcon.Should().Be("Asc");
+            fixture.AdvancedCollectionView.SortDescriptions.First().Direction.Should().Be(SortDirection.Ascending);
         }
     }
 }

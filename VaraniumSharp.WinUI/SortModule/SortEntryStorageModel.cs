@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.WinUI.UI;
+using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.SortModule
 {
     /// <summary>
     /// Sort entry to store
     /// </summary>
-    public class SortEntryStorageModel
+    public class SortEntryStorageModel : ShapingEntryStorageModelBase
     {
         #region Constructor
 
@@ -14,27 +15,21 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         public SortEntryStorageModel()
         {
-            PropertyName = string.Empty;
         }
 
         /// <summary>
         /// Construct and populate
         /// </summary>
         /// <param name="sortEntry">Sort entry to populate from</param>
-        public SortEntryStorageModel(SortOrderEntry sortEntry)
+        public SortEntryStorageModel(SortableShapingEntry sortEntry)
+            : base(sortEntry)
         {
-            PropertyName = sortEntry.PropertyName;
             SortDirection = sortEntry.SortDirection;
         }
 
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// The name of the property to sort by
-        /// </summary>
-        public string PropertyName { get; set; }
 
         /// <summary>
         /// The direction to sort by

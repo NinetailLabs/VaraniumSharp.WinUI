@@ -9,6 +9,7 @@ using VaraniumSharp.Attributes;
 using VaraniumSharp.Enumerations;
 using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
+using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
 using VaraniumSharp.WinUI.SortModule;
@@ -34,6 +35,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             _fileWrapper = fileWrapper;
             _customLayoutEventRouter = customLayoutEventRouter;
             _customLayoutEventRouter.SortChanged += _customLayoutEventRouter_SortChanged;
+            _customLayoutEventRouter.GroupChanged += CustomLayoutEventRouterOnGroupChanged;
             _logger = StaticLogger.GetLogger<ContentPaneManager>();
         }
 
@@ -69,36 +71,6 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             await SaveSortOrderAsync();
         }
 
-        /// <summary>
-        /// Occurs when the BasePane fires an event to indicate that a controls sort order has changed
-        /// </summary>
-        /// <param name="sender">Sender of the event</param>
-        /// <param name="e">Event arguments</param>
-        private async void _customLayoutEventRouter_SortChanged(object? sender, EventArgs e)
-        {
-            await SaveSortOrderAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Save the sort order for the control pane
-        /// </summary>
-        private async Task SaveSortOrderAsync()
-        {
-            try
-            {
-                await _sortStorageSemaphore.WaitAsync();
-                var layoutId = BasePane.GetIdentifier();
-                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_sort.json");
-                var wrapper = new SortStorageWrapperModel(layoutId, await BasePane.GetSortStorageModelsAsync().ConfigureAwait(false));
-                var jsonSort = JsonSerializer.Serialize(wrapper, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
-                await _fileWrapper.WriteAllTextAsync(path, jsonSort);
-            }
-            finally
-            {
-                _sortStorageSemaphore.Release();
-            }
-        }
-
         /// <inheritdoc />
         public async Task ShowSettingPageAsync()
         {
@@ -116,7 +88,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 Width = 100
             };
 
-            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null);
+            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null, null);
         }
 
         /// <inheritdoc/>
@@ -143,8 +115,16 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 var sortPath = _layoutStorageOptions.GetJsonPath($"{tabName}_sort.json");
                 if(_fileWrapper.FileExists(sortPath))
                 {
-                    var sortJson = await _fileWrapper.ReadAllTextAsync(sortPath);
+                    var sortJson = await _fileWrapper.ReadAllTextAsync(sortPath).ConfigureAwait(false);
                     sortWrapper = JsonSerializer.Deserialize<SortStorageWrapperModel>(sortJson, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
+                }
+
+                GroupStorageWrapperModel? groupWrapper = null;
+                var groupPath = _layoutStorageOptions.GetJsonPath($"{tabName}_group.json");
+                if (_fileWrapper.FileExists(groupPath))
+                {
+                    var groupJson = await _fileWrapper.ReadAllTextAsync(groupPath).ConfigureAwait(false);
+                    groupWrapper = JsonSerializer.Deserialize<GroupStorageWrapperModel>(groupJson, GroupStorageWrapperModelJsonContext.Default.GroupStorageWrapperModel);
                 }
 
                 var jsonData = await _fileWrapper.ReadAllTextAsync(path);
@@ -157,7 +137,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
 
                 await BasePane
-                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.SortStorage)
+                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.ShapingStorage, groupWrapper?.ShapingStorage)
                     .ConfigureAwait(false);
             }
             else
@@ -165,6 +145,72 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 await BasePane
                     .InitAsync(Guid.Parse(tabName))
                     .ConfigureAwait(false);
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Occurs when the BasePane fires an event to indicate that a control`s sort order has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private async void _customLayoutEventRouter_SortChanged(object? sender, EventArgs e)
+        {
+            await SaveSortOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Occurs when the BasePane fires an event to indicate that a control`s group order has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        /// <exception cref="NotImplementedException"></exception>
+        private async void CustomLayoutEventRouterOnGroupChanged(object? sender, EventArgs e)
+        {
+            await SaveGroupOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Save the group order for the control pane
+        /// </summary>
+        private async Task SaveGroupOrderAsync()
+        {
+            try
+            {
+                await _storageSemaphore.WaitAsync();
+                var layoutId = BasePane.GetIdentifier();
+                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_group.json");
+                var wrapper = new GroupStorageWrapperModel(layoutId, await BasePane.GetGroupStorageModelsAsync().ConfigureAwait(false));
+                var jsonGroup = JsonSerializer.Serialize(wrapper, GroupStorageWrapperModelJsonContext.Default.GroupStorageWrapperModel);
+                await _fileWrapper.WriteAllTextAsync(path, jsonGroup);
+
+            }
+            finally
+            {
+                _storageSemaphore.Release();
+            }
+        }
+
+        /// <summary>
+        /// Save the sort order for the control pane
+        /// </summary>
+        private async Task SaveSortOrderAsync()
+        {
+            try
+            {
+                await _storageSemaphore.WaitAsync();
+                var layoutId = BasePane.GetIdentifier();
+                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_sort.json");
+                var wrapper = new SortStorageWrapperModel(layoutId, await BasePane.GetSortStorageModelsAsync().ConfigureAwait(false));
+                var jsonSort = JsonSerializer.Serialize(wrapper, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
+                await _fileWrapper.WriteAllTextAsync(path, jsonSort);
+            }
+            finally
+            {
+                _storageSemaphore.Release();
             }
         }
 
@@ -195,7 +241,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <summary>
         /// Semaphore used to lock write to the sort storage json file
         /// </summary>
-        private readonly SemaphoreSlim _sortStorageSemaphore = new(1);
+        private readonly SemaphoreSlim _storageSemaphore = new(1);
 
         #endregion
     }
