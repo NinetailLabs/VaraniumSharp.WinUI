@@ -5,7 +5,7 @@
 #load "CakeScripts/base/base.variables.cake"
 #load "CakeScripts/base/base.setup.cake"
 #load "CakeScripts/base/base.nuget.restore.cake"
-#load "CakeScripts/base.msbuild.cake"
+#load "CakeScripts/base/base.msbuild.cake"
 #load "CakeScripts/base/base.altcover.cake"
 #load "CakeScripts/base/base.coveralls.upload.cake"
 #load "CakeScripts/base/base.gitreleasenotes.cake"
