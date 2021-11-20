@@ -63,33 +63,36 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var subMenuGroup = AvailableControls.GroupBy(x => x.Value.SubMenu);
             foreach (var subMenuItem in subMenuGroup)
             {
-                if (subMenuItem.Any(x => x.Value.ShowInMenus))
+                if (!subMenuItem.Any(x => x.Value.ShowInMenus))
                 {
-                    var subMenu = new MenuFlyoutSubItem
+                    continue;
+                }
+                
+                var subMenu = new MenuFlyoutSubItem
+                {
+                    Name = subMenuItem.Key.Replace(" ", ""),
+                    Text = subMenuItem.Key
+                };
+
+                foreach (var (_, value) in subMenuItem.OrderBy(x => x.Value.ControlName))
+                {
+                    if (!value.ShowInMenus)
                     {
-                        Name = subMenuItem.Key.Replace(" ", ""),
-                        Text = subMenuItem.Key
-                    };
-
-                    foreach (var control in subMenuItem.OrderBy(x => x.Value.ControlName))
-                    {
-                        if (!control.Value.ShowInMenus)
-                        {
-                            continue;
-                        }
-
-                        var menuItem = new MenuFlyoutItem
-                        {
-                            Name = control.Value.ContentId,
-                            Text = control.Value.ControlName
-                        };
-                        menuItem.Click += buttonClickAction.Invoke;
-
-                        subMenu.Items.Add(menuItem);
+                        continue;
                     }
 
-                    menu.Items.Add(subMenu);
+                    var menuItem = new MenuFlyoutItem
+                    {
+                        Name = value.ContentId,
+                        Text = value.ControlName
+                    };
+                    menuItem.Click += buttonClickAction.Invoke;
+
+                    subMenu.Items.Add(menuItem);
                 }
+
+                menu.Items.Add(subMenu);
+                
             }
 
             return menu;

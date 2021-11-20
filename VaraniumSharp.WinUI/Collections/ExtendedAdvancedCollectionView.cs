@@ -97,7 +97,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Gets the groups in collection
         /// </summary>
-        public IObservableVector<object>? CollectionGroups => null;
+        public IObservableVector<object>? CollectionGroups { get; } = new ObservableVector<object>();
 
         /// <inheritdoc />
         public int Count => _view.Count;
@@ -198,8 +198,7 @@ namespace VaraniumSharp.WinUI.Collections
 
                 if (_source is INotifyCollectionChanged sourceNcc)
                 {
-                    _sourceWeakEventListener =
-                        new WeakEventListener<ExtendedAdvancedCollectionView, object, NotifyCollectionChangedEventArgs>(this)
+                    _sourceWeakEventListener = new WeakEventListener<ExtendedAdvancedCollectionView, object, NotifyCollectionChangedEventArgs>(this)
                         {
                             // Call the actual collection changed event
                             OnEventAction = (source, changed, arg3) => SourceNcc_CollectionChanged(source, arg3),
@@ -214,18 +213,6 @@ namespace VaraniumSharp.WinUI.Collections
                 OnPropertyChanged();
             }
         }
-
-        /*
-        /// <summary>
-        /// Gets a value indicating whether this CollectionView can group its items
-        /// </summary>
-        public bool CanGroup => false;
-
-        /// <summary>
-        /// Gets GroupDescriptions to group the visible items
-        /// </summary>
-        public IList<object> GroupDescriptions => null;
-        */
 
         /// <summary>
         /// Gets the source collection
