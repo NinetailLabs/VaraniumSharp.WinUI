@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Core;
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
@@ -17,7 +18,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// </summary>
         /// <param name="customPaneContext">CustomPane context used for resizing</param>
         /// <param name="cursorType">The type of cursor to display for resizing</param>
-        protected ThumbBase(ICustomPaneContext customPaneContext, CoreCursorType cursorType)
+        protected ThumbBase(ICustomPaneContext customPaneContext, InputSystemCursorShape cursorType)
         {
             _customPaneContext = customPaneContext;
             _cursorType = cursorType;
@@ -69,7 +70,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 return;
             }
-            //ProtectedCursor = new CoreCursor(_cursorType, 0);
+            ProtectedCursor = InputSystemCursor.Create(_cursorType);
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <summary>
         /// The type of cursor to display for resizing
         /// </summary>
-        private readonly CoreCursorType _cursorType;
+        private readonly InputSystemCursorShape _cursorType;
 
         /// <summary>
         /// CustomPaneContext instance

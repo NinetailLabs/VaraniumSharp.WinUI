@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Microsoft.UI.Input;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.GroupModule;
@@ -25,7 +26,7 @@ namespace VaraniumSharp.WinUI.VerticalPane
         /// DI Constructor
         /// </summary>
         public VerticalLayoutPane(IVerticalLayoutPaneContext verticalLayoutPaneContext)
-            : base(verticalLayoutPaneContext, CoreCursorType.SizeNorthSouth)
+            : base(verticalLayoutPaneContext, InputSystemCursorShape.SizeNorthSouth)
         {
             Title = "Vertical Pane";
             Context = verticalLayoutPaneContext;

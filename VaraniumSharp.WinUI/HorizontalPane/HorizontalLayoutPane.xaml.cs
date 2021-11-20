@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using Microsoft.UI.Input;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.GroupModule;
@@ -25,7 +26,7 @@ namespace VaraniumSharp.WinUI.HorizontalPane
         /// DI Constructor
         /// </summary>
         public CustomLayoutPane(IHorizontalLayoutPaneContext horizontalLayoutPaneContext)
-            : base(horizontalLayoutPaneContext, CoreCursorType.SizeWestEast)
+            : base(horizontalLayoutPaneContext, InputSystemCursorShape.SizeWestEast)
         {
             Title = "Horizontal Pane";
             Context = horizontalLayoutPaneContext;
