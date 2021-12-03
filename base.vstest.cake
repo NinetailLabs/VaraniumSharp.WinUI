@@ -9,14 +9,20 @@
 
 // Indicate if the unit tests passed
 var testPassed = false;
-// Path where coverage results should be saved
-var coverPath = "./coverageResults.xml";
-// Test result output file
-var testResultFile = "./TestResult.xml";
+// Directory where coverage results should be generated
+var coverDirectory = "./coverage/";
+// Name of the coverage file for the final result
+var coverFilename = "coverage.xml";
+// Path to the final coverage file
+var coverPath = $"{coverDirectory}{coverFilename}";
+// The name of the temporary file where coverage results will be combined
+var sharedCoverageFile = "coverage.json";
 // Filter used to locate unit test dlls
 var unitTestFilter = "./*Tests/bin/Release/net*/*.Tests.dll";
 // Collection of namespaces to exclude
-var excludedNamespaces = new List<string> { "NUnit", "xunit", "Microsoft*" };
+var excludedNamespaces = new List<string> { "[Microsoft.*]*" };
+// Collection of namespaces to include
+var includedNamespaces = new List<string>();
 
 #endregion
 
@@ -65,12 +71,7 @@ public void AddNamespaceExclusion(string namespaceToExclude)
 // Delete the coverage results if it already exists
 private void RemoveCoverageResults()
 {
-    var outputPath = MakeAbsolute(File(coverPath));
-    if(FileExists(outputPath))
-    {
-        Information("Clearing existing coverage results");
-        DeleteFile(outputPath);
-    }
+    CleanDirectories(coverDirectory);
 }
 
 // Execute NUnit tests
@@ -79,6 +80,8 @@ private void ExecuteUnitTests()
     testPassed = true;
 
     var testAssemblies = GetFiles(unitTestFilter);
+    var totalAssemblies = testAssemblies.Count;
+    var currentAssembly = 0;
 
     foreach(var assembly in testAssemblies)
     {
@@ -86,24 +89,14 @@ private void ExecuteUnitTests()
         {
             var assemblyFilename = assembly.GetFilenameWithoutExtension();
 
-            var coverOutput = MakeAbsolute(File(coverPath));
-            var testResultOutput = MakeAbsolute(File(testResultFile));
-
             Information($"Testing: {assembly}");
-
-            excludedNamespaces.Add(assemblyFilename.ToString());
-            var excludeString = string.Join("|", excludedNamespaces);
             
-            var testSettings = new DotNetVSTestSettings {
-            ArgumentCustomization = args=> args
-                .Append("/p:AltCover=true")
-                .Append($"/p:AltCoverXmlReport={coverOutput}")
-                .Append($"/p:AltCoverAssemblyFilter={excludeString}")
-                .Append("--test-adapter-path:.")
-                .Append("--logger:Appveyor")
-    		};
+            var toExclude = string.Join(",", excludedNamespaces);
+            var toInclude = string.Join(",", includedNamespaces);
 
-            DotNetVSTest(assembly.ToString(), testSettings);
+            var args = $"coverlet {assembly} --target \"dotnet\" --targetargs \"test {assembly}\" --format opencover --output {coverPath} --exclude \"{toExclude}\" --include \"{toInclude}\"";           
+            DotNetTool(args);
+
         }
         catch(Exception ex)
         {
