@@ -94,6 +94,7 @@ private void ExecuteUnitTests()
             var toExclude = string.Join(",", excludedNamespaces);
             var toInclude = string.Join(",", includedNamespaces);
 
+            // See: https://github.com/coverlet-coverage/coverlet/blob/master/Documentation/GlobalTool.md
             var args = $"coverlet {assembly} --target \"dotnet\" --targetargs \"test {assembly}\" --format opencover --output {coverPath} --exclude \"{toExclude}\" --include \"{toInclude}\"";           
             DotNetTool(args);
 
