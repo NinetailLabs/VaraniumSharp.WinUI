@@ -35,6 +35,7 @@ Task ("VariableSetup")
 		sonarQubeServerUrl = "https://sonarcloud.io";
 		sonarLogin = EnvironmentVariable("SonarToken");
 		testPassed = true; // Temporary workaround for unit test issue
+		excludedFiles = new List<string> { "**/System.Text.Json.SourceGeneration/**/*.g.cs" };
 	});
 
 Task ("Default")
