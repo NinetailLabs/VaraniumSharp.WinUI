@@ -31,14 +31,7 @@ namespace VaraniumSharp.WinUI.Collections
                 return 0;
             }
 
-            if (!_sortProperties.Any())
-            {
-                var result = x.GetPropertyInfo(_sortDescriptions.Select(x => x.PropertyName));
-                foreach (var (key, value) in result)
-                {
-                    _sortProperties[key] = value;
-                }
-            }
+            GetSortProperties(x);
 
             foreach (var sd in _sortDescriptions)
             {
@@ -75,6 +68,24 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Retrieve the sort properties for an object
+        /// </summary>
+        /// <param name="x">The object for which sort properties should be retrieved</param>
+        private void GetSortProperties(object x)
+        {
+            if (_sortProperties.Any())
+            {
+                return;
+            }
+
+            var result = x.GetPropertyInfo(_sortDescriptions.Select(x => x.PropertyName));
+            foreach (var (key, value) in result)
+            {
+                _sortProperties[key] = value;
+            }
         }
 
         #endregion

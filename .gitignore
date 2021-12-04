@@ -62,6 +62,9 @@ artifacts/
 # StyleCop
 StyleCopReport.xml
 
+# Code Coverage
+coverage
+
 # Files built by Visual Studio
 *_i.c
 *_p.c

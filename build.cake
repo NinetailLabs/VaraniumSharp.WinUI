@@ -6,7 +6,7 @@
 #load "CakeScripts/base/base.setup.cake"
 #load "CakeScripts/base/base.nuget.restore.cake"
 #load "CakeScripts/base/base.msbuild.cake"
-#load "CakeScripts/base/base.altcover.cake"
+#load "CakeScripts/base/base.coverlet.tool.cake"
 #load "CakeScripts/base/base.coveralls.upload.cake"
 #load "CakeScripts/base/base.gitreleasenotes.cake"
 #load "CakeScripts/base/base.nuget.pack.cake"
@@ -35,6 +35,7 @@ Task ("VariableSetup")
 		sonarQubeServerUrl = "https://sonarcloud.io";
 		sonarLogin = EnvironmentVariable("SonarToken");
 		testPassed = true; // Temporary workaround for unit test issue
+		excludedFiles = new List<string> { "**/System.Text.Json.SourceGeneration/**/*.g.cs" };
 	});
 
 Task ("Default")
@@ -45,7 +46,7 @@ Task ("Default")
 	.IsDependentOn ("NugetRestore")
 	.IsDependentOn ("SonarQubeStartup")
 	.IsDependentOn ("Build")
-	//.IsDependentOn ("UnitTests")
+	.IsDependentOn ("UnitTests")
 	.IsDependentOn ("SonarQubeShutdown")
 	.IsDependentOn ("CoverageUpload")
 	.IsDependentOn ("GenerateReleaseNotes")
