@@ -228,7 +228,6 @@ namespace VaraniumSharp.WinUI.Collections
             foreach (var group in CollectionGroups.Where(x => ((CollectionViewGroup)x).Items.Count > 1).Select(x => (CollectionViewGroup)x))
             {
                 var newOrder = viewDictionary[group.Group];
-                var oldOrder = group.Items;
                 group.Items.Clear();
                 for (var r = 0; r < newOrder.Count; r++)
                 {
