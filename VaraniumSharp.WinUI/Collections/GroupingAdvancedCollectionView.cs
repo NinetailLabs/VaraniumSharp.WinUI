@@ -63,7 +63,6 @@ namespace VaraniumSharp.WinUI.Collections
                 }
                 else
                 {
-                    //CollectionGroups?.Clear();
                     CollectionGroups = null;
                     ViewChanged -= HandleViewChanges;
                     OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
@@ -113,9 +112,29 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             col.Items.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
-            col.GroupItems.Add(item);
 
-            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.Count - 1));
+            var firstGroupItem = col.GroupItems.FirstOrDefault();
+            if (firstGroupItem != null)
+            {
+                var firstIndex = _view.IndexOf(firstGroupItem);
+                var insertIndex = _view.IndexOf(item);
+                var offSet = insertIndex - firstIndex;
+                if (offSet > col.GroupItems.Count)
+                {
+                    col.GroupItems.Add(item);
+                }
+                else
+                {
+                    col.GroupItems.Insert(offSet < 0 ? 0 : offSet, item);
+                }
+            }
+            else
+            {
+                col.GroupItems.Add(item);
+            }
+
+
+            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
         }
 
         private object? GetItemGroup(object item)
