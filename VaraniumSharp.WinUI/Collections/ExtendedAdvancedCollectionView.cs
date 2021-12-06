@@ -80,6 +80,16 @@ namespace VaraniumSharp.WinUI.Collections
         /// </summary>
         public event VectorChangedEventHandler<object>? VectorChanged;
 
+        /// <summary>
+        /// Fired when the view has changed and the <see cref="CollectionGroups"/> isn't null
+        /// </summary>
+        protected event VectorChangedEventHandler<object>? ViewChanged;
+
+        /// <summary>
+        /// Fired when the sort order of the items in the collection changes
+        /// </summary>
+        protected event EventHandler? SortChanged;
+
         #endregion
 
         #region Properties
@@ -97,7 +107,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Gets the groups in collection
         /// </summary>
-        public IObservableVector<object>? CollectionGroups => null;
+        public IObservableVector<object>? CollectionGroups { get; protected set; }
 
         /// <inheritdoc />
         public int Count => _view.Count;
@@ -198,8 +208,7 @@ namespace VaraniumSharp.WinUI.Collections
 
                 if (_source is INotifyCollectionChanged sourceNcc)
                 {
-                    _sourceWeakEventListener =
-                        new WeakEventListener<ExtendedAdvancedCollectionView, object, NotifyCollectionChangedEventArgs>(this)
+                    _sourceWeakEventListener = new WeakEventListener<ExtendedAdvancedCollectionView, object, NotifyCollectionChangedEventArgs>(this)
                         {
                             // Call the actual collection changed event
                             OnEventAction = (source, changed, arg3) => SourceNcc_CollectionChanged(source, arg3),
@@ -214,18 +223,6 @@ namespace VaraniumSharp.WinUI.Collections
                 OnPropertyChanged();
             }
         }
-
-        /*
-        /// <summary>
-        /// Gets a value indicating whether this CollectionView can group its items
-        /// </summary>
-        public bool CanGroup => false;
-
-        /// <summary>
-        /// Gets GroupDescriptions to group the visible items
-        /// </summary>
-        public IList<object> GroupDescriptions => null;
-        */
 
         /// <summary>
         /// Gets the source collection
@@ -512,7 +509,16 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             var e = new VectorChangedEventArgs(CollectionChange.ItemInserted, newViewIndex, newItem);
-            OnVectorChanged(e);
+
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(e);
+            }
+            else
+            {
+                ViewChanged?.Invoke(this, e);
+            }
+            
             return true;
         }
 
@@ -541,7 +547,14 @@ namespace VaraniumSharp.WinUI.Collections
             _sortProperties.Clear();
             _view.Sort(this);
             _sortProperties.Clear();
-            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+            else
+            {
+                SortChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void HandleSourceChanged()
@@ -679,7 +692,15 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             var e = new VectorChangedEventArgs(CollectionChange.ItemRemoved, itemIndex, item);
-            OnVectorChanged(e);
+
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(e);
+            }
+            else
+            {
+                ViewChanged?.Invoke(this, e);
+            }
         }
 
         private void SortDescriptions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

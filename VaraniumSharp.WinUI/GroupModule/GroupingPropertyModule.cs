@@ -87,7 +87,10 @@ namespace VaraniumSharp.WinUI.GroupModule
         {
             var groupSource = (GroupingAdvancedCollectionView) ViewSource;
             groupSource.Group = null;
-            groupSource.Group = Group;
+            if (EntriesShapedBy.Count > 0)
+            {
+                groupSource.Group = Group;
+            }
 
             // TODO - Issue #21
             _gridView.ItemsSource = null;

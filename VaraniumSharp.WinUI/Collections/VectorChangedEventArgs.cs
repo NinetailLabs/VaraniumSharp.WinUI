@@ -23,6 +23,7 @@ namespace VaraniumSharp.WinUI.Collections
         {
             CollectionChange = cc;
             Index = (uint)index;
+            Item = item;
         }
 
         #endregion
@@ -44,6 +45,11 @@ namespace VaraniumSharp.WinUI.Collections
         /// The zero-based position where the change occurred in the vector, if applicable.
         /// </returns>
         public uint Index { get; }
+
+        /// <summary>
+        /// The item that was removed from the collection
+        /// </summary>
+        public object? Item { get; }
 
         #endregion
     }

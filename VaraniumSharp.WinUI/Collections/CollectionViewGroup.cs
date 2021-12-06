@@ -48,6 +48,11 @@ namespace VaraniumSharp.WinUI.Collections
         /// </summary>
         public ObservableVector<object> Items { get; }
 
+        /// <summary>
+        /// The starting index of entries in the collection when the group is used as part of a larger collection
+        /// </summary>
+        public int StartIndex { get; set; }
+
         #endregion
     }
 }
