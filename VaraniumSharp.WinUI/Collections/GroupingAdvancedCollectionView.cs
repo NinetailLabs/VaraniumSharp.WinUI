@@ -98,18 +98,14 @@ namespace VaraniumSharp.WinUI.Collections
                 var insertIndex = keys.IndexOf(key);
 
                 CollectionGroups.Insert(insertIndex, col);
-                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+
+                if (!col.Items.IsVectorChangedDeferred)
+                {
+                    OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+                }
             }
 
-            var startIndex = 0;
-            for (var r = 0; r < CollectionGroups.Count; r++)
-            {
-                var group = ((CollectionViewGroup)CollectionGroups[r]);
-                group.StartIndex = r == 0
-                    ? 0
-                    : startIndex;
-                startIndex += group.Items.Count;
-            }
+            UpdateGroupStartIndexes();
 
             col.Items.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
 
@@ -133,8 +129,32 @@ namespace VaraniumSharp.WinUI.Collections
                 col.GroupItems.Add(item);
             }
 
+            if (!col.Items.IsVectorChangedDeferred)
+            {
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted,
+                    col.StartIndex + col.Items.IndexOf(item)));
+            }
+        }
 
-            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
+        /// <summary>
+        /// Update the CollectionGroups` start indexes
+        /// </summary>
+        private void UpdateGroupStartIndexes()
+        {
+            if (CollectionGroups == null)
+            {
+                return;
+            }
+
+            var startIndex = 0;
+            for (var r = 0; r < CollectionGroups.Count; r++)
+            {
+                var group = ((CollectionViewGroup)CollectionGroups[r]);
+                group.StartIndex = r == 0
+                    ? 0
+                    : startIndex;
+                startIndex += group.Items.Count;
+            }
         }
 
         private object? GetItemGroup(object item)
@@ -144,11 +164,20 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void HandleViewChanges(IObservableVector<object> sender, IVectorChangedEventArgs args)
         {
+            var typedArgs = args as VectorChangedEventArgs;
             var ndx = (int)args.Index;
             switch (args.CollectionChange)
             {
                 case CollectionChange.ItemChanged:
-                    RemoveGroupedItem(this[ndx]);
+                    if (typedArgs?.Item != null)
+                    {
+                        RemoveGroupedItem(typedArgs.Item);
+                    }
+                    var entry = GetItemGroup(this[ndx]);
+                    if (entry != null)
+                    {
+                        AddGroupedItem(entry, this[ndx]);
+                    }
                     break;
                 case CollectionChange.ItemInserted:
                     var insertEntry = GetItemGroup(this[ndx]);
@@ -158,7 +187,26 @@ namespace VaraniumSharp.WinUI.Collections
                     }
                     break;
                 case CollectionChange.ItemRemoved:
-                    RebuildGroups();
+                    var doRebuild = true;
+                    if (typedArgs?.Item != null)
+                    {
+                        var items = CollectionGroups
+                            ?.Select(x => (CollectionViewGroup)x)
+                            .FirstOrDefault(x => x.Items.Contains(typedArgs.Item))
+                            ?.Items
+                            .Count
+                                ?? 0;
+                        if (items > 1)
+                        {
+                            RemoveGroupedItem(typedArgs.Item);
+                            doRebuild = false;
+                        }
+                    }
+
+                    if (doRebuild)
+                    {
+                        RebuildGroups();
+                    }
                     break;
                 case CollectionChange.Reset:
                     RebuildGroups();
@@ -217,9 +265,16 @@ namespace VaraniumSharp.WinUI.Collections
                     col.Items.IsVectorChangedDeferred = false;
                 }
                 ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred = false;
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
             }
         }
 
+        /// <summary>
+        /// Remove an item from a group.
+        /// Note that this method cannot deal with the removal of empty groups, this requires a group rebuild.
+        /// </summary>
+        /// <param name="item">The item to remove</param>
+        /// <exception cref="InvalidOperationException">Thrown if the CollectionGroups collection is null</exception>
         private void RemoveGroupedItem(object item)
         {
             if (CollectionGroups == null)
@@ -227,11 +282,25 @@ namespace VaraniumSharp.WinUI.Collections
                 throw new InvalidOperationException("Cannot group items as the internal collection group is null");
             }
 
-            foreach (var g in CollectionGroups.Select(x => ((CollectionViewGroup)x).Items))
+            if (CollectionGroups.FirstOrDefault(x => ((CollectionViewGroup)x).Items.Contains(item)) is not CollectionViewGroup itemGroup)
             {
-                g.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
-                g.Remove(item);
+                return;
             }
+            
+            var vector = itemGroup.Items;
+
+            vector.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
+            var idx = vector.IndexOf(item);
+            vector.Remove(item);
+
+            var startIndex = itemGroup.StartIndex;
+
+            if (!vector.IsVectorChangedDeferred)
+            {
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemRemoved, startIndex + idx));
+            }
+
+            UpdateGroupStartIndexes();
         }
 
         #endregion

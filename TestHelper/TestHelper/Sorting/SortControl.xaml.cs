@@ -69,6 +69,8 @@ namespace TestHelper.Sorting
 
         public Guid InstanceId { get; set; }
 
+        public SortableEntry? SelectedEntry { get; set; }
+
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
@@ -125,6 +127,14 @@ namespace TestHelper.Sorting
                 Title = "B",
                 Position = 4
             });
+        }
+
+        private void ButtonDeleteOnClick(object sender, RoutedEventArgs e)
+        {
+            if (SelectedEntry != null)
+            {
+                Entries.Remove(SelectedEntry);
+            }
         }
 
         /// <summary>

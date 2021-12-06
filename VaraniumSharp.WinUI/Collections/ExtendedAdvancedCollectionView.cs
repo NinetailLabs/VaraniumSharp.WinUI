@@ -681,7 +681,15 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             var e = new VectorChangedEventArgs(CollectionChange.ItemRemoved, itemIndex, item);
-            OnVectorChanged(e);
+
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(e);
+            }
+            else
+            {
+                ViewChanged?.Invoke(this, e);
+            }
         }
 
         private void SortDescriptions_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

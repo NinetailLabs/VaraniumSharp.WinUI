@@ -37,10 +37,24 @@
                 Grid.Column="1"
                 GroupingPropertyModule="{x:Bind Path=GroupingPropertyModule}" />
 
-            <Button
-                Click="ButtonBase_OnClick"
-                Content="Add entry"
-                Grid.Column="2"/>
+            <Grid
+                Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Button
+                    Click="ButtonBase_OnClick"
+                    Content="Add entry"
+                    Grid.Row="0"/>
+
+                <Button
+                    Click="ButtonDeleteOnClick"
+                    Content="Delete"
+                    Grid.Row="1"/>
+
+            </Grid>
 
         </Grid>
 
@@ -48,7 +62,8 @@
             Grid.Row="2"
             ItemsSource="{x:Bind CollectionView, Mode=OneTime}"
             Margin="10"
-            Name="SortableGrid">
+            Name="SortableGrid"
+            SelectedItem="{x:Bind Path=SelectedEntry, Mode=TwoWay}">
             <GridView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
