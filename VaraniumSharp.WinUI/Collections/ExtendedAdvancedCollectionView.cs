@@ -586,7 +586,17 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             _sortProperties.Clear();
-            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+            else
+            {
+                ViewChanged?.Invoke(this, new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+
+
             MoveCurrentTo(currentItem);
         }
 

@@ -196,5 +196,11 @@ namespace TestHelper.Sorting
         }
 
         #endregion
+
+        private void ButtonDeleteAndReadd(object sender, RoutedEventArgs e)
+        {
+            Entries.Clear();
+            SetupCollection();
+        }
     }
 }

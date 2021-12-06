@@ -42,6 +42,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -53,6 +54,11 @@
                     Click="ButtonDeleteOnClick"
                     Content="Delete"
                     Grid.Row="1"/>
+
+                <Button
+                    Click="ButtonDeleteAndReadd"
+                    Content="Reload"
+                    Grid.Row="2" />
 
             </Grid>
 
