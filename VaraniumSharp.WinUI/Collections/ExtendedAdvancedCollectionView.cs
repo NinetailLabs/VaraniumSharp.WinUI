@@ -20,7 +20,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using ABI.Windows.Media.Capture;
 using CommunityToolkit.WinUI.Helpers;
 using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml.Data;
@@ -84,7 +83,12 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Fired when the view has changed and the <see cref="CollectionGroups"/> isn't null
         /// </summary>
-        protected event VectorChangedEventHandler<object>? ViewChanged; 
+        protected event VectorChangedEventHandler<object>? ViewChanged;
+
+        /// <summary>
+        /// Fired when the sort order of the items in the collection changes
+        /// </summary>
+        protected event EventHandler? SortChanged;
 
         #endregion
 
@@ -543,7 +547,14 @@ namespace VaraniumSharp.WinUI.Collections
             _sortProperties.Clear();
             _view.Sort(this);
             _sortProperties.Clear();
-            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+            else
+            {
+                SortChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void HandleSourceChanged()

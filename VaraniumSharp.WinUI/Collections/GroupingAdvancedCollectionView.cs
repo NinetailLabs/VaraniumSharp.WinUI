@@ -60,11 +60,13 @@ namespace VaraniumSharp.WinUI.Collections
                     CollectionGroups = new ObservableVector<object>();
                     RebuildGroups();
                     ViewChanged += HandleViewChanges;
+                    SortChanged += OnSortChanged;
                 }
                 else
                 {
                     CollectionGroups = null;
                     ViewChanged -= HandleViewChanges;
+                    SortChanged -= OnSortChanged;
                     OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
                 }
             }
@@ -136,27 +138,6 @@ namespace VaraniumSharp.WinUI.Collections
             }
         }
 
-        /// <summary>
-        /// Update the CollectionGroups` start indexes
-        /// </summary>
-        private void UpdateGroupStartIndexes()
-        {
-            if (CollectionGroups == null)
-            {
-                return;
-            }
-
-            var startIndex = 0;
-            for (var r = 0; r < CollectionGroups.Count; r++)
-            {
-                var group = ((CollectionViewGroup)CollectionGroups[r]);
-                group.StartIndex = r == 0
-                    ? 0
-                    : startIndex;
-                startIndex += group.Items.Count;
-            }
-        }
-
         private object? GetItemGroup(object item)
         {
             return Group?.Invoke(item);
@@ -211,6 +192,49 @@ namespace VaraniumSharp.WinUI.Collections
                 case CollectionChange.Reset:
                     RebuildGroups();
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Occurs when the sorting of the backing collection changes
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void OnSortChanged(object? sender, EventArgs e)
+        {
+            if (CollectionGroups == null)
+            {
+                throw new InvalidOperationException("Cannot group items as the internal collection group is null");
+            }
+
+            var viewDictionary = new Dictionary<object, List<object>>();
+            foreach (var item in _view)
+            {
+                var key = GetItemGroup(item);
+                if (key == null)
+                {
+                    continue;
+                }
+                if (viewDictionary.ContainsKey(key))
+                {
+                    viewDictionary[key].Add(item);
+                }
+                else
+                {
+                    viewDictionary.Add(key, new List<object>{ item });
+                }
+            }
+
+            foreach (var group in CollectionGroups.Where(x => ((CollectionViewGroup)x).Items.Count > 1).Select(x => (CollectionViewGroup)x))
+            {
+                var newOrder = viewDictionary[group.Group];
+                var oldOrder = group.Items;
+                group.Items.Clear();
+                for (var r = 0; r < newOrder.Count; r++)
+                {
+                    group.Items.Add(newOrder[r]);
+                    OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemChanged, group.StartIndex + r));
+                }
             }
         }
 
@@ -301,6 +325,27 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             UpdateGroupStartIndexes();
+        }
+
+        /// <summary>
+        /// Update the CollectionGroups` start indexes
+        /// </summary>
+        private void UpdateGroupStartIndexes()
+        {
+            if (CollectionGroups == null)
+            {
+                return;
+            }
+
+            var startIndex = 0;
+            for (var r = 0; r < CollectionGroups.Count; r++)
+            {
+                var group = (CollectionViewGroup)CollectionGroups[r];
+                group.StartIndex = r == 0
+                    ? 0
+                    : startIndex;
+                startIndex += group.Items.Count;
+            }
         }
 
         #endregion
