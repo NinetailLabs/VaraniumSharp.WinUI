@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using ABI.Windows.Media.Capture;
 using CommunityToolkit.WinUI.Helpers;
 using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml.Data;
@@ -79,6 +80,11 @@ namespace VaraniumSharp.WinUI.Collections
         /// Occurs when the vector changes.
         /// </summary>
         public event VectorChangedEventHandler<object>? VectorChanged;
+
+        /// <summary>
+        /// Fired when the view has changed and the <see cref="CollectionGroups"/> isn't null
+        /// </summary>
+        protected event VectorChangedEventHandler<object>? ViewChanged; 
 
         #endregion
 
@@ -499,7 +505,16 @@ namespace VaraniumSharp.WinUI.Collections
             }
 
             var e = new VectorChangedEventArgs(CollectionChange.ItemInserted, newViewIndex, newItem);
-            OnVectorChanged(e);
+
+            if (CollectionGroups == null)
+            {
+                OnVectorChanged(e);
+            }
+            else
+            {
+                ViewChanged?.Invoke(this, e);
+            }
+            
             return true;
         }
 

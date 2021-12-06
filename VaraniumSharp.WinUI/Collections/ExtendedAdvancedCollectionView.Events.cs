@@ -49,7 +49,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// Vector changed event
         /// </summary>
         /// <param name="e">event args</param>
-        private void OnVectorChanged(IVectorChangedEventArgs e)
+        protected void OnVectorChanged(IVectorChangedEventArgs e)
         {
             if (_deferCounter > 0)
             {

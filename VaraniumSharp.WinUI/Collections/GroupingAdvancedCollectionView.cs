@@ -59,13 +59,14 @@ namespace VaraniumSharp.WinUI.Collections
                 {
                     CollectionGroups = new ObservableVector<object>();
                     RebuildGroups();
-                    VectorChanged += HandleViewChanges;
+                    ViewChanged += HandleViewChanges;
                 }
                 else
                 {
                     //CollectionGroups?.Clear();
                     CollectionGroups = null;
-                    VectorChanged -= HandleViewChanges;
+                    ViewChanged -= HandleViewChanges;
+                    OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
                 }
             }
         }
@@ -98,10 +99,23 @@ namespace VaraniumSharp.WinUI.Collections
                 var insertIndex = keys.IndexOf(key);
 
                 CollectionGroups.Insert(insertIndex, col);
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+
+            var startIndex = 0;
+            for (var r = 0; r < CollectionGroups.Count; r++)
+            {
+                var group = ((CollectionViewGroup)CollectionGroups[r]);
+                group.StartIndex = r == 0
+                    ? 0
+                    : startIndex;
+                startIndex += group.Items.Count;
             }
 
             col.Items.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
             col.GroupItems.Add(item);
+
+            OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.Count - 1));
         }
 
         private object? GetItemGroup(object item)
@@ -116,11 +130,6 @@ namespace VaraniumSharp.WinUI.Collections
             {
                 case CollectionChange.ItemChanged:
                     RemoveGroupedItem(this[ndx]);
-                    var entry = GetItemGroup(this[ndx]);
-                    if (entry != null)
-                    {
-                        AddGroupedItem(entry, this[ndx]);
-                    }
                     break;
                 case CollectionChange.ItemInserted:
                     var insertEntry = GetItemGroup(this[ndx]);
