@@ -12,14 +12,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml.Data;
 
 namespace VaraniumSharp.WinUI.Collections
 {
     /// <summary>
     /// A collection view implementation that supports filtering, sorting and grouping
     /// </summary>
-    public class GroupingAdvancedCollectionView : ExtendedAdvancedCollectionView, ICollectionView
+    public class GroupingAdvancedCollectionView : ExtendedAdvancedCollectionView
     {
         #region Constructor
 
@@ -29,9 +28,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <param name="source">Source collection for the grouping collection</param>
         public GroupingAdvancedCollectionView(IList source)
             : base(source, true)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Construct and set the source as well as the grouping function
@@ -48,9 +45,6 @@ namespace VaraniumSharp.WinUI.Collections
 
         #region Properties
 
-        // The CollectionGroups property is of type IObservableVector;, but these objects should implement ICollectionViewGroup.
-        IObservableVector<object>? ICollectionView.CollectionGroups => _collectionGroups;
-
         /// <summary>
         /// Function that is used to group the collection items.
         /// Set to null to remove the grouping.
@@ -63,13 +57,14 @@ namespace VaraniumSharp.WinUI.Collections
                 _group = value;
                 if (value != null)
                 {
-                    _collectionGroups = new ObservableVector<object>();
+                    CollectionGroups = new ObservableVector<object>();
                     RebuildGroups();
                     VectorChanged += HandleViewChanges;
                 }
                 else
                 {
-                    _collectionGroups = null;
+                    //CollectionGroups?.Clear();
+                    CollectionGroups = null;
                     VectorChanged -= HandleViewChanges;
                 }
             }
@@ -81,22 +76,31 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void AddGroupedItem(object key, object item)
         {
-            if (_collectionGroups == null)
+            if (CollectionGroups == null)
             {
                 throw new InvalidOperationException("Cannot group items as the internal collection group is null");
             }
 
-            var col = _collectionGroups
+            var col = CollectionGroups
                 .Cast<CollectionViewGroup>()
                 .FirstOrDefault(g => Comparer.Default.Compare(g.Group, key) == 0);
             
             if (col == null)
             {
                 col = new CollectionViewGroup(key);
-                _collectionGroups.Add(col);
+                var keys = CollectionGroups
+                    .Cast<CollectionViewGroup>()
+                    .Select(x => x.Group)
+                    .ToList();
+
+                keys.Add(key);
+                keys.Sort();
+                var insertIndex = keys.IndexOf(key);
+
+                CollectionGroups.Insert(insertIndex, col);
             }
-            
-            col.Items.IsVectorChangedDeferred = _collectionGroups.IsVectorChangedDeferred;
+
+            col.Items.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
             col.GroupItems.Add(item);
         }
 
@@ -136,15 +140,15 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void RebuildGroups()
         {
-            if (_collectionGroups == null)
+            if (CollectionGroups == null)
             {
                 throw new InvalidOperationException("Cannot group items as the internal collection group is null");
             }
 
-            _collectionGroups.IsVectorChangedDeferred = true;
+            ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred = true;
             try
             {
-                _collectionGroups.Clear();
+                CollectionGroups.Clear();
 
                 if (Source == null)
                 {
@@ -180,24 +184,24 @@ namespace VaraniumSharp.WinUI.Collections
             }
             finally
             {
-                foreach (CollectionViewGroup col in _collectionGroups)
+                foreach (CollectionViewGroup col in CollectionGroups)
                 {
                     col.Items.IsVectorChangedDeferred = false;
                 }
-                _collectionGroups.IsVectorChangedDeferred = false;
+                ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred = false;
             }
         }
-        
+
         private void RemoveGroupedItem(object item)
         {
-            if (_collectionGroups == null)
+            if (CollectionGroups == null)
             {
                 throw new InvalidOperationException("Cannot group items as the internal collection group is null");
             }
 
-            foreach (var g in _collectionGroups.Select(x => ((CollectionViewGroup)x).Items))
+            foreach (var g in CollectionGroups.Select(x => ((CollectionViewGroup)x).Items))
             {
-                g.IsVectorChangedDeferred = _collectionGroups.IsVectorChangedDeferred;
+                g.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
                 g.Remove(item);
             }
         }
@@ -205,8 +209,6 @@ namespace VaraniumSharp.WinUI.Collections
         #endregion
 
         #region Variables
-
-        private ObservableVector<object>? _collectionGroups;
 
         private Func<object, object>? _group;
 

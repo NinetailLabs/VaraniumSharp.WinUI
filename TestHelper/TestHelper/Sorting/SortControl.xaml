@@ -26,6 +26,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <sortModule:SortControl 
@@ -36,10 +37,16 @@
                 Grid.Column="1"
                 GroupingPropertyModule="{x:Bind Path=GroupingPropertyModule}" />
 
+            <Button
+                Click="ButtonBase_OnClick"
+                Content="Add entry"
+                Grid.Column="2"/>
+
         </Grid>
 
         <GridView
             Grid.Row="2"
+            ItemsSource="{x:Bind CollectionView, Mode=OneTime}"
             Margin="10"
             Name="SortableGrid">
             <GridView.GroupStyle>

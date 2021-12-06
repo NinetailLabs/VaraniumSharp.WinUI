@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.CustomPaneBase;
@@ -114,7 +115,18 @@ namespace TestHelper.Sorting
         #endregion
 
         #region Private Methods
-        
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var rnd = new Random();
+            Entries.Add(new SortableEntry
+            {
+                Id = rnd.Next(100),
+                Title = "B",
+                Position = 4
+            });
+        }
+
         /// <summary>
         /// Occurs when the <see cref="GroupingPropertyModule"/> groups has changed
         /// </summary>
@@ -137,7 +149,7 @@ namespace TestHelper.Sorting
             Entries.Add(new SortableEntry
             {
                 Id = 1,
-                Title = "Z",
+                Title = "T",
                 Position = 3
             });
 

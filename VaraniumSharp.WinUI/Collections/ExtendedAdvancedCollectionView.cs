@@ -97,7 +97,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Gets the groups in collection
         /// </summary>
-        public IObservableVector<object>? CollectionGroups { get; } = new ObservableVector<object>();
+        public IObservableVector<object>? CollectionGroups { get; protected set; }
 
         /// <inheritdoc />
         public int Count => _view.Count;
