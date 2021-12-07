@@ -57,14 +57,14 @@ namespace VaraniumSharp.WinUI.FilterModule
         }
 
         /// <inheritdoc />
-        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute, PropertyInfo propertyInfo)
         {
             if (attribute is FilterablePropertyAttribute filterAttribute)
             {
                 if (_controlCreationDictionary.ContainsKey(filterAttribute.FilterType))
                 {
                     var action = _controlCreationDictionary[filterAttribute.FilterType];
-                    action.Invoke(propertyName, filterAttribute, null); // TODO - Replace null with properties once we get that far
+                    action.Invoke(propertyName, filterAttribute, propertyInfo);
                 }
                 else
                 {
@@ -83,7 +83,8 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <inheritdoc />
         protected override void EntriesShapedByOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            throw new System.NotImplementedException();
+            // Not implementing this as the filtering controls don't rely on drag/drop to do their filtering
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -137,7 +138,7 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <inheritdoc />
         protected override void Shape(string propertyName)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         #endregion
