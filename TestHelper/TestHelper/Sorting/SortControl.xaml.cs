@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.SortModule;
@@ -39,6 +40,9 @@ namespace TestHelper.Sorting
             };
             GroupingPropertyModule.ShapingChanged += GroupingPropertyModuleOnShapingChanged;
             GroupingPropertyModule.GenerateShapingEntries(typeof(SortableEntry));
+
+            FilterablePropertyModule = new FilterablePropertyModule(CollectionView);
+            FilterablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
             SetupCollection();
         }
@@ -74,6 +78,8 @@ namespace TestHelper.Sorting
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
+
+        public FilterablePropertyModule FilterablePropertyModule { get; }
 
         public bool StartupLoad { get; set; }
         public string Title { get; set; } = "Sort Control";
@@ -153,35 +159,40 @@ namespace TestHelper.Sorting
             {
                 Id = 2,
                 Title = "Q",
-                Position = 2
+                Position = 2,
+                BoolToFilter = true
             });
 
             Entries.Add(new SortableEntry
             {
                 Id = 1,
                 Title = "T",
-                Position = 3
+                Position = 3,
+                BoolToFilter = false
             });
 
             Entries.Add(new SortableEntry
             {
                 Id = 3,
                 Title = "H",
-                Position = 1
+                Position = 1,
+                BoolToFilter = true
             });
 
             Entries.Add(new SortableEntry
             {
                 Id = 3,
                 Title = "A",
-                Position = 1
+                Position = 1,
+                BoolToFilter = false
             });
 
             Entries.Add(new SortableEntry
             {
                 Id = 4,
                 Title = "A",
-                Position = 3
+                Position = 3,
+                BoolToFilter = false
             });
         }
 
