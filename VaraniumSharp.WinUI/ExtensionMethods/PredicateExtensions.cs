@@ -10,7 +10,7 @@ namespace VaraniumSharp.WinUI.ExtensionMethods
         #region Public Methods
 
         /// <summary>
-        /// Combines two predicates with &&
+        /// Combines two predicates with an and operator
         /// </summary>
         /// <typeparam name="T">Type of parameter passed to the predicated</typeparam>
         /// <param name="predicate1">First predicate</param>
@@ -22,7 +22,7 @@ namespace VaraniumSharp.WinUI.ExtensionMethods
         }
 
         /// <summary>
-        /// Combines two predicates with ||
+        /// Combines two predicates with and or operator
         /// </summary>
         /// <typeparam name="T">Type of parameter passed to the predicated</typeparam>
         /// <param name="predicate1">First predicate</param>

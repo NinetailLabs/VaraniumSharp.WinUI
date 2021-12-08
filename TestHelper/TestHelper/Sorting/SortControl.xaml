@@ -106,6 +106,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <TextBlock
@@ -134,6 +135,16 @@
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Text="{x:Bind Path=Position}" />
+
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.Row="3"
+                                Text="Enum:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Grid.Row="3"
+                                Text="{x:Bind Path=EnumToFilter}" />
+
 
                         </Grid>
                     </Border>

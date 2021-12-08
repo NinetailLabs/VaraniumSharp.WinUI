@@ -18,6 +18,9 @@ namespace TestHelper.Sorting
         [FilterableProperty("Bool filter", "Filter by my boolean value", FilterableType.Boolean, 0)]
         public bool BoolToFilter { get; set; }
 
+        [FilterableProperty("Enum filter", "Filter values by enum", FilterableType.Enumeration, 1)]
+        public SortableEnum EnumToFilter { get; init; }
+
         [SortableProperty("Even More", "Even more sorting")]
         public string EvenMore { get; set; }
 

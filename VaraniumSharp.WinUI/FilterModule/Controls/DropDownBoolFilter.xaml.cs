@@ -9,7 +9,7 @@ using VaraniumSharp.WinUI.ExtensionMethods;
 namespace VaraniumSharp.WinUI.FilterModule.Controls
 {
     /// <summary>
-    /// Control used to filter based on a boolean value
+    /// Control used to filter based on a <see cref="bool"/> value
     /// </summary>
     public sealed partial class DropDownBoolFilter : IFilterControl, INotifyPropertyChanged
     {

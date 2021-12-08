@@ -179,7 +179,8 @@ namespace TestHelper.Sorting
                 Id = 2,
                 Title = "Q",
                 Position = 2,
-                BoolToFilter = true
+                BoolToFilter = true,
+                EnumToFilter = SortableEnum.That
             });
 
             Entries.Add(new SortableEntry
@@ -187,7 +188,8 @@ namespace TestHelper.Sorting
                 Id = 1,
                 Title = "T",
                 Position = 3,
-                BoolToFilter = false
+                BoolToFilter = false,
+                EnumToFilter = SortableEnum.This
             });
 
             Entries.Add(new SortableEntry
@@ -195,7 +197,8 @@ namespace TestHelper.Sorting
                 Id = 3,
                 Title = "H",
                 Position = 1,
-                BoolToFilter = true
+                BoolToFilter = true,
+                EnumToFilter = SortableEnum.This
             });
 
             Entries.Add(new SortableEntry
@@ -203,7 +206,8 @@ namespace TestHelper.Sorting
                 Id = 3,
                 Title = "A",
                 Position = 1,
-                BoolToFilter = false
+                BoolToFilter = false,
+                EnumToFilter = SortableEnum.Those
             });
 
             Entries.Add(new SortableEntry
@@ -211,7 +215,8 @@ namespace TestHelper.Sorting
                 Id = 4,
                 Title = "A",
                 Position = 3,
-                BoolToFilter = false
+                BoolToFilter = false,
+                EnumToFilter = SortableEnum.That
             });
         }
 

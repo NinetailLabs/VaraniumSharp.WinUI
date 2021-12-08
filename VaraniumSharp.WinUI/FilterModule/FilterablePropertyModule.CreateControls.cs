@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using VaraniumSharp.WinUI.FilterModule.Controls;
 
@@ -24,18 +26,47 @@ namespace VaraniumSharp.WinUI.FilterModule
         {
             if (!FilterAlreadyExists(attribute.FilterDisplayName))
             {
-
-                var shapingEntry = new FilterShapingEntry(string.Empty)
-                {
-                    PropertyName = fullPropertyName,
-                    Header = attribute.FilterDisplayName,
-                    Tooltip = attribute.ToolTip
-                };
-
-                var control = new DropDownBoolFilter(shapingEntry);
+                var control = new DropDownBoolFilter(GetShapingEntry(fullPropertyName, attribute.FilterDisplayName, attribute.ToolTip));
                 HookupFilterControl(control);
                 
             }
+        }
+
+        /// <summary>
+        /// Create a enumeration filter control and add it to the collection
+        /// </summary>
+        /// <param name="fullPropertyName">Full name of the property to filter on</param>
+        /// <param name="attribute">Attribute used to get filter values</param>
+        /// <param name="property">Property the filter is for</param>
+        [FilterableControlCreation(FilterableType.Enumeration)]
+        [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Method is used via Reflection")]
+        private void AddEnumerationFilterControl(string fullPropertyName, FilterablePropertyAttribute attribute, PropertyInfo property)
+        {
+            var values = Enum.GetValues(property.PropertyType).Cast<object>().ToList();
+
+            if (!FilterAlreadyExists(attribute.FilterDisplayName))
+            {
+                var shapingEntry = GetShapingEntry(fullPropertyName, attribute.FilterDisplayName, attribute.ToolTip);
+                var control = new DropDownEnumFilter(shapingEntry, values);
+                HookupFilterControl(control);
+            }
+        }
+
+        /// <summary>
+        /// Create a new shaping entry and populate it with the provided values
+        /// </summary>
+        /// <param name="fullPropertyName">Full property name the filter is for</param>
+        /// <param name="header">Header to display for the filter control</param>
+        /// <param name="tooltip">Tooltip to display for the filter control</param>
+        /// <returns>Populated shaping entry</returns>
+        private FilterShapingEntry GetShapingEntry(string fullPropertyName, string header, string tooltip)
+        {
+            return new FilterShapingEntry(string.Empty)
+            {
+                PropertyName = fullPropertyName,
+                Header = header,
+                Tooltip = tooltip
+            };
         }
 
         #endregion
