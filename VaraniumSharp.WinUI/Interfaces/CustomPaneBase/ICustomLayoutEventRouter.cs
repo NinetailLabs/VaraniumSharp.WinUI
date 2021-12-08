@@ -16,6 +16,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         event EventHandler<bool>? ControlDisplayChanged;
 
         /// <summary>
+        /// Event that is fired when the filter order of the controls changed
+        /// </summary>
+        event EventHandler? FilterChanged;
+
+        /// <summary>
         /// Event that is fired when the group order of the controls changed
         /// </summary>
         event EventHandler? GroupChanged;
@@ -48,6 +53,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// </summary>
         /// <param name="value">Value to set <see cref="ShowControls"/> to</param>
         Task SetControlDisplayValue(bool value);
+
+        /// <summary>
+        /// Fires the event to indicate that the filters of the controls has been changed
+        /// </summary>
+        void SetFilterChanged();
 
         /// <summary>
         /// Fires the event to indicate that the group order of the controls has been changed

@@ -17,7 +17,7 @@ namespace TestHelper.Sorting
 {
     [AutomaticContainerRegistration(typeof(SortControl))]
     [DisplayComponent("Sort Control", "84dc893c-f7f0-4e74-9922-b059c0d234b7", "Sorting", 100, 100, typeof(SortControl))]
-    public sealed partial class SortControl: ISortableDisplayComponent, IGroupingDisplayComponent
+    public sealed partial class SortControl: ISortableDisplayComponent, IGroupingDisplayComponent, IFilteringDisplayComponent
     {
         #region Constructor
 
@@ -42,6 +42,7 @@ namespace TestHelper.Sorting
             GroupingPropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
             FilterablePropertyModule = new FilterablePropertyModule(CollectionView);
+            FilterablePropertyModule.ShapingChanged += FilterablePropertyModuleOnShapingChanged;
             FilterablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
             SetupCollection();
@@ -50,6 +51,8 @@ namespace TestHelper.Sorting
         #endregion
 
         #region Events
+
+        public event EventHandler? FilterChanged;
 
         public event EventHandler? GroupChanged;
 
@@ -69,6 +72,8 @@ namespace TestHelper.Sorting
         public Guid ContentId => Guid.Parse("84dc893c-f7f0-4e74-9922-b059c0d234b7");
 
         private ObservableCollection<SortableEntry> Entries { get; }
+
+        public FilterablePropertyModule FilterablePropertyModule { get; }
         public GroupingPropertyModule GroupingPropertyModule { get; }
 
         public Guid InstanceId { get; set; }
@@ -78,8 +83,6 @@ namespace TestHelper.Sorting
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
-
-        public FilterablePropertyModule FilterablePropertyModule { get; }
 
         public bool StartupLoad { get; set; }
         public string Title { get; set; } = "Sort Control";
@@ -92,6 +95,11 @@ namespace TestHelper.Sorting
         {
             // Not used for now
             return Task.CompletedTask;
+        }
+
+        public void InitFilterOrder(List<FilterEntryStorageModel> filterEntries)
+        {
+            FilterablePropertyModule.ApplyFilters(filterEntries);
         }
 
         public void InitGroupOrder(List<GroupEntryStorageModel> groupEntries)
@@ -135,12 +143,23 @@ namespace TestHelper.Sorting
             });
         }
 
+        private void ButtonDeleteAndReadd(object sender, RoutedEventArgs e)
+        {
+            Entries.Clear();
+            SetupCollection();
+        }
+
         private void ButtonDeleteOnClick(object sender, RoutedEventArgs e)
         {
             if (SelectedEntry != null)
             {
                 Entries.Remove(SelectedEntry);
             }
+        }
+
+        private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
+        {
+            FilterChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -207,11 +226,5 @@ namespace TestHelper.Sorting
         }
 
         #endregion
-
-        private void ButtonDeleteAndReadd(object sender, RoutedEventArgs e)
-        {
-            Entries.Clear();
-            SetupCollection();
-        }
     }
 }

@@ -6,7 +6,7 @@ namespace VaraniumSharp.WinUI.FilterModule
     /// <summary>
     /// Interface for filter controls
     /// </summary>
-    internal interface IFilterControl
+    public interface IFilterControl
     {
         #region Events
 
@@ -20,9 +20,9 @@ namespace VaraniumSharp.WinUI.FilterModule
         #region Properties
 
         /// <summary>
-        /// The name to display for the filter
+        /// Entry containing the filter details
         /// </summary>
-        public string FilterDisplayName { get; }
+        FilterShapingEntry ShapingEntry { get; }
 
         #endregion
 
@@ -41,6 +41,13 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <param name="entries">List of entries to filter on</param>
         /// <returns>Indicate whether each of the provided filter values was applied or not</returns>
         List<KeyValuePair<object, FilterState>> FilterBy(List<object> entries);
+
+        /// <summary>
+        /// Apply filters to the control
+        /// </summary>
+        /// <param name="entries">Filter entries as strings</param>
+        /// <returns>Indicate whether each of the provided filter values was applied or not</returns>
+        List<KeyValuePair<object, FilterState>> FilterBy(List<string> entries);
 
         #endregion
     }

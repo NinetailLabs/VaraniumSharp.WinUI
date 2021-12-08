@@ -28,6 +28,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <inheritdoc/>
         public event EventHandler<bool>? ControlDisplayChanged;
 
+        /// <inheritdoc/>
+        public event EventHandler? FilterChanged;
+
         /// <inheritdoc />
         public event EventHandler? GroupChanged;
 
@@ -55,6 +58,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             ControlDisplayChanged?.Invoke(this, value);
 
             return Task.CompletedTask;
+        }
+
+        /// <inheritdoc/>
+        public void SetFilterChanged()
+        {
+            FilterChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc />

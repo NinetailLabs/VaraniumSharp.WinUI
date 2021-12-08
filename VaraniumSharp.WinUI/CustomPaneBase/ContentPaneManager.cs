@@ -9,6 +9,7 @@ using VaraniumSharp.Attributes;
 using VaraniumSharp.Enumerations;
 using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
+using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.HorizontalPane;
@@ -36,6 +37,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             _customLayoutEventRouter = customLayoutEventRouter;
             _customLayoutEventRouter.SortChanged += _customLayoutEventRouter_SortChanged;
             _customLayoutEventRouter.GroupChanged += CustomLayoutEventRouterOnGroupChanged;
+            _customLayoutEventRouter.FilterChanged += CustomLayoutEventRouterOnFilterChanged;
             _logger = StaticLogger.GetLogger<ContentPaneManager>();
         }
 
@@ -68,7 +70,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             var jsonLayout = JsonSerializer.Serialize(wrapper, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
             await _fileWrapper.WriteAllTextAsync(path, jsonLayout);
 
-            await SaveSortOrderAsync();
+            await SaveSortOrderAsync().ConfigureAwait(false);
+            await SaveGroupOrderAsync().ConfigureAwait(false);
+            await SaveFilterOrderAsync().ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -88,7 +92,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 Width = 100
             };
 
-            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null, null);
+            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null, null, null);
         }
 
         /// <inheritdoc/>
@@ -116,7 +120,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 if(_fileWrapper.FileExists(sortPath))
                 {
                     var sortJson = await _fileWrapper.ReadAllTextAsync(sortPath).ConfigureAwait(false);
-                    sortWrapper = JsonSerializer.Deserialize<SortStorageWrapperModel>(sortJson, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
+                    sortWrapper = JsonSerializer.Deserialize(sortJson, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
                 }
 
                 GroupStorageWrapperModel? groupWrapper = null;
@@ -124,11 +128,19 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 if (_fileWrapper.FileExists(groupPath))
                 {
                     var groupJson = await _fileWrapper.ReadAllTextAsync(groupPath).ConfigureAwait(false);
-                    groupWrapper = JsonSerializer.Deserialize<GroupStorageWrapperModel>(groupJson, GroupStorageWrapperModelJsonContext.Default.GroupStorageWrapperModel);
+                    groupWrapper = JsonSerializer.Deserialize(groupJson, GroupStorageWrapperModelJsonContext.Default.GroupStorageWrapperModel);
+                }
+
+                FilterStorageWrapperModel? filterWrapper = null;
+                var filterPath = _layoutStorageOptions.GetJsonPath($"{tabName}_filter.json");
+                if (_fileWrapper.FileExists(filterPath))
+                {
+                    var filterJson = await _fileWrapper.ReadAllTextAsync(filterPath).ConfigureAwait(false);
+                    filterWrapper = JsonSerializer.Deserialize(filterJson, FilterStorageWrapperModelJsonContext.Default.FilterStorageWrapperModel);
                 }
 
                 var jsonData = await _fileWrapper.ReadAllTextAsync(path);
-                var wrapper = JsonSerializer.Deserialize<LayoutWrapperModel>(jsonData, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
+                var wrapper = JsonSerializer.Deserialize(jsonData, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
 
                 if (wrapper == null)
                 {
@@ -137,7 +149,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
 
                 await BasePane
-                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.ShapingStorage, groupWrapper?.ShapingStorage)
+                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.ShapingStorage, groupWrapper?.ShapingStorage, filterWrapper?.ShapingStorage)
                     .ConfigureAwait(false);
             }
             else
@@ -163,6 +175,16 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <summary>
+        /// Occurs when the BasePAne fires an event to indicate that a control`s sort order has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private async void CustomLayoutEventRouterOnFilterChanged(object? sender, EventArgs e)
+        {
+            await SaveFilterOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Occurs when the BasePane fires an event to indicate that a control`s group order has changed
         /// </summary>
         /// <param name="sender">Sender of the event</param>
@@ -171,6 +193,28 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         private async void CustomLayoutEventRouterOnGroupChanged(object? sender, EventArgs e)
         {
             await SaveGroupOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Save the filter order for the control pane
+        /// </summary>
+        private async Task SaveFilterOrderAsync()
+        {
+            try
+            {
+                await _storageSemaphore.WaitAsync();
+                var layoutId = BasePane.GetIdentifier();
+                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_filter.json");
+                var wrapper = new FilterStorageWrapperModel(layoutId, await BasePane.GetFilterStorageModelsAsync().ConfigureAwait(false));
+                var filterJson = JsonSerializer.Serialize(wrapper, FilterStorageWrapperModelJsonContext.Default.FilterStorageWrapperModel);
+                await _fileWrapper
+                    .WriteAllTextAsync(path, filterJson)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                _storageSemaphore.Release();
+            }
         }
 
         /// <summary>
@@ -185,7 +229,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_group.json");
                 var wrapper = new GroupStorageWrapperModel(layoutId, await BasePane.GetGroupStorageModelsAsync().ConfigureAwait(false));
                 var jsonGroup = JsonSerializer.Serialize(wrapper, GroupStorageWrapperModelJsonContext.Default.GroupStorageWrapperModel);
-                await _fileWrapper.WriteAllTextAsync(path, jsonGroup);
+                await _fileWrapper
+                    .WriteAllTextAsync(path, jsonGroup)
+                    .ConfigureAwait(false);
 
             }
             finally
@@ -206,7 +252,9 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_sort.json");
                 var wrapper = new SortStorageWrapperModel(layoutId, await BasePane.GetSortStorageModelsAsync().ConfigureAwait(false));
                 var jsonSort = JsonSerializer.Serialize(wrapper, SortStorageWrapperModelJsonContext.Default.SortStorageWrapperModel);
-                await _fileWrapper.WriteAllTextAsync(path, jsonSort);
+                await _fileWrapper
+                    .WriteAllTextAsync(path, jsonSort)
+                    .ConfigureAwait(false);
             }
             finally
             {

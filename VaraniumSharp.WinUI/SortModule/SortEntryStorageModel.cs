@@ -6,7 +6,7 @@ namespace VaraniumSharp.WinUI.SortModule
     /// <summary>
     /// Sort entry to store
     /// </summary>
-    public class SortEntryStorageModel : ShapingEntryStorageModelBase
+    public sealed class SortEntryStorageModel : ShapingEntryStorageModelBase
     {
         #region Constructor
 

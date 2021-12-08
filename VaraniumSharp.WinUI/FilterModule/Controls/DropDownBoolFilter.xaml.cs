@@ -18,16 +18,13 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="propertyName">Text to display for the filter</param>
-        /// <param name="displayName">The label to display for the filter textBox</param>
-        /// <param name="tooltip">The tooltip to display for the UI components</param>
-        public DropDownBoolFilter(string propertyName, string displayName, string tooltip)
+        /// <param name="filterShapingEntry">Entry that contains the details about the filter</param>
+        public DropDownBoolFilter(FilterShapingEntry filterShapingEntry)
         {
             InitializeComponent();
-            FilterDisplayName = displayName;
-            FilterPropertyName = propertyName;
-            FilterTooltip = tooltip;
+            ShapingEntry = filterShapingEntry;
             FilterBy(new List<object> {BooleanFilterValues.All});
+            filterShapingEntry.CurrentFilterValues.Add(BooleanFilterValues.All.ToString());
         }
 
         #endregion
@@ -47,17 +44,7 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
         #region Properties
 
         /// <inheritdoc />
-        public string FilterDisplayName { get; }
-
-        /// <summary>
-        /// Name of the property that is being filtered on
-        /// </summary>
-        public string FilterPropertyName { get; }
-
-        /// <summary>
-        /// The tooltip to display for the UI components
-        /// </summary>
-        public string FilterTooltip { get; }
+        public FilterShapingEntry ShapingEntry { get; }
 
         #endregion
 
@@ -71,7 +58,7 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
                 return true;
             }
 
-            var property = obj.GetNestedPropertyValue(FilterPropertyName);
+            var property = obj.GetNestedPropertyValue(ShapingEntry.PropertyName);
             return property is bool boolToFilter
                    && (_selectedFilterValues == BooleanFilterValues.Yes && boolToFilter
                        || _selectedFilterValues == BooleanFilterValues.No && !boolToFilter);
@@ -92,7 +79,7 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
                 var entry = entries[r];
                 if (r > 0)
                 {
-                    response.Add(new KeyValuePair<object, FilterState>(entry, FilterState.Ignored));
+                    response.Add(new(entry, FilterState.Ignored));
                     continue;
                 }
 
@@ -104,20 +91,29 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
                         .First(x => x.Text.Equals(filterValue, StringComparison.InvariantCultureIgnoreCase));
                     if (entry is not BooleanFilterValues boolFilter)
                     {
-                        response.Add(new KeyValuePair<object, FilterState>(entry, FilterState.NotFound));
+                        response.Add(new(entry, FilterState.NotFound));
                         continue;
                     }
 
                     ApplyFilter(menuItem, boolFilter);
-                    response.Add(new KeyValuePair<object, FilterState>(entry, FilterState.Applied));
+                    response.Add(new(entry, FilterState.Applied));
                 }
                 catch (Exception)
                 {
-                    response.Add(new KeyValuePair<object, FilterState>(entry, FilterState.NotValid));
+                    response.Add(new(entry, FilterState.NotValid));
                 }
             }
 
             return response;
+        }
+
+        /// <inheritdoc />
+        public List<KeyValuePair<object, FilterState>> FilterBy(List<string> entries)
+        {
+            var typedEntries = entries
+                .Select(x => (object) Enum.Parse<BooleanFilterValues>(x))
+                .ToList();
+            return FilterBy(typedEntries);
         }
 
         #endregion
@@ -142,6 +138,9 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
 
             _selectedFilterValues = filterValue;
             menuItem.IsChecked = true;
+
+            ShapingEntry.CurrentFilterValues.Clear();
+            ShapingEntry.CurrentFilterValues.Add(filterValue.ToString());
 
             RefreshFiltering?.Invoke(this, EventArgs.Empty);
         }
@@ -180,7 +179,7 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
                 return _menu;
             }
 
-            _menu = new MenuFlyout();
+            _menu = new();
 
             var filterValues = Enum.GetValues<BooleanFilterValues>();
             foreach (var filterValue in filterValues)

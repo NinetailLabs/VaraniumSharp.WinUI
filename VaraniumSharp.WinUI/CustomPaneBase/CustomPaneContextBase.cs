@@ -13,6 +13,7 @@ using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
 using VaraniumSharp.Extensions;
+using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
 
@@ -134,16 +135,21 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             foreach (var control in Components)
             {
-                if(control is ISortableDisplayComponent sortableDisplayComponent)
+                if(control.Control is ISortableDisplayComponent sortableDisplayComponent)
                 {
                     sortableDisplayComponent.SortChanged -= SortableDisplayComponent_SortChanged;
                 }
 
-                if (control is IGroupingDisplayComponent groupingDisplayComponent)
+                if (control.Control is IGroupingDisplayComponent groupingDisplayComponent)
                 {
                     groupingDisplayComponent.GroupChanged -= GroupingDisplayComponentOnGroupChanged;
                 }
 
+                if (control.Control is IFilteringDisplayComponent filteringDisplayComponent)
+                {
+                    filteringDisplayComponent.FilterChanged += FilteringDisplayComponentOnFilterChanged;
+                }
+                
                 if (control.Control is IAsyncDisposable disposableControl)
                 {
                     Logger.LogDebug("Disposing {ContentId}", control.Control.ContentId);
@@ -164,6 +170,37 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     layoutDisplay.RequestRemoval -= Entry_RequestRemoval;
                 }
             });
+        }
+
+        /// <inheritdoc />
+        public async Task<List<FilterStorageModel>> GetControlFiltersAsync()
+        {
+            var resultList = new List<FilterStorageModel>();
+
+            foreach (var component in Components.Select(x => x.Control))
+            {
+                if (component is ICustomLayoutPane customPane)
+                {
+                    var storageEntry = new FilterStorageModel
+                    {
+                        InstanceId = customPane.InstanceId
+                    };
+                    storageEntry.SubEntries.AddRange(await customPane.GetFilterStorageModelsAsync().ConfigureAwait(false));
+                }
+                else
+                {
+                    if (component is IFilteringDisplayComponent filteringDisplayComponent)
+                    {
+                        resultList.Add(new()
+                        {
+                            InstanceId = filteringDisplayComponent.InstanceId,
+                            ShapingEntries = filteringDisplayComponent.FilterablePropertyModule.FilterControls.Select(x => new FilterEntryStorageModel(((IFilterControl)x).ShapingEntry)).ToList()
+                        });
+                    }
+                }
+            }
+
+            return resultList;
         }
 
         /// <inheritdoc />
@@ -262,7 +299,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
-        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
+        public async Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters)
         {
             foreach (var item in controls)
             {
@@ -278,11 +315,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         .ConfigureAwait(false);
                 }
 
-                SetupNewControl(newControl, item, sortOrder, groupOrder);
+                SetupNewControl(newControl, item, sortOrder, groupOrder, filters);
             }
 
             await ResizeAllControlsAsync().ConfigureAwait(false);
-            await InitializeCustomLayoutPaneAsync(controls, sortOrder, groupOrder).ConfigureAwait(false);
+            await InitializeCustomLayoutPaneAsync(controls, sortOrder, groupOrder, filters).ConfigureAwait(false);
             
         }
 
@@ -415,13 +452,23 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <summary>
+        /// Occurs when a <see cref="IFilteringDisplayComponent"/> filter changes
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void FilteringDisplayComponentOnFilterChanged(object? sender, EventArgs e)
+        {
+            CustomLayoutEventRouter.SetFilterChanged();
+        }
+
+        /// <summary>
         /// Occurs when a <see cref="IGroupingDisplayComponent"/> group order changed
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
         private void GroupingDisplayComponentOnGroupChanged(object? sender, EventArgs e)
         {
-            CustomLayoutEventRouter?.SetGroupOrderChanged();
+            CustomLayoutEventRouter.SetGroupOrderChanged();
         }
 
         /// <summary>
@@ -441,7 +488,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <param name="controls">Storage models that contains the control details</param>
         /// <param name="sortOrder">Collection of sort order entries that might contain sort details for the control</param>
         /// <param name="groupOrder">Collection of group order entries that might contain group details for the control</param>
-        private async Task InitializeCustomLayoutPaneAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
+        /// <param name="filters">Collection of filter entries that might contain filtering details for the control</param>
+        private async Task InitializeCustomLayoutPaneAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters)
         {
             foreach (var layoutPane in Components.Where(x => x.Control is ICustomLayoutPane).Select(x => x.Control))
             {
@@ -453,7 +501,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
                     await customPane
-                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries)
+                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries, filters)
                         .ConfigureAwait(false);
                 }
             }
@@ -490,6 +538,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     {
                         groupingDisplayComponent.GroupChanged += GroupingDisplayComponentOnGroupChanged;
                     }
+
+                    if (newControl is IFilteringDisplayComponent filteringDisplayComponent)
+                    {
+                        filteringDisplayComponent.FilterChanged += FilteringDisplayComponentOnFilterChanged;
+                    }
                 }
             }
         }
@@ -512,7 +565,8 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <param name="storageModel">Storage model that contains the control details</param>
         /// <param name="sortOrder">Collection of sort order entries that might contain sort details for the control</param>
         /// <param name="groupOrder">Collection of group order entries that might contain group details for the control</param>
-        private void SetupNewControl(IDisplayComponent? newControl, ControlStorageModel storageModel, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder)
+        /// <param name="filters">Collection of filter entries that might contains filter details for the control</param>
+        private void SetupNewControl(IDisplayComponent? newControl, ControlStorageModel storageModel, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters)
         {
             if (newControl != null)
             {
@@ -538,6 +592,16 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                         groupingDisplayComponent.InitGroupOrder(groupDetails.ShapingEntries);
                     }
                     groupingDisplayComponent.GroupChanged += GroupingDisplayComponentOnGroupChanged;
+                }
+
+                if (newControl is IFilteringDisplayComponent filteringDisplayComponent)
+                {
+                    var filterDetails = filters?.FirstOrDefault(x => x.InstanceId == newControl.InstanceId);
+                    if (filterDetails != null)
+                    {
+                        filteringDisplayComponent.InitFilterOrder(filterDetails.ShapingEntries);
+                    }
+                    filteringDisplayComponent.FilterChanged += FilteringDisplayComponentOnFilterChanged;
                 }
 
                 newControl.Title = storageModel.Title;

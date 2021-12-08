@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
 
-namespace VaraniumSharp.WinUI.SortModule
+namespace VaraniumSharp.WinUI.FilterModule
 {
     /// <summary>
-    /// Stores the <see cref="SortStorageModel"/> collection for a view
+    /// Stores the <see cref="FilterStorageModel"/> collection for a view
     /// </summary>
-    public sealed class SortStorageWrapperModel : ShapingStorageWrapperModel<SortStorageModel, SortEntryStorageModel,
-        SortableShapingEntry>
+    public class FilterStorageWrapperModel : ShapingStorageWrapperModel<FilterStorageModel, FilterEntryStorageModel, FilterShapingEntry>
     {
         #region Constructor
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        public SortStorageWrapperModel()
+        public FilterStorageWrapperModel()
         { }
 
         /// <summary>
@@ -23,7 +22,7 @@ namespace VaraniumSharp.WinUI.SortModule
         /// </summary>
         /// <param name="layoutName">Name of the layout being stored</param>
         /// <param name="storageModels">ShapingStorage models to store</param>
-        public SortStorageWrapperModel(Guid layoutName, List<SortStorageModel> storageModels)
+        public FilterStorageWrapperModel(Guid layoutName, List<FilterStorageModel> storageModels)
             : base(layoutName, storageModels)
         { }
 

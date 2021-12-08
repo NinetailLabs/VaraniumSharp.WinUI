@@ -44,6 +44,27 @@ namespace VaraniumSharp.WinUI.FilterModule
 
         #endregion
 
+        #region Public Methods
+
+        /// <summary>
+        /// Apply the provided filter values
+        /// </summary>
+        /// <param name="filters">Collection containing the filters to apply</param>
+        public void ApplyFilters(List<FilterEntryStorageModel> filters)
+        {
+            foreach (var entry in filters)
+            {
+                var control = FilterControls.FirstOrDefault(x => ((IFilterControl) x).ShapingEntry.PropertyName == entry.PropertyName);
+                if (control is IFilterControl filterControl)
+                {
+                    filterControl.FilterBy(entry.CurrentFilters);
+                }
+            }
+
+        }
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -53,6 +74,7 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <param name="e">Event arguments</param>
         private void ControlOnRefreshFiltering(object? sender, EventArgs e)
         {
+            FireShapingChangedEvent();
             ViewSource.Refresh();
         }
 
@@ -84,7 +106,7 @@ namespace VaraniumSharp.WinUI.FilterModule
         protected override void EntriesShapedByOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // Not implementing this as the filtering controls don't rely on drag/drop to do their filtering
-            throw new NotImplementedException();
+            throw new NotImplementedException("Filtering controls don't rely on the drag/drop method to be applied");
         }
 
         /// <summary>
@@ -95,7 +117,7 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <returns>True if the filter exists, otherwise false</returns>
         private bool FilterAlreadyExists(string filterDisplayName)
         {
-            return FilterControls.Any(x => ((IFilterControl)x).FilterDisplayName == filterDisplayName);
+            return FilterControls.Any(x => ((IFilterControl)x).ShapingEntry.Header == filterDisplayName);
         }
 
         /// <summary>
@@ -138,7 +160,8 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <inheritdoc />
         protected override void Shape(string propertyName)
         {
-            throw new NotImplementedException();
+            // This isn't used as it doesn't provide a practical way to pass multiple filters and their values
+            throw new NotImplementedException("Not supported. To filter the collection use the ApplyFilters method instead");
         }
 
         #endregion

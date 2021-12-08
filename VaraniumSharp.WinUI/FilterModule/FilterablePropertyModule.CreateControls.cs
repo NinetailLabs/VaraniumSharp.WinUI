@@ -24,8 +24,15 @@ namespace VaraniumSharp.WinUI.FilterModule
         {
             if (!FilterAlreadyExists(attribute.FilterDisplayName))
             {
-                
-                var control = new DropDownBoolFilter(fullPropertyName, attribute.FilterDisplayName, attribute.ToolTip);
+
+                var shapingEntry = new FilterShapingEntry(string.Empty)
+                {
+                    PropertyName = fullPropertyName,
+                    Header = attribute.FilterDisplayName,
+                    Tooltip = attribute.ToolTip
+                };
+
+                var control = new DropDownBoolFilter(shapingEntry);
                 HookupFilterControl(control);
                 
             }
