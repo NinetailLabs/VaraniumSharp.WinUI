@@ -106,7 +106,7 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <param name="header">Header to display for the filter control</param>
         /// <param name="tooltip">Tooltip to display for the filter control</param>
         /// <returns>Populated shaping entry</returns>
-        private FilterShapingEntry GetShapingEntry(string fullPropertyName, string header, string tooltip)
+        private static FilterShapingEntry GetShapingEntry(string fullPropertyName, string header, string tooltip)
         {
             return new FilterShapingEntry(string.Empty)
             {
