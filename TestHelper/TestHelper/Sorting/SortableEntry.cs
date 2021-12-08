@@ -42,6 +42,9 @@ namespace TestHelper.Sorting
         [SortableProperty("Title", "Sort by Title")]
         public string Title { get; init; }
 
+        [FilterableProperty("Long Entry Title", "Filter by long entry title", FilterableType.SearchableString, 4)]
+        public string Another { get; init; }
+
         #endregion
     }
 }
