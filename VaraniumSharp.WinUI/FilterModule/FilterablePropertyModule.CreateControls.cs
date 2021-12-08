@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -48,6 +49,33 @@ namespace VaraniumSharp.WinUI.FilterModule
             {
                 var shapingEntry = GetShapingEntry(fullPropertyName, attribute.FilterDisplayName, attribute.ToolTip);
                 var control = new DropDownEnumFilter(shapingEntry, values);
+                HookupFilterControl(control);
+            }
+        }
+
+        /// <summary>
+        /// Create a predefined string filter control and add it to the collection
+        /// </summary>
+        /// <param name="fullPropertyName">Full name of the property to filter on</param>
+        /// <param name="attribute">Attribute used to get filter values</param>
+        /// <param name="property">Property the filter is for</param>
+        [FilterableControlCreation(FilterableType.PredefinedString)]
+        [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Method is used via Reflection")]
+        [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = "Property is required for signature to match Action")]
+        private void AddPredefinedStringFilterControl(string fullPropertyName, FilterablePropertyAttribute attribute, PropertyInfo property)
+        {
+            var type = Type.GetType(attribute.FilterCollectionClassName);
+            var filterValues = (List<string>?)type?.GetProperty(attribute.FilterListPropertyName, BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+            if (filterValues == null)
+            {
+                throw new InvalidOperationException($"No pre-defined string filters could be found for {fullPropertyName}");
+            }
+
+            if (!FilterAlreadyExists(attribute.FilterDisplayName))
+            {
+                var shapingProperty = GetShapingEntry(fullPropertyName, attribute.Header, attribute.ToolTip);
+                var control = new DropDownStringFilter(shapingProperty, filterValues);
+                control.RefreshFiltering += ControlOnRefreshFiltering;
                 HookupFilterControl(control);
             }
         }

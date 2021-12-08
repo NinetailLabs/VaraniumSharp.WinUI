@@ -8,7 +8,20 @@
 
     <Grid
         MinWidth="100">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            FontSize="12"
+            Text="Filters"
+            Grid.Row="0" />
+
         <GridView
+            Grid.Row="1"
             ItemContainerStyle="{ThemeResource NoSelect}"
             ItemsSource="{x:Bind Path=FilterablePropertyModule.FilterControls}"/>
     </Grid>

@@ -38,6 +38,9 @@ namespace TestHelper.Sorting
         [SortableProperty("Title", "Sort by Title")]
         public string Title { get; init; }
 
+        [FilterableProperty("Type", "Filter by type", FilterableType.PredefinedString, 2, "TestHelper.Sorting.PredefinedStrings, TestHelper", "PredefinedStringsCollection")]
+        public string PredefinedType { get; set; }
+
         #endregion
     }
 }
