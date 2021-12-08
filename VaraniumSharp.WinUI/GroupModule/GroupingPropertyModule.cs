@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.ExtensionMethods;
@@ -31,7 +32,7 @@ namespace VaraniumSharp.WinUI.GroupModule
         #region Private Methods
 
         /// <inheritdoc />
-        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute, PropertyInfo propertyInfo)
         {
             if (attribute is GroupingPropertyAttribute)
             {

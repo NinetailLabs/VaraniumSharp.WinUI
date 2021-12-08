@@ -16,7 +16,8 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// </summary>
         /// <param name="propertyName">Name of the property the button is for</param>
         /// <param name="attribute">Attribute containing the details of the shaping entry</param>
-        protected virtual ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        /// <param name="propertyInfo">Property info for the shaping entry</param>
+        protected virtual ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute, PropertyInfo propertyInfo)
         {
             return null;
         }
@@ -109,7 +110,7 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
                 else
                 {
                     var fullPropertyName = $"{propertyPrefix}{property.Name}";
-                    var entry = CreateShapingEntry(fullPropertyName, attribute);
+                    var entry = CreateShapingEntry(fullPropertyName, attribute, property);
                     if (entry == null)
                     {
                         continue;

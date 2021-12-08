@@ -78,12 +78,11 @@
             <Button 
                 Click="{x:Bind Path=GroupingPropertyModule.MoveEntryFromAvailableToShapedBy}"
                 Grid.Row="1"
-                Height="30"
                 HorizontalAlignment="Center"
                 IsEnabled="{x:Bind Path=GroupingPropertyModule.MoveAvailableEnabled, Mode=OneWay}"
                 Margin="4,8,2,2"
                 ToolTipService.ToolTip="Add entry to sort"
-                Width="30">
+                Width="37">
                 <Button.Content>
                     <TextBlock
                         FontSize="18"
@@ -98,12 +97,11 @@
             <Button 
                 Click="{x:Bind Path=GroupingPropertyModule.MoveEntryFromShapedByToAvailable}"
                 Grid.Row="2"
-                Height="30"
                 HorizontalAlignment="Center"
                 IsEnabled="{x:Bind Path=GroupingPropertyModule.MoveShapedByEnabled, Mode=OneWay}"
                 Margin="4,8,2,2"
                 ToolTipService.ToolTip="Remove entry from sort"
-                Width="30">
+                Width="37">
                 <Button.Content>
                     <TextBlock
                         FontSize="18"
@@ -118,12 +116,11 @@
             <Button 
                 Click="{x:Bind Path=GroupingPropertyModule.ClearShapingOnClick}"
                 Grid.Row="3"
-                Height="30"
                 HorizontalAlignment="Center"
                 IsEnabled="{x:Bind Path=GroupingPropertyModule.IsShaped, Mode=OneWay}"
                 Margin="4,8,2,2"
                 ToolTipService.ToolTip="Clear sort"
-                Width="30">
+                Width="37">
                 <Button.Content>
                     <FontIcon 
                         FontFamily="Segoe MDL2 Assets" 

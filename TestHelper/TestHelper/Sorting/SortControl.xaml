@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sortModule="using:VaraniumSharp.WinUI.SortModule"
     xmlns:groupModule="using:VaraniumSharp.WinUI.GroupModule"
+    xmlns:filterModule="using:VaraniumSharp.WinUI.FilterModule"
     mc:Ignorable="d">
 
     <Grid>
@@ -24,9 +25,11 @@
         <Grid
             Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <sortModule:SortControl 
@@ -34,11 +37,15 @@
                 SortablePropertyModule="{x:Bind Path=SortablePropertyModule}" />
 
             <groupModule:GroupControl
-                Grid.Column="1"
+                Grid.Column="2"
                 GroupingPropertyModule="{x:Bind Path=GroupingPropertyModule}" />
 
+            <filterModule:FilterControl
+                Grid.Column="3"
+                FilterablePropertyModule="{x:Bind Path=FilterablePropertyModule}" />
+
             <Grid
-                Grid.Column="2">
+                Grid.Column="4">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -100,6 +107,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <TextBlock
@@ -128,6 +136,16 @@
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Text="{x:Bind Path=Position}" />
+
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.Row="3"
+                                Text="Enum:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Grid.Row="3"
+                                Text="{x:Bind Path=EnumToFilter}" />
+
 
                         </Grid>
                     </Border>

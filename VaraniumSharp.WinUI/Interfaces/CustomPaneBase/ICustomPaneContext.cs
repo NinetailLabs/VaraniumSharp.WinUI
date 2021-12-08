@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
 
@@ -58,6 +59,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Task ClearComponentsAsync();
 
         /// <summary>
+        /// Retrieve the collection of filter controls and their currently applied filters
+        /// </summary>
+        /// <returns>Collection of filter storage models</returns>
+        Task<List<FilterStorageModel>> GetControlFiltersAsync();
+
+        /// <summary>
         /// Retrieve collection of sortable controls and their current sort order
         /// </summary>
         /// <returns>Collection of sort storage models</returns>
@@ -77,7 +84,7 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <summary>
         /// Handle the loading of controls
         /// </summary>
-        Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder);
+        Task HandleControlLoadAsync(List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters);
 
         /// <summary>
         /// Set the size of the parent container and resize any controls after the current control.

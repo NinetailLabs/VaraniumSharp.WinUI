@@ -26,6 +26,11 @@
 
   <ItemGroup>
     <None Remove="CustomPaneBase\GridViewStyles.xaml" />
+    <None Remove="FilterModule\Controls\DropDownBoolFilter.xaml" />
+    <None Remove="FilterModule\Controls\DropDownEnumFilter.xaml" />
+    <None Remove="FilterModule\Controls\DropDownStringFilter.xaml" />
+    <None Remove="FilterModule\Controls\StringFilter.xaml" />
+    <None Remove="FilterModule\FilterControl.xaml" />
     <None Remove="GroupModule\GroupControl.xaml" />
     <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
     <None Remove="SettingPane\SettingPane.xaml" />
@@ -62,6 +67,36 @@
     <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
     <Folder Include="Shared\ShapingControlHelper\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="FilterModule\Controls\StringFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="FilterModule\Controls\DropDownStringFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="FilterModule\Controls\DropDownEnumFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="FilterModule\FilterControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="FilterModule\Controls\DropDownBoolFilter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

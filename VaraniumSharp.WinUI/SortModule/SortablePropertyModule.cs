@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reflection;
 using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml.Data;
 using VaraniumSharp.WinUI.Collections;
@@ -33,7 +34,7 @@ namespace VaraniumSharp.WinUI.SortModule
         #region Private Methods
 
         /// <inheritdoc />
-        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute)
+        protected override ShapingEntry? CreateShapingEntry(string propertyName, ShapingPropertyAttributeBase attribute, PropertyInfo propertyInfo)
         {
             if (attribute is SortablePropertyAttribute sortAttribute)
             {
