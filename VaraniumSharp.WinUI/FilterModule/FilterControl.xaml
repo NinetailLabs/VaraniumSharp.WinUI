@@ -8,7 +8,7 @@
 
     <Grid
         MinWidth="100"
-        MaxWidth="250">
+        MaxWidth="300">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
