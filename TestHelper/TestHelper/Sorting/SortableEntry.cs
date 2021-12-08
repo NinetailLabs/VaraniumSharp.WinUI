@@ -34,12 +34,13 @@ namespace TestHelper.Sorting
         [SortableProperty("Position", "Sort by Position", DefaultSortDirection = SortDirection.Descending)]
         public int Position { get; init; }
 
+        [FilterableProperty("Type", "Filter by type", FilterableType.PredefinedString, 2, "TestHelper.Sorting.PredefinedStrings, TestHelper", "PredefinedStringsCollection")]
+        public string PredefinedType { get; set; }
+
+        [FilterableProperty("Title", "Filter by Title", FilterableType.SearchableString, 3)]
         [GroupingProperty("Title", "Group by Title")]
         [SortableProperty("Title", "Sort by Title")]
         public string Title { get; init; }
-
-        [FilterableProperty("Type", "Filter by type", FilterableType.PredefinedString, 2, "TestHelper.Sorting.PredefinedStrings, TestHelper", "PredefinedStringsCollection")]
-        public string PredefinedType { get; set; }
 
         #endregion
     }

@@ -33,7 +33,34 @@ namespace VaraniumSharp.WinUI.FilterModule
         /// <summary>
         /// Module used to handle the filtering
         /// </summary>
-        public FilterablePropertyModule? FilterablePropertyModule { get; set; }
+        public FilterablePropertyModule? FilterablePropertyModule
+        {
+            get => _filterablePropertyModule;
+            set
+            {
+                _filterablePropertyModule = value;
+                if (value == null)
+                {
+                    ItemPanel.Children.Clear();
+                }
+                else
+                {
+                    foreach (var entry in value.FilterControls)
+                    {
+                        ItemPanel.Children.Add(entry);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Variables
+
+        /// <summary>
+        /// Backing variable for the <see cref="FilterablePropertyModule"/> property
+        /// </summary>
+        private FilterablePropertyModule? _filterablePropertyModule;
 
         #endregion
     }

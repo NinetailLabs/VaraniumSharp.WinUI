@@ -7,7 +7,8 @@
     mc:Ignorable="d">
 
     <Grid
-        MinWidth="100">
+        MinWidth="100"
+        MaxWidth="250">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -20,9 +21,12 @@
             Text="Filters"
             Grid.Row="0" />
 
-        <GridView
-            Grid.Row="1"
-            ItemContainerStyle="{ThemeResource NoSelect}"
-            ItemsSource="{x:Bind Path=FilterablePropertyModule.FilterControls}"/>
+        <ScrollViewer
+                Grid.Row="1">
+            <StackPanel
+                HorizontalAlignment="Center"
+                x:Name="ItemPanel"/>
+        </ScrollViewer>
+
     </Grid>
 </UserControl>

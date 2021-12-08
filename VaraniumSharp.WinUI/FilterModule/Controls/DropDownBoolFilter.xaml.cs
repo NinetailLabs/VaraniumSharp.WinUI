@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using VaraniumSharp.WinUI.ExtensionMethods;
 
 namespace VaraniumSharp.WinUI.FilterModule.Controls
@@ -153,7 +154,10 @@ namespace VaraniumSharp.WinUI.FilterModule.Controls
         private void ButtonClicked(object sender, RoutedEventArgs e)
         {
             var menu = GetContextMenu();
-            menu.ShowAt(FlyoutButton);
+            menu.ShowAt(FlyoutButton, new FlyoutShowOptions
+            {
+                Placement = FlyoutPlacementMode.Bottom
+            });
         }
 
         /// <summary>

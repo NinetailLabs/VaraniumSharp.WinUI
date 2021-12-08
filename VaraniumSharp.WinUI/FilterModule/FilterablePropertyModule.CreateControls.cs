@@ -81,6 +81,25 @@ namespace VaraniumSharp.WinUI.FilterModule
         }
 
         /// <summary>
+        /// Create a searchable string filter control and add it to the collection
+        /// </summary>
+        /// <param name="fullPropertyName">Full name of the property to filter on</param>
+        /// <param name="attribute">Attribute used to get filter values</param>
+        /// <param name="property">Property the filter is for</param>
+        [FilterableControlCreation(FilterableType.SearchableString)]
+        [SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "Method is used via Reflection")]
+        [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = "Property is required for signature to match Action")]
+        private void AddSearchableStringFilterControl(string fullPropertyName, FilterablePropertyAttribute attribute, PropertyInfo property)
+        {
+            if (!FilterAlreadyExists(attribute.FilterDisplayName))
+            {
+                var shapingEntry = GetShapingEntry(fullPropertyName, attribute.Header, attribute.ToolTip);
+                var control = new StringFilter(shapingEntry);
+                HookupFilterControl(control);
+            }
+        }
+
+        /// <summary>
         /// Create a new shaping entry and populate it with the provided values
         /// </summary>
         /// <param name="fullPropertyName">Full property name the filter is for</param>
