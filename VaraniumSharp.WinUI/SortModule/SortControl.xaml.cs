@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System.ComponentModel;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.WinUI.Shared.ShapingControlHelper;
 
 namespace VaraniumSharp.WinUI.SortModule
@@ -37,6 +38,16 @@ namespace VaraniumSharp.WinUI.SortModule
         /// Control helper instance
         /// </summary>
         public ShapingControlHelper<SortablePropertyModule, SortablePropertyAttribute> ControlHelper { get; }
+
+        /// <summary>
+        /// The width of the container inside the scroll container
+        /// </summary>
+        private double InnerContainerWidth { get; set; }
+
+        /// <summary>
+        /// The width of the container
+        /// </summary>
+        private double ScrollContainerWidth { get; set; }
 
         /// <summary>
         /// Pass-through for the sortable module
@@ -81,6 +92,17 @@ namespace VaraniumSharp.WinUI.SortModule
             {
                 FlipSortDirection(sender);
             }
+        }
+
+        /// <summary>
+        /// Occurs when the size of the control changes
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void SortControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ScrollContainerWidth = PrimaryColumn.ActualWidth - 2;
+            InnerContainerWidth = PrimaryColumn.ActualWidth - 10;
         }
 
         #endregion

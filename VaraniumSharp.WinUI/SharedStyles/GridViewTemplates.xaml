@@ -11,11 +11,11 @@
             BorderThickness="1"
             CornerRadius="3"
             Height="38"
-            Width="250">
+            HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -43,7 +43,7 @@
             BorderThickness="1"
             CornerRadius="3"
             Height="38"
-            Width="250">
+            HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />

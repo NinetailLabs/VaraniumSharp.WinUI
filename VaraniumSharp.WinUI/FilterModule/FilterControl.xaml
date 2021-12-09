@@ -24,7 +24,7 @@
         <ScrollViewer
                 Grid.Row="1">
             <StackPanel
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Stretch"
                 x:Name="ItemPanel"/>
         </ScrollViewer>
 

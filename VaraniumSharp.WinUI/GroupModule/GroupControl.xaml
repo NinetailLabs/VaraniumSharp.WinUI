@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    SizeChanged="GroupControl_OnSizeChanged"
     mc:Ignorable="d">
 
     <Grid>
@@ -12,9 +13,9 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition MaxWidth="280" MinWidth="100" x:Name="PrimaryColumn" />
             <ColumnDefinition Width="60" />
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition MaxWidth="280" MinWidth="100" />
         </Grid.ColumnDefinitions>
 
         <TextBlock
@@ -37,7 +38,7 @@
             CornerRadius="5"
             Grid.Column="0"
             Grid.Row="1"
-            Width="280">
+            Width="{x:Bind Path=ScrollContainerWidth, Mode=OneWay}">
             <GridView
                 AllowDrop="True"            
                 CanDragItems="True"
@@ -52,11 +53,10 @@
                 KeyUp="GridView_KeyUp"
                 Name="AvailableGrid"
                 SelectedItem="{x:Bind Path=GroupingPropertyModule.SelectedAvailableEntry, Mode=TwoWay}"
-                Width="270">
+                Width="{x:Bind Path=InnerContainerWidth, Mode=OneWay}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid 
-                            HorizontalAlignment="Center"
+                        <StackPanel 
                             Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
@@ -226,7 +226,7 @@
             CornerRadius="5"
             Grid.Column="2"
             Grid.Row="1"
-            Width="280">
+            Width="{x:Bind Path=ScrollContainerWidth, Mode=OneWay}">
             <GridView
                 AllowDrop="True"
                 CanDragItems="True"
@@ -241,11 +241,10 @@
                 KeyUp="GridView_KeyUp"
                 Name="SortGrid"
                 SelectedItem="{x:Bind Path=GroupingPropertyModule.SelectedShapedByEntry, Mode=TwoWay}"
-                Width="270">
+                Width="{x:Bind Path=InnerContainerWidth, Mode=OneWay}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid
-                            HorizontalAlignment="Center"
+                        <StackPanel
                             Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
