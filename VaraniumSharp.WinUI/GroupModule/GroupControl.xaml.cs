@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.UI.Xaml;
 using VaraniumSharp.WinUI.Shared.ShapingControlHelper;
 
 namespace VaraniumSharp.WinUI.GroupModule
@@ -46,6 +47,16 @@ namespace VaraniumSharp.WinUI.GroupModule
             set=> ControlHelper.ShapingPropertyModule = value;
         }
 
+        /// <summary>
+        /// The width of the container inside the scroll container
+        /// </summary>
+        private double InnerContainerWidth { get; set; }
+
+        /// <summary>
+        /// The width of the container
+        /// </summary>
+        private double ScrollContainerWidth { get; set; }
+
         #endregion
 
         #region Private Methods
@@ -58,6 +69,17 @@ namespace VaraniumSharp.WinUI.GroupModule
         private void GridView_KeyUp(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             ControlHelper.SharedKeyUpAction(sender, e);
+        }
+
+        /// <summary>
+        /// Occurs when the size of the control changes
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private void GroupControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ScrollContainerWidth = PrimaryColumn.ActualWidth - 2;
+            InnerContainerWidth = PrimaryColumn.ActualWidth - 10;
         }
 
         #endregion
