@@ -35,7 +35,9 @@ namespace TestHelper
             containerSetup.RetrieveClassesRequiringRegistration(true);
             containerSetup.RetrieveConcretionClassesRequiringRegistration(true);
 
-            m_window = containerSetup.Resolve<TabWindow>();
+            var tabWindow = containerSetup.Resolve<TabWindow>();
+            tabWindow.MinWidth = 750;
+            m_window = tabWindow;
             m_window.Activate();
         }
 

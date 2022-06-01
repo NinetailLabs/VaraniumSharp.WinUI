@@ -25,6 +25,7 @@
         <dependency id="VaraniumSharp" version="4.2.1" />
         <dependency id="VaraniumSharp.DryIoc" version="1.4.0" />
         <dependency id="System.Text.Json" version="6.0.4" />
+        <dependency id="WinUIEx" version="1.4.3" />
       </group>
     </dependencies>
   </metadata>
