@@ -20,7 +20,8 @@
         <Grid 
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            Height="40"
+            Height="40.5"
+            Margin="-1,0,0,0"
             x:Name="AppTitleBar" 
             VerticalAlignment="Top">
         </Grid>
