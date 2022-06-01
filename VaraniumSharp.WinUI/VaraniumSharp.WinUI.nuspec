@@ -21,9 +21,10 @@
     <dependencies>
       <group targetFramework="net5.0-windows10.0.19041.0">
         <dependency id="CommunityToolkit.WinUI.UI" version="7.1.2" />
-        <dependency id="Microsoft.WindowsAppSDK" version="1.0.0" />
-        <dependency id="VaraniumSharp" version="4.2.0" />
-        <dependency id="System.Text.Json" version="6.0.0" />
+        <dependency id="Microsoft.WindowsAppSDK" version="1.0.3" />
+        <dependency id="VaraniumSharp" version="4.2.1" />
+        <dependency id="VaraniumSharp.DryIoc" version="1.4.0" />
+        <dependency id="System.Text.Json" version="6.0.4" />
       </group>
     </dependencies>
   </metadata>
