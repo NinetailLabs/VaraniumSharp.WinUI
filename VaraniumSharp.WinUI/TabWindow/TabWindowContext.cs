@@ -95,8 +95,8 @@ namespace VaraniumSharp.WinUI.TabWindow
             var filePath = _layoutStorageOptions.GetJsonPath(LayoutFile);
             if (!_fileWrapper.FileExists(filePath))
             {
-                await AddTabAsync().ConfigureAwait(false);
-                await HandleTabViewPersistenceAsync();
+                await AddTabAsync().ConfigureAwait(true);
+                await HandleTabViewPersistenceAsync().ConfigureAwait(true);
             }
             else
             {
@@ -104,17 +104,19 @@ namespace VaraniumSharp.WinUI.TabWindow
                 {
                     var tabs = await _tabViewStorageManager
                         .LoadLayoutAsync(filePath)
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
                     foreach (var tab in tabs)
                     {
-                        await AddExistingTabAsync(tab.GetTabViewItem()).ConfigureAwait(false);
+                        await AddExistingTabAsync(tab.GetTabViewItem()).ConfigureAwait(true);
                     }
                 }
                 catch (Exception)
                 {
                     if (_root != null)
                     {
-                        await _dialogs.ShowMessageDialogAsync("Error", $"An error occurred while loading the Tab layout. Please ensure the layout file is accessible and valid.\r\n\r\n{filePath}", _root);
+                        await _dialogs
+                            .ShowMessageDialogAsync("Error", $"An error occurred while loading the Tab layout. Please ensure the layout file is accessible and valid.\r\n\r\n{filePath}", _root)
+                            .ConfigureAwait(true);
                     }
                 }
             }
@@ -134,30 +136,16 @@ namespace VaraniumSharp.WinUI.TabWindow
             if (tab.Name == SettingGuid)
             {
                 EnableContextMenuItems = false;
-                await ShowSettingPaneAsync();
+                await ShowSettingPaneAsync().ConfigureAwait(true);
                 return;
             }
 
             EnableContextMenuItems = true;
-            await HandleTabChangesAsync();
-            await ContentPaneManager.UpdateContentAsync(tab.Name);
+            await HandleTabChangesAsync().ConfigureAwait(true);
+            await ContentPaneManager
+                .UpdateContentAsync(tab.Name)
+                .ConfigureAwait(true);
             _previousIndex = SelectedIndex;
-        }
-
-        /// <summary>
-        /// Handle tab if it has changes.
-        /// </summary>
-        private async Task HandleTabChangesAsync()
-        {
-            if (_currentTabHasChanges)
-            {
-                if (_root != null && await _dialogs.ShowConfirmationDialog("Unsaved Changes", "Your layout has unsaved changes.\r\nDo you want to save them?", _root))
-                {
-                    await ContentPaneManager.SaveLayoutAsync();
-                }
-                Tabs[_previousIndex].IconSource = null;
-                _currentTabHasChanges = false;
-            }
         }
 
         /// <inheritdoc/>
@@ -169,7 +157,9 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <inheritdoc/>
         public async Task SaveLayoutAsync()
         {
-            await ContentPaneManager.SaveLayoutAsync();
+            await ContentPaneManager
+                .SaveLayoutAsync()
+                .ConfigureAwait(true);
             Tabs[SelectedIndex].IconSource = null;
             _currentTabHasChanges = false;
         }
@@ -183,7 +173,7 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <inheritdoc/>
         public async Task ShowSettingPaneAsync()
         {
-            await HandleTabChangesAsync();
+            await HandleTabChangesAsync().ConfigureAwait(true);
 
             if (Tabs.Any(x => x.Name == SettingGuid))
             {
@@ -201,7 +191,9 @@ namespace VaraniumSharp.WinUI.TabWindow
                 SelectedIndex = Tabs.IndexOf(settingTab);
             }
 
-            await ContentPaneManager.ShowSettingPageAsync();
+            await ContentPaneManager
+                .ShowSettingPageAsync()
+                .ConfigureAwait(true);
             _previousIndex = SelectedIndex;
         }
 
@@ -248,7 +240,7 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// </summary>
         private async Task AddTabAsync()
         {
-            Tabs.Add(await CreateNewTabAsync().ConfigureAwait(false));
+            Tabs.Add(await CreateNewTabAsync().ConfigureAwait(true));
             if (Tabs.Count == 1)
             {
                 SelectedIndex = 0;
@@ -306,6 +298,27 @@ namespace VaraniumSharp.WinUI.TabWindow
         }
 
         /// <summary>
+        /// Handle tab if it has changes.
+        /// </summary>
+        private async Task HandleTabChangesAsync()
+        {
+            if (_currentTabHasChanges)
+            {
+                if (_root != null 
+                    && await _dialogs
+                        .ShowConfirmationDialog("Unsaved Changes", "Your layout has unsaved changes.\r\nDo you want to save them?", _root)
+                        .ConfigureAwait(true))
+                {
+                    await ContentPaneManager
+                        .SaveLayoutAsync()
+                        .ConfigureAwait(true);
+                }
+                Tabs[_previousIndex].IconSource = null;
+                _currentTabHasChanges = false;
+            }
+        }
+
+        /// <summary>
         /// Handle the removal of a Tab item.
         /// The caller is responsible for checking if the item can be removed
         /// </summary>
@@ -319,13 +332,15 @@ namespace VaraniumSharp.WinUI.TabWindow
                 {
                     await disposableContent
                         .DisposeAsync()
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
                 }
 
                 var paneIdentifier = Guid.Parse(tabToRemove.Name);
-                await ContentPaneManager.DeleteLayoutAsync(paneIdentifier);
+                await ContentPaneManager
+                    .DeleteLayoutAsync(paneIdentifier)
+                    .ConfigureAwait(true);
             }
-            await HandleTabViewPersistenceAsync().ConfigureAwait(false);
+            await HandleTabViewPersistenceAsync().ConfigureAwait(true);
         }
 
         /// <summary>
@@ -342,13 +357,15 @@ namespace VaraniumSharp.WinUI.TabWindow
             {
                 await _tabViewStorageManager
                     .SaveLayoutAsync(tabCollection, file)
-                    .ConfigureAwait(false);
+                    .ConfigureAwait(true);
             }
             catch (Exception)
             {
                 if (_root != null)
                 {
-                    await _dialogs.ShowMessageDialogAsync("Error", $"An error occurred while attempting to save the Tab layout.\r\nPlease ensure that the layout file is accessible.\r\n\r\n{file}", _root);
+                    await _dialogs
+                        .ShowMessageDialogAsync("Error", $"An error occurred while attempting to save the Tab layout.\r\nPlease ensure that the layout file is accessible.\r\n\r\n{file}", _root)
+                        .ConfigureAwait(true);
                 }
             }
         }
@@ -375,6 +392,11 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// Name of the tab layout file
         /// </summary>
         private const string LayoutFile = "TabLayout.json";
+
+        /// <summary>
+        /// The GUID for the Settings pane
+        /// </summary>
+        private const string SettingGuid = "90ef7c67-1cea-4001-aedc-afb8c760a4c8";
 
         /// <summary>
         /// Dialogs instance
@@ -420,11 +442,6 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// The XamlRoot of the container
         /// </summary>
         private XamlRoot? _root;
-
-        /// <summary>
-        /// The GUID for the Settings pane
-        /// </summary>
-        private const string SettingGuid = "90ef7c67-1cea-4001-aedc-afb8c760a4c8";
 
         #endregion
     }
