@@ -119,9 +119,15 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         {
             GenericContext.LayoutIdentifier = contentGuid;
 
-            await GenericContext.HandleControlLoadAsync(controls, sortOrder, groupOrder, filters);
-            await GenericContext.SetControlResizingAsync();
-            await GenericContext.UpdateChildrenSizeAsync(Width, Height);
+            await GenericContext
+                .HandleControlLoadAsync(controls, sortOrder, groupOrder, filters)
+                .ConfigureAwait(true);
+            await GenericContext
+                .SetControlResizingAsync()
+                .ConfigureAwait(true);
+            await GenericContext
+                .UpdateChildrenSizeAsync(Width, Height)
+                .ConfigureAwait(true);
         }
 
         /// <inheritdoc />
