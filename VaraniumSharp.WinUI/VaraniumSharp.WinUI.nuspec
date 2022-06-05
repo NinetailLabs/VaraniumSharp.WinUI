@@ -19,7 +19,7 @@
     <repository type="git" url="https://github.com/NinetailLabs/VaraniumSharp.ServiceCollection.git" commit="GitHashHere" />
 
     <dependencies>
-      <group targetFramework="net5.0-windows10.0.19041.0">
+      <group targetFramework="net6.0-windows10.0.19041.0">
         <dependency id="CommunityToolkit.WinUI.UI" version="7.1.2" />
         <dependency id="Microsoft.WindowsAppSDK" version="1.1.0" />
         <dependency id="VaraniumSharp" version="4.2.1" />
@@ -32,25 +32,25 @@
 
   <files>
     <file src="../nugetIcon.png" target="\images" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.pdb" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.xml" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.deps.json" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll.config" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI.pri" target="lib\net5.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SettingPane/SettingPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SettingPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SettingPane/SettingPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SettingPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xaml" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
-    <file src="./bin/Release/net5.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xbf" target="lib\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.pdb" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.xml" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.deps.json" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll.config" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.pri" target="lib\net6.0-windows10.0.19041.0" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/HorizontalPane/HorizontalLayoutPane.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\HorizontalPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SettingPane/SettingPane.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SettingPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SettingPane/SettingPane.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SettingPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabWindow/TabWindow.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabWindow" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/VerticalPane/VerticalLayoutPane.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\VerticalPane" />
   </files>
 </package>
