@@ -38,7 +38,8 @@ namespace VaraniumSharp.WinUI.TabViewHelpers
             try
             {
                 var jsonData = await _fileWrapper
-                    .ReadAllTextAsync(filePath);
+                    .ReadAllTextAsync(filePath)
+                    .ConfigureAwait(false);
                 var tabsContainer = JsonSerializer.Deserialize<TabsContainerModel>(jsonData, TabsContainerJsonContext.Default.TabsContainerModel);
                 return tabsContainer?.Tabs 
                        ?? Enumerable.Empty<TabViewModel>();
