@@ -35,6 +35,7 @@ Task ("VariableSetup")
 		sonarQubeServerUrl = "https://sonarcloud.io";
 		sonarLogin = EnvironmentVariable("SonarToken");
 		excludedFiles = new List<string> { "**/System.Text.Json.SourceGeneration/**/*.g.cs" };
+		toolVersion = MSBuildToolVersion.VS2022;
 	});
 
 Task ("Default")
