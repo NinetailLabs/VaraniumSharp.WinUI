@@ -96,7 +96,7 @@ namespace VaraniumSharp.WinUI.TabWindow
             if (!_fileWrapper.FileExists(filePath))
             {
                 await AddTabAsync().ConfigureAwait(false);
-                await HandleTabViewPersistenceAsync();
+                await HandleTabViewPersistenceAsync().ConfigureAwait(false);
             }
             else
             {
@@ -104,10 +104,10 @@ namespace VaraniumSharp.WinUI.TabWindow
                 {
                     var tabs = await _tabViewStorageManager
                         .LoadLayoutAsync(filePath)
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
                     foreach (var tab in tabs)
                     {
-                        await AddExistingTabAsync(tab.GetTabViewItem()).ConfigureAwait(false);
+                        await AddExistingTabAsync(tab.GetTabViewItem()).ConfigureAwait(true);
                     }
                 }
                 catch (Exception)
@@ -134,13 +134,15 @@ namespace VaraniumSharp.WinUI.TabWindow
             if (tab.Name == SettingGuid)
             {
                 EnableContextMenuItems = false;
-                await ShowSettingPaneAsync();
+                await ShowSettingPaneAsync().ConfigureAwait(true);
                 return;
             }
 
             EnableContextMenuItems = true;
-            await HandleTabChangesAsync();
-            await ContentPaneManager.UpdateContentAsync(tab.Name);
+            await HandleTabChangesAsync().ConfigureAwait(true);
+            await ContentPaneManager
+                .UpdateContentAsync(tab.Name)
+                .ConfigureAwait(true);
             _previousIndex = SelectedIndex;
         }
 
