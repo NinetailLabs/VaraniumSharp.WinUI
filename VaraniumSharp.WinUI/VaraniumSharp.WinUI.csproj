@@ -104,6 +104,9 @@
     <Page Update="GroupModule\GroupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="SharedStyles\BrushDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
