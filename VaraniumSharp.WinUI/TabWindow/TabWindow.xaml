@@ -98,13 +98,13 @@
 
         <Grid
             Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
-            Margin="0,-0.5,0,0"
-            Padding="0,-9,0,0"
-            x:Name="LayoutPane"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             Grid.Row="1"
-            SizeChanged="{x:Bind Path=Context.ContentPaneManager.UpdateBasePaneSize}"/>
+            Margin="0,-0.5,0,-3"
+            Padding="0,-9,0,0"
+            SizeChanged="{x:Bind Path=Context.ContentPaneManager.UpdateBasePaneSize}"
+            x:Name="LayoutPane" />
 
     </Grid>
 </winUiEx:WindowEx>
