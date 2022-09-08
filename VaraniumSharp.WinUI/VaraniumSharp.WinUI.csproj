@@ -34,7 +34,6 @@
     <None Remove="GroupModule\GroupControl.xaml" />
     <None Remove="HorizontalPane\HorizontalLayoutPane.xaml" />
     <None Remove="SettingPane\SettingPane.xaml" />
-    <None Remove="SharedStyles\BrushDictionary.xaml" />
     <None Remove="SharedStyles\GridViewTemplates.xaml" />
     <None Remove="SortModule\SortControl.xaml" />
     <None Remove="TabPane\TabLayoutLayoutPane.xaml" />
@@ -52,15 +51,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" />
-    <PackageReference Include="PropertyChanged.Fody" Version="4.0.1" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
     <PackageReference Include="SemVer.Git.MSBuild" Version="1.3.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Text.Json" Version="6.0.5" />
-    <PackageReference Include="VaraniumSharp" Version="5.0.1" />
-    <PackageReference Include="WinUIEx" Version="1.8.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.4" />
+    <PackageReference Include="VaraniumSharp" Version="4.2.1" />
+    <PackageReference Include="WinUIEx" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,12 +68,6 @@
     <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
     <Folder Include="Shared\ShapingControlHelper\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="SharedStyles\BrushDictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -109,6 +102,9 @@
 
   <ItemGroup>
     <Page Update="GroupModule\GroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="SharedStyles\BrushDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
