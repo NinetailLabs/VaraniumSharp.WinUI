@@ -3,6 +3,7 @@ using System;
 using System.Reflection;
 using VaraniumSharp.DryIoc;
 using VaraniumSharp.WinUI.TabWindow;
+using WinUIEx;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,6 +38,7 @@ namespace TestHelper
 
             var tabWindow = containerSetup.Resolve<TabWindow>();
             tabWindow.MinWidth = 750;
+            tabWindow.Backdrop = Backdrop.Acrylic;
             m_window = tabWindow;
             m_window.Activate();
         }
