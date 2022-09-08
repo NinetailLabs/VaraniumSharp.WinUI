@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <ResourceDictionary Source="ms-appx:///VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xaml" />
+                <ResourceDictionary Source="ms-appx:///VaraniumSharp.WinUI/SharedStyles/BrushDictionary.xaml" />
                 <sharedstyles:GridViewTemplates />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>

@@ -50,7 +50,7 @@
                         </Grid>
                     </Grid>
                     <Grid 
-                        Background="{ThemeResource SystemControlAcrylicElementBrush}"
+                        Background="{ThemeResource ResizeBrush}"
                         BorderBrush="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}"
                         BorderThickness="1"
                         Margin="2"
