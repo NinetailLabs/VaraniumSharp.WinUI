@@ -39,7 +39,7 @@
             TabCloseRequested="{x:Bind Path=Context.OnTabClosedAsync}"
             TabItemsSource="{x:Bind Path=Context.Tabs}">
             <TabView.Resources>
-                <x:Double x:Key="TabViewItemHeaderMinHeight">32</x:Double>
+                <x:Double x:Key="TabViewItemHeaderMinHeight">35</x:Double>
                 <x:Double x:Key="TabViewItemHeaderMinWidth">90</x:Double>
                 <x:Double x:Key="TabViewItemHeaderMaxWidth">200</x:Double>
             </TabView.Resources>
@@ -97,7 +97,9 @@
         </TabView>
 
         <Grid
-            Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+            Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
+            Margin="0,-0.5,0,0"
+            Padding="0,-9,0,0"
             x:Name="LayoutPane"
             Grid.Column="0"
             Grid.ColumnSpan="3"
