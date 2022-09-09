@@ -44,6 +44,8 @@
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SettingPane/SettingPane.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SettingPane" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewStyles.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/BrushDictionary.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
+    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/BrushDictionary.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/SharedStyles/GridViewTemplates.xbf" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\SharedStyles" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI/TabPane/TabLayoutLayoutPane.xaml" target="lib\net6.0-windows10.0.19041.0\VaraniumSharp.WinUI\TabPane" />
