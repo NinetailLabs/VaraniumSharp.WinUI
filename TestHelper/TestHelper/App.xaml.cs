@@ -38,7 +38,7 @@ namespace TestHelper
 
             var tabWindow = containerSetup.Resolve<TabWindow>();
             tabWindow.MinWidth = 750;
-            tabWindow.Backdrop = Backdrop.Acrylic;
+            tabWindow.Backdrop = new AcrylicSystemBackdrop();
             m_window = tabWindow;
             m_window.Activate();
         }
