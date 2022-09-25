@@ -57,6 +57,21 @@ namespace VaraniumSharp.WinUI.Pickers
             return await savePicker.PickSaveFileAsync();
         }
 
+        /// <inheritdoc />
+        public async Task<StorageFile?> PickSingleFileToOpenAsync(List<string> fileExtensionsToPick)
+        {
+            var openPicker = new FileOpenPicker();
+            foreach (var fileExtension in fileExtensionsToPick)
+            {
+                openPicker.FileTypeFilter.Add(fileExtension);
+            }
+
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(_ownerWindow.ParentWindow);
+            WinRT.Interop.InitializeWithWindow.Initialize(openPicker, hwnd);
+
+            return await openPicker.PickSingleFileAsync();
+        }
+
         #endregion
 
         #region Variables
