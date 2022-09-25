@@ -25,6 +25,13 @@ namespace VaraniumSharp.WinUI.Interfaces.Pickers
         /// <returns>StorageFile from the pick. If no file is picked null is returned</returns>
         Task<StorageFile?> PickSaveFileAsync(KeyValuePair<string, List<string>> fileTypes, string? suggestedFilename);
 
+        /// <summary>
+        /// Pick a single file with a specific type to open
+        /// </summary>
+        /// <param name="fileExtensionsToPick">The file extensions that the picker can select</param>
+        /// <returns>StorageFile from the pick. If no file is picked null is returned</returns>
+        Task<StorageFile?> PickSingleFileToOpenAsync(List<string> fileExtensionsToPick);
+
         #endregion
     }
 }
