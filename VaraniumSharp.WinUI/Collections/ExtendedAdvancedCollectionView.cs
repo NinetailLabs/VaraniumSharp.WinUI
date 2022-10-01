@@ -301,7 +301,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// </summary>
         /// <param name="item">item</param>
         /// <returns>success of operation</returns>
-        public bool MoveCurrentTo(object? item) => item == null || item == CurrentItem || MoveCurrentToIndex(IndexOf(item));
+        public bool MoveCurrentTo(object? item) => item == CurrentItem || MoveCurrentToIndex(item == null ? -1 : IndexOf(item));
 
         /// <summary>
         /// Move current item to first item
