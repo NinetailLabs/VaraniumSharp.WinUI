@@ -14,6 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="38" />
             <RowDefinition Height="*"/>
+            <RowDefinition Height="38" />
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -71,8 +72,13 @@
 
         </Grid>
 
+        <Button
+            Click="ClearSelectClick"
+            Content="Clear Selection"
+            Grid.Row="2"/>
+
         <GridView
-            Grid.Row="2"
+            Grid.Row="3"
             ItemsSource="{x:Bind CollectionView, Mode=OneTime}"
             Margin="10"
             Name="SortableGrid"
