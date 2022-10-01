@@ -88,8 +88,6 @@ namespace TestHelper.Sorting
             }
         }
 
-        private SortableEntry? _selectedEntry;
-
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
@@ -167,6 +165,12 @@ namespace TestHelper.Sorting
             }
         }
 
+        private void ClearSelectClick(object sender, RoutedEventArgs e)
+        {
+            SelectedEntry = null;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedEntry)));
+        }
+
         private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
         {
             FilterChanged?.Invoke(this, e);
@@ -242,10 +246,10 @@ namespace TestHelper.Sorting
 
         #endregion
 
-        private void ClearSelectClick(object sender, RoutedEventArgs e)
-        {
-            //SelectedEntry = null;
-            CollectionView.CurrentItem = null;
-        }
+        #region Variables
+
+        private SortableEntry? _selectedEntry;
+
+        #endregion
     }
 }
