@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
@@ -78,7 +79,16 @@ namespace TestHelper.Sorting
 
         public Guid InstanceId { get; set; }
 
-        public SortableEntry? SelectedEntry { get; set; }
+        public SortableEntry? SelectedEntry
+        {
+            get => _selectedEntry;
+            set
+            {
+                _selectedEntry = value;
+            }
+        }
+
+        private SortableEntry? _selectedEntry;
 
         public bool ShowResizeHandle { get; set; }
 
@@ -231,5 +241,11 @@ namespace TestHelper.Sorting
         }
 
         #endregion
+
+        private void ClearSelectClick(object sender, RoutedEventArgs e)
+        {
+            //SelectedEntry = null;
+            CollectionView.CurrentItem = null;
+        }
     }
 }
