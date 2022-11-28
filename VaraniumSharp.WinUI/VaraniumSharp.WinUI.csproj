@@ -21,6 +21,10 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+	<PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
   </PropertyGroup>
