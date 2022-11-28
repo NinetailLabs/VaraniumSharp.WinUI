@@ -33,7 +33,6 @@
   <files>
     <file src="../nugetIcon.png" target="\images" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll" target="lib\net6.0-windows10.0.19041.0" />
-    <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.pdb" target="lib\net6.0-windows10.0.19041.0" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.xml" target="lib\net6.0-windows10.0.19041.0" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.deps.json" target="lib\net6.0-windows10.0.19041.0" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll.config" target="lib\net6.0-windows10.0.19041.0" />
