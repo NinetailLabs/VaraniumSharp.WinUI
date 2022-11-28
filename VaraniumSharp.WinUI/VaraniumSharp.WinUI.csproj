@@ -7,7 +7,6 @@
     <UseWinUI>true</UseWinUI>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,9 +16,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
+	<PropertyGroup Condition="'$(APPVEYOR)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
