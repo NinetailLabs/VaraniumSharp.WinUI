@@ -82,6 +82,7 @@
             ItemsSource="{x:Bind CollectionView, Mode=OneTime}"
             Margin="10"
             Name="SortableGrid"
+            SelectedIndex="{x:Bind Path=SelectedIndex, Mode=TwoWay}"
             SelectedItem="{x:Bind Path=SelectedEntry, Mode=TwoWay}">
             <GridView.GroupStyle>
                 <GroupStyle>

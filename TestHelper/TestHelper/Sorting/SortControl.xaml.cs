@@ -88,6 +88,17 @@ namespace TestHelper.Sorting
             }
         }
 
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set
+            {
+                _selectedIndex = value;
+            }
+        }
+
+        private int _selectedIndex;
+
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
