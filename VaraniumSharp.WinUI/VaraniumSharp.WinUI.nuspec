@@ -9,6 +9,7 @@
     <description>A VarniumSharp library with WinUI helper classes and components.</description>
     <summary>A VarniumSharp library with WinUI helper classes and components.</summary>
     <license type="expression">MIT</license>
+	<readme>docs\readme.md</readme>
     <projectUrl>https://github.com/NinetailLabs/VaraniumSharp.WinUI</projectUrl>
     <icon>images\nugetIcon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -32,6 +33,7 @@
 
   <files>
     <file src="../nugetIcon.png" target="\images" />
+    <file src="../readme.md" target="\docs" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.dll" target="lib\net6.0-windows10.0.19041.0" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.xml" target="lib\net6.0-windows10.0.19041.0" />
     <file src="./bin/Release/net6.0-windows10.0.19041.0/VaraniumSharp.WinUI.deps.json" target="lib\net6.0-windows10.0.19041.0" />
