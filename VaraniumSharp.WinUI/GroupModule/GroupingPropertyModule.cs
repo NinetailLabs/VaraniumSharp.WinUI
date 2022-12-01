@@ -4,12 +4,13 @@ using System.Reflection;
 using Microsoft.UI.Xaml.Controls;
 using VaraniumSharp.WinUI.Collections;
 using VaraniumSharp.WinUI.ExtensionMethods;
+using VaraniumSharp.WinUI.Interfaces.Collections;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.GroupModule
 {
     /// <summary>
-    /// Assists with grouping a <see cref="GroupingAdvancedCollectionView"/>
+    /// Assists with grouping a <see cref="IGroupingAdvancedCollectionView"/>
     /// </summary>
     public class GroupingPropertyModule : ShapingPropertyModuleBase<GroupingPropertyAttribute>
     {
@@ -20,7 +21,7 @@ namespace VaraniumSharp.WinUI.GroupModule
         /// </summary>
         /// <param name="viewSource">The collection to group.</param>
         /// <param name="gridView">The GridView that is used to display the grouped collection</param>
-        public GroupingPropertyModule(GroupingAdvancedCollectionView viewSource, GridView gridView) 
+        public GroupingPropertyModule(IGroupingAdvancedCollectionView viewSource, GridView gridView) 
             : base(viewSource)
         {
             _gridView = gridView;
