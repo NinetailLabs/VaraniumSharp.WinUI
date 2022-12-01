@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using VaraniumSharp.WinUI.Interfaces.Collections;
 using Windows.Foundation.Collections;
 
 namespace VaraniumSharp.WinUI.Collections
@@ -18,7 +19,7 @@ namespace VaraniumSharp.WinUI.Collections
     /// <summary>
     /// A collection view implementation that supports filtering, sorting and grouping
     /// </summary>
-    public class GroupingAdvancedCollectionView : ExtendedAdvancedCollectionView
+    public class GroupingAdvancedCollectionView : ExtendedAdvancedCollectionView, IGroupingAdvancedCollectionView
     {
         #region Constructor
 
