@@ -87,7 +87,7 @@ namespace VaraniumSharp.WinUI.GroupModule
         /// <inheritdoc />
         protected override void Shape(string propertyName)
         {
-            var groupSource = (GroupingAdvancedCollectionView) ViewSource;
+            var groupSource = (IGroupingAdvancedCollectionView) ViewSource;
             groupSource.Group = null;
             if (EntriesShapedBy.Count > 0)
             {
