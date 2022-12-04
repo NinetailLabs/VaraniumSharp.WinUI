@@ -115,7 +115,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Gets or sets the current item
         /// </summary>
-        public object? CurrentItem
+        public virtual object? CurrentItem
         {
             get => CurrentPosition > -1 && CurrentPosition < _view.Count ? _view[CurrentPosition] : null;
             set => MoveCurrentTo(value);
@@ -124,7 +124,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <summary>
         /// Gets the position of current item
         /// </summary>
-        public int CurrentPosition { get; private set; }
+        public virtual int CurrentPosition { get; private set; }
 
         /// <summary>
         /// Gets or sets the predicate used to filter the visible items
@@ -170,7 +170,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// The element at the specified index.
         /// </returns>
         /// <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        public object this[int index]
+        public virtual object this[int index]
         {
             get => _view[index];
             set => _view[index] = value;
@@ -271,7 +271,7 @@ namespace VaraniumSharp.WinUI.Collections
         public IEnumerator<object> GetEnumerator() => _view.GetEnumerator();
 
         /// <inheritdoc />
-        public int IndexOf(object item) => _view.IndexOf(item);
+        public virtual int IndexOf(object item) => _view.IndexOf(item);
 
         /// <inheritdoc />
         public void Insert(int index, object item)

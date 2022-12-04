@@ -11,8 +11,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using VaraniumSharp.WinUI.Interfaces.Collections;
 using Windows.Foundation.Collections;
+using VaraniumSharp.WinUI.Interfaces.Collections;
 
 namespace VaraniumSharp.WinUI.Collections
 {
@@ -46,6 +46,32 @@ namespace VaraniumSharp.WinUI.Collections
 
         #region Properties
 
+        /// <inheritdoc />
+        public override object? CurrentItem
+        {
+            get
+            {
+                if (CollectionGroups == null)
+                {
+                    return base.CurrentItem;
+                }
+
+                if (CurrentPosition < 0)
+                {
+                    return null;
+                }
+                
+                var details = GetEntryGroupAndLocationByIndex(CurrentPosition);
+                if (details == null)
+                {
+                    return null;
+                }
+
+                return CurrentPosition > -1 && CurrentPosition < _view.Count ? details.Value.groupContainingEntry.Items[details.Value.entryIndex] : null;
+            }
+            set => MoveCurrentTo(value);
+        }
+
         /// <summary>
         /// Function that is used to group the collection items.
         /// Set to null to remove the grouping.
@@ -71,6 +97,68 @@ namespace VaraniumSharp.WinUI.Collections
                     OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
                 }
             }
+        }
+
+        /// <inheritdoc />
+        public override object this[int index]
+        {
+            get
+            {
+                if (CollectionGroups == null)
+                {
+                    return base[index];
+                }
+                
+                var details = GetEntryGroupAndLocationByIndex(index);
+                return details == null 
+                    ? base[index] 
+                    : details.Value.groupContainingEntry.Items[details.Value.entryIndex];
+            }
+            set
+            {
+                if (CollectionGroups == null)
+                {
+                    base[index] = value;
+                }
+
+                var details = GetEntryGroupAndLocationByIndex(index);
+                if (details == null)
+                {
+                    base[index] = value;
+                }
+                else
+                {
+                    details.Value.groupContainingEntry.Items[details.Value.entryIndex] = value;
+                }
+
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <inheritdoc />
+        public override int IndexOf(object item)
+        {
+            if (CollectionGroups == null)
+            {
+                return base.IndexOf(item);
+            }
+
+            var group = CollectionGroups
+                .Cast<CollectionViewGroup>()
+                .FirstOrDefault(x => x.GroupItems.Contains(item));
+
+            if (group == null)
+            {
+                return -1;
+            }
+
+            var startIndex = group.StartIndex;
+            var itemIndex = group.GroupItems.IndexOf(item);
+
+            return startIndex + itemIndex;
         }
 
         #endregion
@@ -132,10 +220,45 @@ namespace VaraniumSharp.WinUI.Collections
                 col.GroupItems.Add(item);
             }
 
+            UpdateGroupStartIndexes();
+
             if (!col.Items.IsVectorChangedDeferred)
             {
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
             }
+        }
+
+        /// <summary>
+        /// Retrieve the group and resolution index for an index value.
+        /// </summary>
+        /// <param name="index">The index in the entire collection to find the group for</param>
+        /// <returns>The group containing the index value and the index of the entry in the group</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the CollectionGroups are null</exception>
+        private (CollectionViewGroup groupContainingEntry, int entryIndex)? GetEntryGroupAndLocationByIndex(int index)
+        {
+            if (CollectionGroups == null)
+            {
+                throw new InvalidOperationException($"{nameof(CollectionGroups)} should not be empty");
+            }
+
+            var group = index == 0
+                ? CollectionGroups.FirstOrDefault()
+                : CollectionGroups
+                    .Cast<CollectionViewGroup>()
+                    .LastOrDefault(x => x.StartIndex <= index);
+
+            if (group is not CollectionViewGroup typedGroup
+                || index < typedGroup.StartIndex
+                || index >= typedGroup.StartIndex + typedGroup.Items.Count)
+            {
+                return null;
+            }
+
+            var resolutionIndex = index - typedGroup.StartIndex >= typedGroup.GroupItems.Count
+                ? index - typedGroup.StartIndex - 1
+                : index - typedGroup.StartIndex;
+
+            return new (typedGroup, resolutionIndex);
         }
 
         private object? GetItemGroup(object item)
@@ -154,17 +277,17 @@ namespace VaraniumSharp.WinUI.Collections
                     {
                         RemoveGroupedItem(typedArgs.Item);
                     }
-                    var entry = GetItemGroup(this[ndx]);
+                    var entry = GetItemGroup(base[ndx]);
                     if (entry != null)
                     {
-                        AddGroupedItem(entry, this[ndx]);
+                        AddGroupedItem(entry, base[ndx]);
                     }
                     break;
                 case CollectionChange.ItemInserted:
-                    var insertEntry = GetItemGroup(this[ndx]);
+                    var insertEntry = GetItemGroup(base[ndx]);
                     if (insertEntry != null)
                     {
-                        AddGroupedItem(insertEntry, this[ndx]);
+                        AddGroupedItem(insertEntry, base[ndx]);
                     }
                     break;
                 case CollectionChange.ItemRemoved:
@@ -340,9 +463,13 @@ namespace VaraniumSharp.WinUI.Collections
             for (var r = 0; r < CollectionGroups.Count; r++)
             {
                 var group = (CollectionViewGroup)CollectionGroups[r];
-                group.StartIndex = r == 0
-                    ? 0
-                    : startIndex;
+                if (startIndex == 0 && r > 0)
+                {
+                    var firstGroup = (CollectionViewGroup)CollectionGroups[0];
+                    startIndex += firstGroup.Items.Count;
+                }
+
+                group.StartIndex = startIndex;
                 startIndex += group.Items.Count;
             }
         }
