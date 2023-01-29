@@ -22,8 +22,23 @@ namespace TestHelper.CustomData
         {
             InitializeComponent();
             EntriesShapedBy = new();
-            Title = "Custom Control";
         }
+
+        #endregion
+
+        #region Events
+
+#pragma warning disable CS0067 // Is used via Fody
+        public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
+
+        public event EventHandler? ShapingChanged;
+
+        #endregion
+
+        #region Properties
+
+        public Guid ContentId => Guid.Parse("37c8c6c6-7072-4540-9d73-09ec3723fd3f");
 
         public bool EnableControl
         {
@@ -57,27 +72,11 @@ namespace TestHelper.CustomData
             }
         }
 
-        private bool _isEnabled;
-
-        #endregion
-
-        #region Events
-
-#pragma warning disable CS0067 // Is used via Fody
-        public event PropertyChangedEventHandler? PropertyChanged;
-#pragma warning restore CS0067
-
-        public event EventHandler? ShapingChanged;
-
-        #endregion
-
-        #region Properties
-
-        public Guid ContentId => Guid.Parse("37c8c6c6-7072-4540-9d73-09ec3723fd3f");
+        public List<ShapingEntry> EntriesShapedBy { get; }
         public Guid InstanceId { get; set; }
         public bool ShowResizeHandle { get; set; }
         public bool StartupLoad { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = "Custom Control";
 
         #endregion
 
@@ -88,8 +87,6 @@ namespace TestHelper.CustomData
             // Not used for now
             return Task.CompletedTask;
         }
-
-        public List<ShapingEntry> EntriesShapedBy { get; }
 
         public void InitFilterOrder(List<CustomEntryStorageModel> filterEntries)
         {
@@ -109,6 +106,12 @@ namespace TestHelper.CustomData
             Height = height;
             return Task.CompletedTask;
         }
+
+        #endregion
+
+        #region Variables
+
+        private bool _isEnabled;
 
         #endregion
     }
