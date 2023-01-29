@@ -9,6 +9,7 @@ using VaraniumSharp.Attributes;
 using VaraniumSharp.Enumerations;
 using VaraniumSharp.Interfaces.Wrappers;
 using VaraniumSharp.Logging;
+using VaraniumSharp.WinUI.CustomShaping;
 using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
@@ -38,6 +39,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             _customLayoutEventRouter.SortChanged += _customLayoutEventRouter_SortChanged;
             _customLayoutEventRouter.GroupChanged += CustomLayoutEventRouterOnGroupChanged;
             _customLayoutEventRouter.FilterChanged += CustomLayoutEventRouterOnFilterChanged;
+            _customLayoutEventRouter.CustomDataChanged += CustomLayoutEventRouterOnCustomDataChanged;
             _logger = StaticLogger.GetLogger<ContentPaneManager>();
         }
 
@@ -92,7 +94,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 Width = 100
             };
 
-            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null, null, null);
+            await BasePane.InitAsync(control.ContentId, new List<ControlStorageModel>{ control }, null, null, null, null);
         }
 
         /// <inheritdoc/>
@@ -139,6 +141,15 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     filterWrapper = JsonSerializer.Deserialize(filterJson, FilterStorageWrapperModelJsonContext.Default.FilterStorageWrapperModel);
                 }
 
+                CustomStorageWrapperModel? customWrapper = null;
+                var customPath = _layoutStorageOptions.GetJsonPath($"{tabName}_custom.json");
+                if (_fileWrapper.FileExists(customPath))
+                {
+                    var customJson = await _fileWrapper.ReadAllTextAsync(customPath).ConfigureAwait(true);
+                    customWrapper = JsonSerializer.Deserialize(customJson,
+                        CustomStorageWrapperModelJsonContext.Default.CustomStorageWrapperModel);
+                }
+
                 var jsonData = await _fileWrapper.ReadAllTextAsync(path).ConfigureAwait(true);
                 var wrapper = JsonSerializer.Deserialize(jsonData, LayoutWrapperModelJsonContext.Default.LayoutWrapperModel);
 
@@ -149,7 +160,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 }
 
                 await BasePane
-                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.ShapingStorage, groupWrapper?.ShapingStorage, filterWrapper?.ShapingStorage)
+                    .InitAsync(Guid.Parse(tabName), wrapper.Controls, sortWrapper?.ShapingStorage, groupWrapper?.ShapingStorage, filterWrapper?.ShapingStorage, customWrapper?.ShapingStorage)
                     .ConfigureAwait(true);
             }
             else
@@ -174,6 +185,11 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             await SaveSortOrderAsync().ConfigureAwait(false);
         }
 
+        private async void CustomLayoutEventRouterOnCustomDataChanged(object? sender, EventArgs e)
+        {
+            await SaveCustomDataAsync().ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Occurs when the BasePAne fires an event to indicate that a control`s sort order has changed
         /// </summary>
@@ -193,6 +209,27 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         private async void CustomLayoutEventRouterOnGroupChanged(object? sender, EventArgs e)
         {
             await SaveGroupOrderAsync().ConfigureAwait(false);
+        }
+
+        private async Task SaveCustomDataAsync()
+        {
+            try
+            {
+                await _storageSemaphore.WaitAsync();
+                var layoutId = BasePane.GetIdentifier();
+                var path = _layoutStorageOptions.GetJsonPath($"{layoutId}_custom.json");
+                var wrapper = new CustomStorageWrapperModel(layoutId,
+                    await BasePane.GetCustomStorageModelsAsync().ConfigureAwait(false));
+                var jsonCustom = JsonSerializer.Serialize(wrapper,
+                    CustomStorageWrapperModelJsonContext.Default.CustomStorageWrapperModel);
+                await _fileWrapper
+                    .WriteAllTextAsync(path, jsonCustom)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                _storageSemaphore.Release();
+            }
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaraniumSharp.WinUI.CustomPaneBase;
+using VaraniumSharp.WinUI.CustomShaping;
 using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
@@ -35,6 +36,12 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         Task<List<ControlStorageModel>> GetComponentsForStorageAsync();
 
         /// <summary>
+        /// Retrieve custom data storage models for sub-components
+        /// </summary>
+        /// <returns>Collection of custom data storage models for sub components</returns>
+        Task<List<CustomStorageModel>> GetCustomStorageModelsAsync();
+
+        /// <summary>
         /// Retrieve filter storage models for sub-components
         /// </summary>
         /// <returns>Collection of filter storage models for sub components</returns>
@@ -66,7 +73,8 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// <param name="sortOrder">The default order in which the control content should be sorted</param>
         /// <param name="groupOrder">The default order in which the control content should be grouped</param>
         /// <param name="filters">The default filters that should be applied to the control content</param>
-        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters);
+        /// <param name="customData">The default custom data that should be applied to the control content</param>
+        Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters, List<CustomStorageModel>? customData);
 
         /// <summary>
         /// Initialize the pane when it doesn't have any controls

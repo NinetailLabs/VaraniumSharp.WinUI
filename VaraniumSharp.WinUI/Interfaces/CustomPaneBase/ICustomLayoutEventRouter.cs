@@ -16,6 +16,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         event EventHandler<bool>? ControlDisplayChanged;
 
         /// <summary>
+        /// Event that is fired when the custom layout data changed
+        /// </summary>
+        event EventHandler? CustomDataChanged;
+
+        /// <summary>
         /// Event that is fired when the filter order of the controls changed
         /// </summary>
         event EventHandler? FilterChanged;
@@ -53,6 +58,11 @@ namespace VaraniumSharp.WinUI.Interfaces.CustomPaneBase
         /// </summary>
         /// <param name="value">Value to set <see cref="ShowControls"/> to</param>
         Task SetControlDisplayValue(bool value);
+
+        /// <summary>
+        /// Fires the event to indicate that the custom layout data has been changed
+        /// </summary>
+        void SetCustomDataChanged();
 
         /// <summary>
         /// Fires the event to indicate that the filters of the controls has been changed

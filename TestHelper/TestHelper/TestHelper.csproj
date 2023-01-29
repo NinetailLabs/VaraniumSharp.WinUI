@@ -12,6 +12,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CustomData\CustomDataControl.xaml" />
     <None Remove="FilePicking\FilePicking.xaml" />
     <None Remove="Settings\SettingControl1.xaml" />
     <None Remove="Settings\SettingControl2.xaml" />
@@ -55,6 +56,12 @@
 
   <ItemGroup>
     <Page Update="FilePicking\FilePicking.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="CustomData\CustomDataControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

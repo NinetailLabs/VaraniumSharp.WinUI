@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
+using VaraniumSharp.WinUI.CustomShaping;
 using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
@@ -94,6 +95,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
+        public async Task<List<CustomStorageModel>> GetCustomStorageModelsAsync()
+        {
+            return await GenericContext.GetControlCustomDataAsync();
+        }
+
+        /// <inheritdoc />
         public async Task<List<FilterStorageModel>> GetFilterStorageModelsAsync()
         {
             return await GenericContext.GetControlFiltersAsync().ConfigureAwait(false);
@@ -115,12 +122,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         }
 
         /// <inheritdoc />
-        public virtual async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters)
+        public virtual async Task InitAsync(Guid contentGuid, List<ControlStorageModel> controls, List<SortStorageModel>? sortOrder, List<GroupStorageModel>? groupOrder, List<FilterStorageModel>? filters, List<CustomStorageModel>? customData)
         {
             GenericContext.LayoutIdentifier = contentGuid;
 
             await GenericContext
-                .HandleControlLoadAsync(controls, sortOrder, groupOrder, filters)
+                .HandleControlLoadAsync(controls, sortOrder, groupOrder, filters, customData)
                 .ConfigureAwait(true);
             await GenericContext
                 .SetControlResizingAsync()

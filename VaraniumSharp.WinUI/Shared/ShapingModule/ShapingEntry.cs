@@ -46,7 +46,7 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// <summary>
         /// Header for the shaping control
         /// </summary>
-        public string Header { get; init; }
+        public string Header { get; set; }
 
         /// <inheritdoc/>
         public string Identifier => PropertyName;
@@ -54,12 +54,12 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         /// <summary>
         /// Name of the property that the information is for
         /// </summary>
-        public string PropertyName { get; init; }
+        public string PropertyName { get; set; }
 
         /// <summary>
         /// Tooltip for the sort order
         /// </summary>
-        public string Tooltip { get; init; }
+        public string Tooltip { get; set; }
 
         #endregion
 
