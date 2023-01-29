@@ -21,7 +21,7 @@ namespace TestHelper
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -43,6 +43,6 @@ namespace TestHelper
             m_window.Activate();
         }
 
-        private Window m_window;
+        private Window? m_window;
     }
 }
