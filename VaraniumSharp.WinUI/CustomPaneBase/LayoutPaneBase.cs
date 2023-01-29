@@ -24,7 +24,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// <param name="contentId">Control's content Id</param>
         /// <param name="context">Context for the control</param>
         /// <param name="title">Control's title</param>
-        public LayoutPaneBase(Guid contentId, ICustomPaneContext context, string title)
+        protected LayoutPaneBase(Guid contentId, ICustomPaneContext context, string title)
         {
             ContentId = contentId;
             GenericContext = context;

@@ -36,7 +36,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             _layoutStorageOptions = layoutStorageOptions;
             _fileWrapper = fileWrapper;
             _customLayoutEventRouter = customLayoutEventRouter;
-            _customLayoutEventRouter.SortChanged += _customLayoutEventRouter_SortChanged;
+            _customLayoutEventRouter.SortChanged += CustomLayoutEventRouterSortChanged;
             _customLayoutEventRouter.GroupChanged += CustomLayoutEventRouterOnGroupChanged;
             _customLayoutEventRouter.FilterChanged += CustomLayoutEventRouterOnFilterChanged;
             _customLayoutEventRouter.CustomDataChanged += CustomLayoutEventRouterOnCustomDataChanged;
@@ -176,15 +176,10 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         #region Private Methods
 
         /// <summary>
-        /// Occurs when the BasePane fires an event to indicate that a control`s sort order has changed
+        /// Occurs when the BasePane fires an event to indicate that a control's custom data has changed
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
-        private async void _customLayoutEventRouter_SortChanged(object? sender, EventArgs e)
-        {
-            await SaveSortOrderAsync().ConfigureAwait(false);
-        }
-
         private async void CustomLayoutEventRouterOnCustomDataChanged(object? sender, EventArgs e)
         {
             await SaveCustomDataAsync().ConfigureAwait(false);
@@ -205,12 +200,24 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
-        /// <exception cref="NotImplementedException"></exception>
         private async void CustomLayoutEventRouterOnGroupChanged(object? sender, EventArgs e)
         {
             await SaveGroupOrderAsync().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Occurs when the BasePane fires an event to indicate that a control`s sort order has changed
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="e">Event arguments</param>
+        private async void CustomLayoutEventRouterSortChanged(object? sender, EventArgs e)
+        {
+            await SaveSortOrderAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Save the custom data for the control pane
+        /// </summary>
         private async Task SaveCustomDataAsync()
         {
             try

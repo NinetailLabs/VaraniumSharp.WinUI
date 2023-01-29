@@ -4,15 +4,26 @@ using VaraniumSharp.WinUI.Shared.ShapingModule;
 
 namespace VaraniumSharp.WinUI.CustomShaping;
 
+/// <summary>
+/// Class used to store a collection of <see cref="CustomEntryStorageModel"/>
+/// </summary>
 public class CustomStorageModel : ShapingStorageModelBase<CustomEntryStorageModel, CustomShapingEntry>
 {
     #region Constructor
 
+    /// <summary>
+    /// Default Constructor
+    /// </summary>
     public CustomStorageModel()
     {
         SubEntries = new();
     }
 
+    /// <summary>
+    /// Construct and populate the storage model data
+    /// </summary>
+    /// <param name="instanceId">Instance Id of the control the data is stored for</param>
+    /// <param name="customDataShapingEntries">Collection of custom data storage entries to persist</param>
     public CustomStorageModel(Guid instanceId, List<CustomShapingEntry> customDataShapingEntries)
         : base(instanceId, customDataShapingEntries)
     {
@@ -33,6 +44,7 @@ public class CustomStorageModel : ShapingStorageModelBase<CustomEntryStorageMode
 
     #region Private Methods
 
+    /// <inheritdoc />
     protected override CustomEntryStorageModel CreateInstance(CustomShapingEntry shapingEntry)
     {
         return new CustomEntryStorageModel(shapingEntry);

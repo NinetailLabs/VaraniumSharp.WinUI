@@ -183,6 +183,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             await ClearComponentsAsync();
         }
 
+        /// <inheritdoc />
         public async Task<List<CustomStorageModel>> GetControlCustomDataAsync()
         {
             var resultList = new List<CustomStorageModel>();
@@ -338,14 +339,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             {
                 var newControl = await _controlDiscoveryHelper
                     .CreateControlAsync(item.ContentId)
-                    .ConfigureAwait(true);
+                    .ConfigureAwait(false);
                 if (newControl is ICustomLayoutPane customPane)
                 {
                     item.UniqueControlIdentifier = Guid.NewGuid();
                     customPane.UniqueIdentifier = item.UniqueControlIdentifier;
                     await customPane
                         .InitAsync(item.ContentId)
-                        .ConfigureAwait(true);
+                        .ConfigureAwait(false);
                 }
 
                 SetupNewControl(newControl, item, sortOrder, groupOrder, filters, customData);
