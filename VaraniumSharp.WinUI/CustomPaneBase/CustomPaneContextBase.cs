@@ -586,11 +586,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 {
                     var sortChildren = sortOrder?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
                     var groupChildren = groupOrder?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
+                    var customChildren = customData?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
 
                     var controlId = customPane.GetIdentifier();
                     var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
                     await customPane
-                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries, filters, customData)
+                        .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries, filters, customChildren?.SubEntries)
                         .ConfigureAwait(false);
                 }
             }
