@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.Interfaces.Wrappers;
+using VaraniumSharp.WinUI.Dialog;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
 using VaraniumSharp.WinUI.Interfaces.TabViewHelpers;
@@ -30,13 +31,14 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// DI Constructor
         /// </summary>
         public TabWindowContext(IDialogs dialogs, IFileWrapper fileWrapper, ITabViewFlyoutHelper tabViewFlyoutHelper, ITabViewStorageManager tabViewStorageManager,
-            IContentPaneManager contentPaneManager, ILayoutStorageOptions layoutStorageOptions, ICustomLayoutEventRouter customLayoutEventRouter)
+            IContentPaneManager contentPaneManager, ILayoutStorageOptions layoutStorageOptions, ICustomLayoutEventRouter customLayoutEventRouter, XamlRootHelper xamlRootHelper)
         {
             _dialogs = dialogs;
             _fileWrapper = fileWrapper;
             _tabViewItemFlyoutHelper = tabViewFlyoutHelper;
             _tabViewStorageManager = tabViewStorageManager;
             _layoutStorageOptions = layoutStorageOptions;
+            _xamlRootHelper = xamlRootHelper;
             ContentPaneManager = contentPaneManager;
             _tabViewItemFlyoutHelper.SetSaveCallback(HandleTabViewPersistenceAsync);
             customLayoutEventRouter.LayoutChanged += CustomLayoutEventRouterOnLayoutChanged;
@@ -168,6 +170,7 @@ namespace VaraniumSharp.WinUI.TabWindow
         public void SetXamlRoot(XamlRoot root)
         {
             _root = root;
+            _xamlRootHelper.SetXamlRoot(root);
         }
 
         /// <inheritdoc/>
@@ -422,6 +425,11 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// TabViewItemStorageManager instance
         /// </summary>
         private readonly ITabViewStorageManager _tabViewStorageManager;
+
+        /// <summary>
+        /// XamlRootHelper instance
+        /// </summary>
+        private readonly XamlRootHelper _xamlRootHelper;
 
         /// <summary>
         /// Indicates if the current tab has unsaved changes
