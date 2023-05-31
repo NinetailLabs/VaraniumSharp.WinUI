@@ -9,7 +9,7 @@
 #load "CakeScripts/base/base.coverlet.tool.cake"
 #load "CakeScripts/base/base.coveralls.upload.cake"
 #load "CakeScripts/base/base.gitreleasenotes.cake"
-#load "CakeScripts/base/base.nuget.pack.cake"
+#load "custom.nuget.pack.cake"
 #load "CakeScripts/base/base.nuget.push.cake"
 #load "CakeScripts/base/base.docfx.cake"
 #load "CakeScripts/base/base.sonarqube.cake"
@@ -44,14 +44,14 @@ Task ("Default")
 	.IsDependentOn ("LocateFiles")
 	.IsDependentOn ("VariableSetup")
 	.IsDependentOn ("NugetRestore")
-	// .IsDependentOn ("SonarQubeStartup")
+	.IsDependentOn ("SonarQubeStartup")
 	.IsDependentOn ("Build")
-	// .IsDependentOn ("UnitTests")
-	// .IsDependentOn ("SonarQubeShutdown")
-	// .IsDependentOn ("CoverageUpload")
+	.IsDependentOn ("UnitTests")
+	.IsDependentOn ("SonarQubeShutdown")
+	.IsDependentOn ("CoverageUpload")
 	// .IsDependentOn ("GenerateReleaseNotes")
 	.IsDependentOn ("NugetPack")
-	// .IsDependentOn ("NugetPush")
+	.IsDependentOn ("NugetPush")
 	//.IsDependentOn ("Documentation")
 	.IsDependentOn ("FailBuildIfTestFailed");
 
