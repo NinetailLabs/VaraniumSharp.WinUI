@@ -7,7 +7,7 @@ namespace VaraniumSharp.WinUI.Dialog;
 /// <summary>
 /// Helper to get easy access to the XamlRoot for the main window
 /// </summary>
-[AutomaticContainerRegistration(typeof(XamlRoot), ServiceReuse.Singleton)]
+[AutomaticContainerRegistration(typeof(XamlRootHelper), ServiceReuse.Singleton)]
 public class XamlRootHelper
 {
     #region Properties
