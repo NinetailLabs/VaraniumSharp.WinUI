@@ -30,6 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="BorderedPane\BorderedPane.xaml" />
     <None Remove="CustomPaneBase\GridViewStyles.xaml" />
     <None Remove="FilterModule\Controls\DropDownBoolFilter.xaml" />
     <None Remove="FilterModule\Controls\DropDownEnumFilter.xaml" />
@@ -68,11 +69,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Interfaces\BorderedPane\" />
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
     <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
     <Folder Include="Shared\ShapingControlHelper\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="BorderedPane\BorderedPane.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
