@@ -40,7 +40,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
             CustomLayoutEventRouter = customLayoutEventRouter;
             CustomLayoutEventRouter.ControlDisplayChanged += _customLayoutEventRouter_ControlDisplayChanged;
             _controlDiscoveryHelper = controlDiscoveryHelper;
-            _dialogs = dialogs;
+            Dialogs = dialogs;
 
             Components = new ObservableCollection<LayoutDisplay>();
             Components.CollectionChanged += Components_CollectionChanged;
@@ -609,7 +609,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 var newControl = await _controlDiscoveryHelper.CreateControlAsync(Guid.Parse(flyoutItem.Name));
                 if (newControl != null)
                 {
-                    var layout = new LayoutDisplay(newControl, _dialogs, CustomLayoutEventRouter)
+                    var layout = new LayoutDisplay(newControl, Dialogs, CustomLayoutEventRouter)
                     {
                         CanMove = _moveControls,
                         ShowResizeHandle = _resizeControls,
@@ -667,7 +667,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                 HandleShapingOfNewControlEntries(newControl, sortOrder, groupOrder, filters, customData);
 
                 newControl.Title = storageModel.Title;
-                var layout = new LayoutDisplay(newControl, _dialogs, CustomLayoutEventRouter)
+                var layout = new LayoutDisplay(newControl, Dialogs, CustomLayoutEventRouter)
                 {
                     CanMove = _moveControls,
                     ShowResizeHandle = _resizeControls,
@@ -746,14 +746,14 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         private readonly IControlDiscoveryHelper _controlDiscoveryHelper;
 
         /// <summary>
-        /// Dialogs instance
-        /// </summary>
-        private readonly IDialogs _dialogs;
-
-        /// <summary>
         /// CustomLayoutEventRouter instance
         /// </summary>
         protected readonly ICustomLayoutEventRouter CustomLayoutEventRouter;
+
+        /// <summary>
+        /// Dialogs instance
+        /// </summary>
+        protected readonly IDialogs Dialogs;
 
         /// <summary>
         /// Logger instance
