@@ -11,7 +11,7 @@ clone_script:
     git submodule update --init --recursive
 environment:
   NugetKey:
-    secure: 1blJ+Sxuzwx4WpEdWcj6Dps8gxgTxSpZvZuTT1zdsG4CQaAw58dWhHgzxR1Igw/R
+    secure: B6DCxFCtVkjfyGh11BzPZA/lbJ85RQudxGwL9mG8skEiL2tFOCqQlXdg1ZfMKCtQ
   CoverallRepoToken:
     secure: 8KQxK7dJEQ2md8qskfgGHSQzZMFw7fKHdJ5H5rWXJKYndbyctdtRVnUC8NsX3sdW
   BotToken:
