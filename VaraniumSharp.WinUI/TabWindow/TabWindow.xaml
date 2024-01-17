@@ -36,6 +36,7 @@
             Grid.Column="0"            
             Grid.Row="0"
             MaxWidth="{x:Bind Path=Context.MaxTabViewSize, Mode=OneWay}"
+            Margin="0,0,0.5,0"
             Loaded="{x:Bind Path=Context.OnLoadedAsync, Mode=OneWay}"
             SelectionChanged="{x:Bind Path=Context.OnSelectionChangedAsync}"
             SelectedIndex="{x:Bind Path=Context.SelectedIndex, Mode=TwoWay}"
