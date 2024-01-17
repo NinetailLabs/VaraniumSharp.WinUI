@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+	<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -15,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net8.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +27,7 @@
 	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net8.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
