@@ -13,12 +13,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
 
         <Grid 
+            Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Height="40"
