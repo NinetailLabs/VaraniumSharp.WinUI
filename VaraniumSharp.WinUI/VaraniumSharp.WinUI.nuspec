@@ -22,11 +22,11 @@
     <dependencies>
       <group targetFramework="net8.0-windows10.0.19041.0">
         <dependency id="CommunityToolkit.WinUI.UI" version="7.1.2" />
-        <dependency id="Microsoft.WindowsAppSDK" version="1.3.230502000" />
-        <dependency id="VaraniumSharp" version="5.0.2" />
+        <dependency id="Microsoft.WindowsAppSDK" version="1.4.231219000" />
+        <dependency id="VaraniumSharp" version="5.2.0" />
         <dependency id="VaraniumSharp.DryIoc" version="1.4.1" />
-        <dependency id="System.Text.Json" version="7.0.2" />
-        <dependency id="WinUIEx" version="2.2.0" />
+        <dependency id="System.Text.Json" version="8.0.1" />
+        <dependency id="WinUIEx" version="2.3.3" />
       </group>
     </dependencies>
   </metadata>
