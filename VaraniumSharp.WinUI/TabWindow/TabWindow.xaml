@@ -10,15 +10,18 @@
     <Grid x:Name="OuterGrid" SizeChanged="{x:Bind Path=Context.WindowSizeChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" x:Name="TopRow" />
+            <RowDefinition Height="5px" />
             <RowDefinition />
+            <RowDefinition Height="8px" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
 
         <Grid 
+            Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Height="40"
@@ -33,6 +36,7 @@
             Grid.Column="0"            
             Grid.Row="0"
             MaxWidth="{x:Bind Path=Context.MaxTabViewSize, Mode=OneWay}"
+            Margin="0,0,0.5,0"
             Loaded="{x:Bind Path=Context.OnLoadedAsync, Mode=OneWay}"
             SelectionChanged="{x:Bind Path=Context.OnSelectionChangedAsync}"
             SelectedIndex="{x:Bind Path=Context.SelectedIndex, Mode=TwoWay}"
@@ -100,11 +104,48 @@
             Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
             Grid.Column="0"
             Grid.ColumnSpan="3"
-            Grid.Row="1"
-            Margin="0,-0.5,0,-3"
+            Grid.Row="1">
+            <Border
+                Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                CornerRadius="5,5,0,0"
+                Margin="4,0,4,0" />
+        </Grid>
+
+        <Grid
+            Background="{ThemeResource AppBarButtonRevealBackgroundPressed}"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="2"
+            Margin="0,0,0,-8"
+            Padding="0,-9,0,0"/>
+
+        <Border
+            Background="#aa272727"
+            BorderBrush="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+            BorderThickness="5,0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="2"
+            Margin="4,0,4,0" />
+
+        <Grid
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="2"
+            Margin="0,0,0,-8"
             Padding="0,-9,0,0"
             SizeChanged="{x:Bind Path=Context.ContentPaneManager.UpdateBasePaneSize}"
             x:Name="LayoutPane" />
+
+        <Grid
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="3">
+            <Border
+                Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                CornerRadius="0,0,5,5"
+                Margin="4,0,4,5" />
+        </Grid>
 
     </Grid>
 </winUiEx:WindowEx>
