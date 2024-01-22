@@ -108,7 +108,7 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
         private void DiscoverControls()
         {
             var workableClasses = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(x => x.GetTypes())
+                .SelectMany(x => x.IsDynamic ? x.GetTypes() : x.GetExportedTypes())
                 .Where(x => x.IsClass && x.GetInterfaces().Contains(typeof(IDisplayComponent))
                 && x.GetCustomAttribute(typeof(DisplayComponentAttribute), false) != null);
 

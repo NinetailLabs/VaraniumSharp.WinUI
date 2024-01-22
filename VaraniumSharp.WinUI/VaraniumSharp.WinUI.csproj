@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+	<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -15,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net8.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -26,7 +27,7 @@
 	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Release\net5.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\net8.0-windows10.0.19041.0\VaraniumSharp.WinUI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,26 +54,25 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.UI" Version="7.1.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230502000" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231219000" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageReference Include="SemVer.Git.MSBuild" Version="1.3.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.Text.Json" Version="7.0.2" />
-    <PackageReference Include="VaraniumSharp" Version="5.0.2" />
-    <PackageReference Include="WinUIEx" Version="2.2.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.1" />
+    <PackageReference Include="VaraniumSharp" Version="5.2.0" />
+    <PackageReference Include="WinUIEx" Version="2.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Interfaces\BorderedPane\" />
     <Folder Include="Interfaces\SettingPane\" />
     <Folder Include="Interfaces\VerticalPane\" />
-    <Folder Include="ExtensionMethods\" />
     <Folder Include="Pickers\" />
     <Folder Include="Shared\ShapingControlHelper\" />
   </ItemGroup>

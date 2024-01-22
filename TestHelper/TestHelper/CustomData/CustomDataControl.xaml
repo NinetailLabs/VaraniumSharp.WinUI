@@ -8,7 +8,21 @@
     mc:Ignorable="d">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <ToggleSwitch
+            Grid.Row="1"
             IsOn="{x:Bind Path=EnableControl, Mode=TwoWay}" />
+
+        <RichTextBlock 
+            Grid.Row="1"
+            x:Name="TestBlock1" />
+
+        <RichTextBlock
+            Grid.Row="2"
+            x:Name="TestBlock2" />
     </Grid>
 </UserControl>
