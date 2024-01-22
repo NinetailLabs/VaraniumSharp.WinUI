@@ -9,6 +9,7 @@ using VaraniumSharp.WinUI.CustomPaneBase;
 using VaraniumSharp.WinUI.CustomShaping;
 using VaraniumSharp.WinUI.Interfaces.CustomShaping;
 using VaraniumSharp.WinUI.Shared.ShapingModule;
+using VaraniumSharp.WinUI.ExtensionMethods;
 
 namespace TestHelper.CustomData
 {
@@ -22,6 +23,19 @@ namespace TestHelper.CustomData
         {
             InitializeComponent();
             EntriesShapedBy = new();
+            TestBlock1.ShowRichText(TextValue1);
+
+            var tokenHelper = new TokenHelper
+            {
+                TokenRegex = @"(\<[^<>]*\>)",
+                BoldStartToken = "<b>",
+                BoldEndToken = "</b>",
+                ItalicStartToken = "<i>",
+                ItalicEndToken = "</i>",
+                NewLineToken = "<br>"
+            };
+
+            TestBlock2.ShowRichText(TextValue2, tokenHelper);
         }
 
         #endregion
@@ -76,6 +90,11 @@ namespace TestHelper.CustomData
         public Guid InstanceId { get; set; }
         public bool ShowResizeHandle { get; set; }
         public bool StartupLoad { get; set; }
+
+        public string TextValue1 => "This is some {b}bold{/b} text.{br}{br}This is a new paragraph.";
+
+        public string TextValue2 => "This is some <b>bold</b> text.<br><br>This is a new paragraph.";
+
         public string Title { get; set; } = "Custom Control";
 
         #endregion
