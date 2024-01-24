@@ -281,6 +281,7 @@ namespace VaraniumSharp.WinUI.Collections
                     if (entry != null)
                     {
                         AddGroupedItem(entry, base[ndx]);
+                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemInserted:
@@ -288,6 +289,7 @@ namespace VaraniumSharp.WinUI.Collections
                     if (insertEntry != null)
                     {
                         AddGroupedItem(insertEntry, base[ndx]);
+                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemRemoved:
@@ -316,8 +318,6 @@ namespace VaraniumSharp.WinUI.Collections
                     RebuildGroups();
                     break;
             }
-            
-            RefreshSorting();
         }
 
         /// <summary>
