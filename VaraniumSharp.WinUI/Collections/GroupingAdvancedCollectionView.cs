@@ -281,6 +281,7 @@ namespace VaraniumSharp.WinUI.Collections
                     if (entry != null)
                     {
                         AddGroupedItem(entry, base[ndx]);
+                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemInserted:
@@ -288,6 +289,7 @@ namespace VaraniumSharp.WinUI.Collections
                     if (insertEntry != null)
                     {
                         AddGroupedItem(insertEntry, base[ndx]);
+                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemRemoved:
@@ -344,7 +346,7 @@ namespace VaraniumSharp.WinUI.Collections
                 }
                 else
                 {
-                    viewDictionary.Add(key, new List<object>{ item });
+                    viewDictionary.Add(key, [item]);
                 }
             }
 
@@ -388,7 +390,7 @@ namespace VaraniumSharp.WinUI.Collections
 
                     if (!groupKeys.ContainsKey(key))
                     {
-                        groupKeys.Add(key, new List<object>{ item });
+                        groupKeys.Add(key, [item]);
                     }
                     else
                     {
