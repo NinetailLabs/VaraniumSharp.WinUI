@@ -26,8 +26,8 @@ namespace TestHelper.Sorting
         {
             InitializeComponent();
             Entries = new();
-            CollectionView = new GroupingAdvancedCollectionView(Entries);
-            SortablePropertyModule = new SortablePropertyModule(CollectionView)
+            CollectionView = new(Entries);
+            SortablePropertyModule = new(CollectionView)
             {
                 DisableDefaultShaping = true
             };
@@ -42,7 +42,7 @@ namespace TestHelper.Sorting
             GroupingPropertyModule.ShapingChanged += GroupingPropertyModuleOnShapingChanged;
             GroupingPropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
-            FilterablePropertyModule = new FilterablePropertyModule(CollectionView);
+            FilterablePropertyModule = new(CollectionView);
             FilterablePropertyModule.ShapingChanged += FilterablePropertyModuleOnShapingChanged;
             FilterablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
@@ -154,7 +154,7 @@ namespace TestHelper.Sorting
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var rnd = new Random();
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
             {
                 Id = rnd.Next(100),
                 Title = "B",
@@ -179,7 +179,7 @@ namespace TestHelper.Sorting
         private void ClearSelectClick(object sender, RoutedEventArgs e)
         {
             SelectedEntry = null;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedEntry)));
+            PropertyChanged?.Invoke(this, new(nameof(SelectedEntry)));
         }
 
         private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
@@ -199,7 +199,7 @@ namespace TestHelper.Sorting
 
         private void SetupCollection()
         {
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
             {
                 Id = 2,
                 Title = "Q",
@@ -208,7 +208,7 @@ namespace TestHelper.Sorting
                 EnumToFilter = SortableEnum.That
             });
 
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
             {
                 Id = 1,
                 Title = "T",
@@ -217,7 +217,7 @@ namespace TestHelper.Sorting
                 EnumToFilter = SortableEnum.This
             });
 
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
             {
                 Id = 3,
                 Title = "H",
@@ -226,7 +226,25 @@ namespace TestHelper.Sorting
                 EnumToFilter = SortableEnum.This
             });
 
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
+            {
+                Id = 4,
+                Title = "A",
+                Position = 9,
+                BoolToFilter = false,
+                EnumToFilter = SortableEnum.That
+            });
+
+            Entries.Add(new()
+            {
+                Id = 4,
+                Title = "A",
+                Position = 4,
+                BoolToFilter = false,
+                EnumToFilter = SortableEnum.That
+            });
+
+            Entries.Add(new()
             {
                 Id = 3,
                 Title = "A",
@@ -235,7 +253,7 @@ namespace TestHelper.Sorting
                 EnumToFilter = SortableEnum.Those
             });
 
-            Entries.Add(new SortableEntry
+            Entries.Add(new()
             {
                 Id = 4,
                 Title = "A",
