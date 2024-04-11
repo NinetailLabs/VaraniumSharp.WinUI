@@ -1,12 +1,19 @@
-﻿using CommunityToolkit.WinUI.UI;
+﻿using System.ComponentModel;
+using CommunityToolkit.WinUI.UI;
 using VaraniumSharp.WinUI.FilterModule;
 using VaraniumSharp.WinUI.GroupModule;
 using VaraniumSharp.WinUI.SortModule;
 
 namespace TestHelper.Sorting
 {
-    public class SortableEntry
+    public class SortableEntry : INotifyPropertyChanged
     {
+        #region Events
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        #endregion
+
         #region Properties
 
         [SortableProperty("Accidental Sort", "Sort by accident")]
@@ -14,6 +21,9 @@ namespace TestHelper.Sorting
 
         [SortableProperty("And another", "And another sort")]
         public string AndAnother { get; set; }
+
+        [FilterableProperty("Long Entry Title", "Filter by long entry title", FilterableType.SearchableString, 4)]
+        public string Another { get; init; }
 
         [FilterableProperty("Bool filter", "Filter by my boolean value", FilterableType.Boolean, 0)]
         public bool BoolToFilter { get; set; }
@@ -41,9 +51,6 @@ namespace TestHelper.Sorting
         [GroupingProperty("Title", "Group by Title")]
         [SortableProperty("Title", "Sort by Title")]
         public string Title { get; init; }
-
-        [FilterableProperty("Long Entry Title", "Filter by long entry title", FilterableType.SearchableString, 4)]
-        public string Another { get; init; }
 
         #endregion
     }
