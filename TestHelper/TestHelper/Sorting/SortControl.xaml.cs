@@ -46,7 +46,7 @@ namespace TestHelper.Sorting
             FilterablePropertyModule.ShapingChanged += FilterablePropertyModuleOnShapingChanged;
             FilterablePropertyModule.GenerateShapingEntries(typeof(SortableEntry));
 
-            SetupCollection();
+            //SetupCollection();
         }
 
         #endregion
@@ -113,6 +113,7 @@ namespace TestHelper.Sorting
         public Task InitAsync()
         {
             // Not used for now
+            SetupCollection();
             return Task.CompletedTask;
         }
 

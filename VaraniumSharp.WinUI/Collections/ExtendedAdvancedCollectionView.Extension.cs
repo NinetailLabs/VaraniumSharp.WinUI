@@ -44,7 +44,7 @@ namespace VaraniumSharp.WinUI.Collections
                 {
                     var pi = _sortProperties[sd.PropertyName];
 
-                    if (!sd.PropertyName.Contains("."))
+                    if (!sd.PropertyName.Contains('.'))
                     {
 
                         cx = pi.GetValue(x);

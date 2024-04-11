@@ -45,7 +45,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// Initializes a new instance of the <see cref="ExtendedAdvancedCollectionView"/> class.
         /// </summary>
         /// <param name="source">source IEnumerable</param>
-        /// <param name="isLiveShaping">Denotes whether or not this ACV should re-filter/re-sort if a PropertyChanged is raised for an observed property.</param>
+        /// <param name="isLiveShaping">Denotes whether this ACV should re-filter/re-sort if a PropertyChanged is raised for an observed property.</param>
         public ExtendedAdvancedCollectionView(IList source, bool isLiveShaping = false)
         {
             _liveShapingEnabled = isLiveShaping;
@@ -457,7 +457,6 @@ namespace VaraniumSharp.WinUI.Collections
 
             if (_sortDescriptions.Any())
             {
-                _sortProperties.Clear();
                 newViewIndex = _view.BinarySearch(newItem, this);
                 if (newViewIndex < 0)
                 {
@@ -544,9 +543,7 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void HandleSortChanged()
         {
-            _sortProperties.Clear();
             _view.Sort(this);
-            _sortProperties.Clear();
             if (CollectionGroups == null)
             {
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
@@ -559,7 +556,6 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void HandleSourceChanged()
         {
-            _sortProperties.Clear();
             var currentItem = CurrentItem;
             _view.Clear();
             foreach (var item in Source ?? new List<object>())
@@ -584,8 +580,6 @@ namespace VaraniumSharp.WinUI.Collections
                     _view.Add(item);
                 }
             }
-
-            _sortProperties.Clear();
 
             if (CollectionGroups == null)
             {
@@ -720,6 +714,7 @@ namespace VaraniumSharp.WinUI.Collections
                 return;
             }
 
+            _sortProperties.Clear();
             HandleSortChanged();
         }
 
