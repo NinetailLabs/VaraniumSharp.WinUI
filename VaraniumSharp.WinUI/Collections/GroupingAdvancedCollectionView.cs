@@ -293,25 +293,30 @@ namespace VaraniumSharp.WinUI.Collections
                     }
                     break;
                 case CollectionChange.ItemRemoved:
-                    var doRebuild = true;
                     if (typedArgs?.Item != null)
                     {
-                        var items = CollectionGroups
+                        var cGroup = CollectionGroups
                             ?.Select(x => (CollectionViewGroup)x)
-                            .FirstOrDefault(x => x.Items.Contains(typedArgs.Item))
-                            ?.Items
-                            .Count
-                                ?? 0;
+                            .FirstOrDefault(x => x.Items.Contains(typedArgs.Item));
+
+                        var items = cGroup
+                                        ?.Items
+                                        .Count
+                                    ?? 0;
                         if (items > 1)
                         {
                             RemoveGroupedItem(typedArgs.Item);
-                            doRebuild = false;
                         }
-                    }
-
-                    if (doRebuild)
-                    {
-                        RebuildGroups();
+                        else
+                        {
+                            RemoveGroupedItem(typedArgs.Item);
+                            if (CollectionGroups != null && cGroup != null)
+                            {
+                                var idx = CollectionGroups.IndexOf(cGroup);
+                                CollectionGroups.RemoveAt(idx);
+                                UpdateGroupStartIndexes();
+                            }
+                        }
                     }
                     break;
                 case CollectionChange.Reset:
