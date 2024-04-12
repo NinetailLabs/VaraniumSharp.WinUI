@@ -45,7 +45,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// Initializes a new instance of the <see cref="ExtendedAdvancedCollectionView"/> class.
         /// </summary>
         /// <param name="source">source IEnumerable</param>
-        /// <param name="isLiveShaping">Denotes whether or not this ACV should re-filter/re-sort if a PropertyChanged is raised for an observed property.</param>
+        /// <param name="isLiveShaping">Denotes whether this ACV should re-filter/re-sort if a PropertyChanged is raised for an observed property.</param>
         public ExtendedAdvancedCollectionView(IList source, bool isLiveShaping = false)
         {
             _liveShapingEnabled = isLiveShaping;
@@ -76,6 +76,11 @@ namespace VaraniumSharp.WinUI.Collections
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
+        /// Fired when the sort order of the items in the collection changes
+        /// </summary>
+        protected event EventHandler? SortChanged;
+
+        /// <summary>
         /// Occurs when the vector changes.
         /// </summary>
         public event VectorChangedEventHandler<object>? VectorChanged;
@@ -84,11 +89,6 @@ namespace VaraniumSharp.WinUI.Collections
         /// Fired when the view has changed and the <see cref="CollectionGroups"/> isn't null
         /// </summary>
         protected event VectorChangedEventHandler<object>? ViewChanged;
-
-        /// <summary>
-        /// Fired when the sort order of the items in the collection changes
-        /// </summary>
-        protected event EventHandler? SortChanged;
 
         #endregion
 
@@ -457,7 +457,6 @@ namespace VaraniumSharp.WinUI.Collections
 
             if (_sortDescriptions.Any())
             {
-                _sortProperties.Clear();
                 newViewIndex = _view.BinarySearch(newItem, this);
                 if (newViewIndex < 0)
                 {
@@ -544,9 +543,7 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void HandleSortChanged()
         {
-            _sortProperties.Clear();
             _view.Sort(this);
-            _sortProperties.Clear();
             if (CollectionGroups == null)
             {
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
@@ -559,7 +556,6 @@ namespace VaraniumSharp.WinUI.Collections
 
         private void HandleSourceChanged()
         {
-            _sortProperties.Clear();
             var currentItem = CurrentItem;
             _view.Clear();
             foreach (var item in Source ?? new List<object>())
@@ -585,8 +581,6 @@ namespace VaraniumSharp.WinUI.Collections
                 }
             }
 
-            _sortProperties.Clear();
-
             if (CollectionGroups == null)
             {
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
@@ -600,7 +594,12 @@ namespace VaraniumSharp.WinUI.Collections
             MoveCurrentTo(currentItem);
         }
 
-        private void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Occurs when the property of an item in the collection changes
+        /// </summary>
+        /// <param name="item">Item on which the property changed</param>
+        /// <param name="e">Property changed arguments</param>
+        protected virtual void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
         {
             if (!_liveShapingEnabled || item == null || _source == null)
             {
@@ -720,6 +719,7 @@ namespace VaraniumSharp.WinUI.Collections
                 return;
             }
 
+            _sortProperties.Clear();
             HandleSortChanged();
         }
 

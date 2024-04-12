@@ -23,6 +23,7 @@ namespace VaraniumSharp.WinUI.ExtensionMethods
             var path = propertyName.Split(".");
             var typeToUse = obj.GetType();
             var objData = obj;
+
             for (var r = 0; r < path.Length; r++)
             {
                 var property = typeToUse
@@ -37,7 +38,10 @@ namespace VaraniumSharp.WinUI.ExtensionMethods
                 }
                 else
                 {
-                    objData = property.GetValue(objData);
+                    if (objData != null)
+                    {
+                        objData = property.GetValue(objData);
+                    }
                 }
             }
 
