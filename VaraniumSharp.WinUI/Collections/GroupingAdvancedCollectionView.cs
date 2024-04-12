@@ -324,6 +324,83 @@ namespace VaraniumSharp.WinUI.Collections
             }
         }
 
+        /// <inheritdoc />
+        protected override void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
+        {
+            if (item == null || CollectionGroups == null)
+            {
+                return;
+            }
+
+            var filterResult = Filter?.Invoke(item);
+
+            if((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
+            {
+                var insertEntry = GetItemGroup(item);
+                var cGroup = CollectionGroups
+                    ?.Select(x => (CollectionViewGroup)x)
+                    .FirstOrDefault(x => x.Items.Contains(item));
+
+                if (insertEntry == null)
+                {
+                    return;
+                }
+
+                // TODO - We need to test this by changing the grouping value
+                if (cGroup?.Group != insertEntry)
+                {
+                    RemoveGroupedItem(item);
+                    AddGroupedItem(insertEntry, item);
+                }
+                else
+                {
+                    var oldIndex = _view.IndexOf(item);
+                    if (oldIndex < 0)
+                    {
+                        return;
+                    }
+
+                    // Move the item to the correct position in the view and update the start index of the groups
+                    _view.RemoveAt(oldIndex);
+                    var targetIndex = _view.BinarySearch(item, this);
+                    if (targetIndex < 0)
+                    {
+                        targetIndex = ~targetIndex;
+                    }
+                    _view.Insert(targetIndex, item);
+                    UpdateGroupStartIndexes();
+                    
+                    // If our entry didn't move we can exit early
+                    if (targetIndex == oldIndex)
+                    {
+                        return;
+                    }
+
+                    // Ignore our entry similar to the AddGroupItem, otherwise our firstGroupItem will likely be the item itself
+                    var firstGroupItem = cGroup.GroupItems.Except([item]).FirstOrDefault();
+                    if (firstGroupItem == null)
+                    {
+                        return;
+                    }
+
+                    var firstIndex = _view.IndexOf(firstGroupItem);
+                    var insertIndex = _view.IndexOf(item);
+                    var offSet = insertIndex - firstIndex;
+                    if (offSet <= cGroup.GroupItems.Count - 1)
+                    {
+                        // If the item is already in the correct position we can exit early
+                        if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
+                        {
+                            return;
+                        }
+
+                        RemoveGroupedItem(item);
+                        AddGroupedItem(insertEntry, item);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Occurs when the sorting of the backing collection changes
         /// </summary>
@@ -418,84 +495,6 @@ namespace VaraniumSharp.WinUI.Collections
                 }
                 ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred = false;
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
-            }
-        }
-
-        /// <inheritdoc />
-        protected override void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
-        {
-            if (item == null || CollectionGroups == null)
-            {
-                return;
-            }
-
-            var filterResult = Filter?.Invoke(item);
-
-            if((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
-            {
-                var insertEntry = GetItemGroup(item);
-                var cGroup = CollectionGroups
-                    ?.Select(x => (CollectionViewGroup)x)
-                    .FirstOrDefault(x => x.Items.Contains(item));
-
-                // TODO - We need to test this by changing the grouping value
-                if (insertEntry != null && cGroup?.Group != insertEntry)
-                {
-                    RemoveGroupedItem(item);
-                    AddGroupedItem(insertEntry, item);
-                }
-                else
-                {
-                    var oldIndex = _view.IndexOf(item);
-                    if (oldIndex < 0)
-                    {
-                        return;
-                    }
-
-                    // Move the item to the correct position in the view and update the start index of the groups
-                    _view.RemoveAt(oldIndex);
-                    var targetIndex = _view.BinarySearch(item, this);
-                    if (targetIndex < 0)
-                    {
-                        targetIndex = ~targetIndex;
-                    }
-                    _view.Insert(targetIndex, item);
-                    UpdateGroupStartIndexes();
-                    
-                    // If our entry didn't move we can exit early
-                    if (targetIndex == oldIndex)
-                    {
-                        return;
-                    }
-
-                    // Ignore our entry similar to the AddGroupItem, otherwise our firstGroupItem will likely be the item itself
-                    var firstGroupItem = cGroup?.GroupItems.Except([item]).FirstOrDefault();
-                    if (firstGroupItem == null)
-                    {
-                        return;
-                    }
-
-                    var firstIndex = _view.IndexOf(firstGroupItem);
-                    var insertIndex = _view.IndexOf(item);
-                    var offSet = insertIndex - firstIndex;
-                    if (offSet > cGroup.GroupItems.Count - 1)
-                    {
-                        //_view.Insert(targetIndex, item);
-                    }
-                    else
-                    {
-                        //if (offSet < 0)
-                        //{
-                        if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
-                        {
-                            return;
-                        }
-                        //}
-                        RemoveGroupedItem(item);
-                        //_view.Insert(targetIndex, item);
-                        AddGroupedItem(insertEntry, item);
-                    }
-                }
             }
         }
 
