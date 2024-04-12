@@ -10,6 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Windows.Foundation.Collections;
 using VaraniumSharp.WinUI.Interfaces.Collections;
@@ -419,6 +420,65 @@ namespace VaraniumSharp.WinUI.Collections
                 }
                 ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred = false;
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.Reset));
+            }
+        }
+
+        /// <inheritdoc />
+        protected override void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
+        {
+            if (item == null || CollectionGroups == null)
+            {
+                return;
+            }
+
+            var filterResult = Filter?.Invoke(item);
+
+            if((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
+            {
+                var insertEntry = GetItemGroup(item);
+                var cGroup = CollectionGroups
+                    ?.Select(x => (CollectionViewGroup)x)
+                    .FirstOrDefault(x => x.Items.Contains(item));
+
+                // TODO - We need to test this by changing the grouping value
+                if (cGroup?.Group != insertEntry)
+                {
+                    RemoveGroupedItem(item);
+                    AddGroupedItem(insertEntry, item);
+                }
+                else
+                {
+                    RemoveGroupedItem(item);
+                    var oldIndex = _view.IndexOf(item);
+
+                    // Check if item is in view:
+                    if (oldIndex < 0)
+                    {
+                        return;
+                    }
+
+                    _view.RemoveAt(oldIndex);
+                    var targetIndex = _view.BinarySearch(item, this);
+                    if (targetIndex < 0)
+                    {
+                        targetIndex = ~targetIndex;
+                    }
+
+                    // Only trigger expensive UI updates if the index really changed:
+                    if (targetIndex != oldIndex)
+                    {
+                        //OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemRemoved, oldIndex, item));
+
+                        _view.Insert(targetIndex, item);
+
+                        //OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, targetIndex, item));
+                    }
+                    else
+                    {
+                        _view.Insert(targetIndex, item);
+                    }
+                    AddGroupedItem(insertEntry, item);
+                }
             }
         }
 

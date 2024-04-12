@@ -28,6 +28,26 @@ namespace TestHelper.Sorting
         [FilterableProperty("Bool filter", "Filter by my boolean value", FilterableType.Boolean, 0)]
         public bool BoolToFilter { get; set; }
 
+        [SortableProperty(typeof(EmbeddedEntry))]
+        public EmbeddedEntry EmbeddedEntry
+        {
+            get => _embeddedEntry;
+            set
+            {
+                _embeddedEntry = value;
+                _embeddedEntry.PropertyChanged += (sender, args) =>
+                {
+                    PropertyChanged?.Invoke(this,
+                        new($"{nameof(EmbeddedEntry)}.{args.PropertyName}"));
+                };
+            }
+        }
+
+        /// <summary>
+        /// Backing variable for the <see cref="EmbeddedEntry"/> property
+        /// </summary>
+        private EmbeddedEntry _embeddedEntry;
+
         [FilterableProperty("Enum filter", "Filter values by enum", FilterableType.Enumeration, 1)]
         public SortableEnum EnumToFilter { get; init; }
 
@@ -35,8 +55,7 @@ namespace TestHelper.Sorting
         public string EvenMore { get; set; }
 
         [GroupingProperty("Id", "Group by Id")]
-        [SortableProperty("Id", "Sort by Id", IsDefault = true)]
-        public int Id { get; init; }
+        public int Id { get; set; }
 
         [SortableProperty("MoreSorting", "More sorting")]
         public string MoreSorting { get; set; }

@@ -97,8 +97,6 @@ namespace TestHelper.Sorting
             }
         }
 
-        private int _selectedIndex;
-
         public bool ShowResizeHandle { get; set; }
 
         public SortablePropertyModule SortablePropertyModule { get; }
@@ -183,6 +181,16 @@ namespace TestHelper.Sorting
             PropertyChanged?.Invoke(this, new(nameof(SelectedEntry)));
         }
 
+        private void EButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            var rand = new Random();
+            if (SelectedEntry != null)
+            {
+                SelectedEntry.Id = rand.Next(100);
+                SelectedEntry.EmbeddedEntry.EmbeddedId = SelectedEntry.Id;
+            }
+        }
+
         private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
         {
             FilterChanged?.Invoke(this, e);
@@ -206,7 +214,11 @@ namespace TestHelper.Sorting
                 Title = "Q",
                 Position = 2,
                 BoolToFilter = true,
-                EnumToFilter = SortableEnum.That
+                EnumToFilter = SortableEnum.That,
+                EmbeddedEntry = new()
+                {
+                    EmbeddedId = 2
+                }
             });
 
             Entries.Add(new()
@@ -215,7 +227,11 @@ namespace TestHelper.Sorting
                 Title = "T",
                 Position = 3,
                 BoolToFilter = false,
-                EnumToFilter = SortableEnum.This
+                EnumToFilter = SortableEnum.This,
+                EmbeddedEntry = new()
+                {
+                    EmbeddedId = 1
+                }
             });
 
             Entries.Add(new()
@@ -224,7 +240,11 @@ namespace TestHelper.Sorting
                 Title = "H",
                 Position = 1,
                 BoolToFilter = true,
-                EnumToFilter = SortableEnum.This
+                EnumToFilter = SortableEnum.This,
+                EmbeddedEntry = new()
+                {
+                    EmbeddedId = 3
+                }
             });
 
             Entries.Add(new()
@@ -251,7 +271,11 @@ namespace TestHelper.Sorting
                 Title = "A",
                 Position = 1,
                 BoolToFilter = false,
-                EnumToFilter = SortableEnum.Those
+                EnumToFilter = SortableEnum.Those,
+                EmbeddedEntry = new()
+                {
+                    EmbeddedId = 3
+                }
             });
 
             Entries.Add(new()
@@ -260,7 +284,11 @@ namespace TestHelper.Sorting
                 Title = "A",
                 Position = 3,
                 BoolToFilter = false,
-                EnumToFilter = SortableEnum.That
+                EnumToFilter = SortableEnum.That,
+                EmbeddedEntry = new()
+                {
+                    EmbeddedId = 4
+                }
             });
         }
 
@@ -279,6 +307,8 @@ namespace TestHelper.Sorting
         #region Variables
 
         private SortableEntry? _selectedEntry;
+
+        private int _selectedIndex;
 
         #endregion
     }
