@@ -175,6 +175,16 @@ namespace TestHelper.Sorting
             }
         }
 
+        private void ChangeLetterClick(object sender, RoutedEventArgs e)
+        {
+            char[] titles = ['Q', 'T', 'H', 'A', 'B'];
+            var rand = new Random();
+            if (SelectedEntry != null)
+            {
+                SelectedEntry.Title = titles[rand.Next(5)].ToString();
+            }
+        }
+
         private void ClearSelectClick(object sender, RoutedEventArgs e)
         {
             SelectedEntry = null;

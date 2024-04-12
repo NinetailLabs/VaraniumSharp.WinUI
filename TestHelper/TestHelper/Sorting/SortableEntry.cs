@@ -35,6 +35,7 @@ namespace TestHelper.Sorting
             set
             {
                 _embeddedEntry = value;
+                // Need to forward the request in order for sorting to work correctly
                 _embeddedEntry.PropertyChanged += (sender, args) =>
                 {
                     PropertyChanged?.Invoke(this,
@@ -69,7 +70,7 @@ namespace TestHelper.Sorting
         [FilterableProperty("Title", "Filter by Title", FilterableType.SearchableString, 3)]
         [GroupingProperty("Title", "Group by Title")]
         [SortableProperty("Title", "Sort by Title")]
-        public string Title { get; init; }
+        public string Title { get; set; }
 
         #endregion
     }
