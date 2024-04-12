@@ -52,6 +52,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -73,6 +74,11 @@
                     Click="EButtonOnClick"
                     Content="Change E-Id"
                     Grid.Row="3" />
+
+                <Button
+                    Click="ChangeLetterClick"
+                    Content ="Change Title"
+                    Grid.Row="4" />
 
             </Grid>
 

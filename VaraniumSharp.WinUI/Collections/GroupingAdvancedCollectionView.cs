@@ -336,25 +336,29 @@ namespace VaraniumSharp.WinUI.Collections
 
             var filterResult = Filter?.Invoke(item);
 
-            if((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
+            var cGroup = CollectionGroups
+                ?.Select(x => (CollectionViewGroup)x)
+                .FirstOrDefault(x => x.Items.Contains(item));
+            var key = GetItemGroup(item);
+            if (key == null)
             {
-                var insertEntry = GetItemGroup(item);
-                var cGroup = CollectionGroups
-                    ?.Select(x => (CollectionViewGroup)x)
-                    .FirstOrDefault(x => x.Items.Contains(item));
-
-                if (insertEntry == null)
+                return;
+            }
+            if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) != 0)
+            {
+                RemoveGroupedItem(item);
+                AddGroupedItem(key, item);
+                if (CollectionGroups != null && cGroup?.GroupItems.Count == 0)
                 {
-                    return;
+                    var idx = CollectionGroups.IndexOf(cGroup);
+                    CollectionGroups.RemoveAt(idx);
+                    UpdateGroupStartIndexes();
                 }
+            }
 
-                // TODO - We need to test this by changing the grouping value
-                if (cGroup?.Group != insertEntry)
-                {
-                    RemoveGroupedItem(item);
-                    AddGroupedItem(insertEntry, item);
-                }
-                else
+            if ((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
+            {
+                if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) == 0)
                 {
                     var oldIndex = _view.IndexOf(item);
                     if (oldIndex < 0)
@@ -397,7 +401,19 @@ namespace VaraniumSharp.WinUI.Collections
                         }
 
                         RemoveGroupedItem(item);
-                        AddGroupedItem(insertEntry, item);
+                        AddGroupedItem(key, item);
+                    }
+                    else
+                    {
+                        // TODO - There are some strange edge cases where the item will removed and re-added to the same location at the end of the group, however trying to fix this issue can cause items to become stuck in the wrong location
+                        //var groupItems = cGroup.GroupItems.Count;
+                        //if (offSet > groupItems && cGroup.GroupItems.IndexOf(item) == groupItems - 1)
+                        //{
+                        //    return;
+                        //}
+
+                        RemoveGroupedItem(item);
+                        AddGroupedItem(key, item);
                     }
                 }
             }
