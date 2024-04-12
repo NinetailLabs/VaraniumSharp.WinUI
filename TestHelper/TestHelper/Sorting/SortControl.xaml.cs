@@ -201,16 +201,6 @@ namespace TestHelper.Sorting
             }
         }
 
-        private void EButtonOnClick(object sender, RoutedEventArgs e)
-        {
-            var rand = new Random();
-            if (SelectedEntry != null)
-            {
-                SelectedEntry.Id = rand.Next(100);
-                SelectedEntry.EmbeddedEntry.EmbeddedId = SelectedEntry.Id;
-            }
-        }
-
         private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
         {
             FilterChanged?.Invoke(this, e);
@@ -266,25 +256,7 @@ namespace TestHelper.Sorting
                     EmbeddedId = 3
                 }
             });
-
-            Entries.Add(new()
-            {
-                Id = 4,
-                Title = "A",
-                Position = 9,
-                BoolToFilter = false,
-                EnumToFilter = SortableEnum.That
-            });
-
-            Entries.Add(new()
-            {
-                Id = 4,
-                Title = "A",
-                Position = 4,
-                BoolToFilter = false,
-                EnumToFilter = SortableEnum.That
-            });
-
+            
             Entries.Add(new()
             {
                 Id = 3,
