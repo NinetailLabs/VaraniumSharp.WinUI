@@ -439,7 +439,7 @@ namespace VaraniumSharp.WinUI.Collections
                     .FirstOrDefault(x => x.Items.Contains(item));
 
                 // TODO - We need to test this by changing the grouping value
-                if (cGroup?.Group != insertEntry)
+                if (insertEntry != null && cGroup?.Group != insertEntry)
                 {
                     RemoveGroupedItem(item);
                     AddGroupedItem(insertEntry, item);
@@ -447,50 +447,53 @@ namespace VaraniumSharp.WinUI.Collections
                 else
                 {
                     var oldIndex = _view.IndexOf(item);
-
-                    // Check if item is in view:
                     if (oldIndex < 0)
                     {
                         return;
                     }
 
+                    // Move the item to the correct position in the view and update the start index of the groups
                     _view.RemoveAt(oldIndex);
                     var targetIndex = _view.BinarySearch(item, this);
                     if (targetIndex < 0)
                     {
                         targetIndex = ~targetIndex;
                     }
-
                     _view.Insert(targetIndex, item);
                     UpdateGroupStartIndexes();
-
-                    // Only trigger expensive UI updates if the index really changed:
-                    if (targetIndex != oldIndex)
+                    
+                    // If our entry didn't move we can exit early
+                    if (targetIndex == oldIndex)
                     {
-                        var firstGroupItem = cGroup?.GroupItems.Except([item]).FirstOrDefault();
-                        if (firstGroupItem != null)
+                        return;
+                    }
+
+                    // Ignore our entry similar to the AddGroupItem, otherwise our firstGroupItem will likely be the item itself
+                    var firstGroupItem = cGroup?.GroupItems.Except([item]).FirstOrDefault();
+                    if (firstGroupItem == null)
+                    {
+                        return;
+                    }
+
+                    var firstIndex = _view.IndexOf(firstGroupItem);
+                    var insertIndex = _view.IndexOf(item);
+                    var offSet = insertIndex - firstIndex;
+                    if (offSet > cGroup.GroupItems.Count - 1)
+                    {
+                        //_view.Insert(targetIndex, item);
+                    }
+                    else
+                    {
+                        //if (offSet < 0)
+                        //{
+                        if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
                         {
-                            var firstIndex = _view.IndexOf(firstGroupItem);
-                            var insertIndex = _view.IndexOf(item);
-                            var offSet = insertIndex - firstIndex;
-                            if (offSet > cGroup.GroupItems.Count - 1)
-                            {
-                                //_view.Insert(targetIndex, item);
-                            }
-                            else
-                            {
-                                //if (offSet < 0)
-                                //{
-                                    if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
-                                    {
-                                        return;
-                                    }
-                                //}
-                                RemoveGroupedItem(item);
-                                //_view.Insert(targetIndex, item);
-                                AddGroupedItem(insertEntry, item);
-                            }
+                            return;
                         }
+                        //}
+                        RemoveGroupedItem(item);
+                        //_view.Insert(targetIndex, item);
+                        AddGroupedItem(insertEntry, item);
                     }
                 }
             }
