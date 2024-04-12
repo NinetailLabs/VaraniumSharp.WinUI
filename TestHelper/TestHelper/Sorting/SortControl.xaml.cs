@@ -201,6 +201,16 @@ namespace TestHelper.Sorting
             }
         }
 
+        private void EButtonOnClick(object sender, RoutedEventArgs e)
+        {
+            var rand = new Random();
+            if (SelectedEntry != null)
+            {
+                SelectedEntry.Id = rand.Next(100);
+                SelectedEntry.EmbeddedEntry.EmbeddedId = SelectedEntry.Id;
+            }
+        }
+
         private void FilterablePropertyModuleOnShapingChanged(object? sender, EventArgs e)
         {
             FilterChanged?.Invoke(this, e);
