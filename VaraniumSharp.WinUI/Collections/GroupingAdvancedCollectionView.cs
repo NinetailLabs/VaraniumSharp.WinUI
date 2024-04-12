@@ -448,7 +448,6 @@ namespace VaraniumSharp.WinUI.Collections
                 }
                 else
                 {
-                    RemoveGroupedItem(item);
                     var oldIndex = _view.IndexOf(item);
 
                     // Check if item is in view:
@@ -467,17 +466,28 @@ namespace VaraniumSharp.WinUI.Collections
                     // Only trigger expensive UI updates if the index really changed:
                     if (targetIndex != oldIndex)
                     {
-                        //OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemRemoved, oldIndex, item));
-
-                        _view.Insert(targetIndex, item);
-
-                        //OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, targetIndex, item));
+                        var firstGroupItem = cGroup.GroupItems.FirstOrDefault();
+                        if (firstGroupItem != null)
+                        {
+                            var firstIndex = _view.IndexOf(firstGroupItem);
+                            var insertIndex = _view.IndexOf(item);
+                            var offSet = insertIndex - firstIndex;
+                            if (offSet > cGroup.GroupItems.Count - 1)
+                            {
+                                _view.Insert(targetIndex, item);
+                            }
+                            else
+                            {
+                                RemoveGroupedItem(item);
+                                _view.Insert(targetIndex, item);
+                                AddGroupedItem(insertEntry, item);
+                            }
+                        }
                     }
                     else
                     {
                         _view.Insert(targetIndex, item);
                     }
-                    AddGroupedItem(insertEntry, item);
                 }
             }
         }
