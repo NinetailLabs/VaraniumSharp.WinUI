@@ -51,6 +51,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -67,6 +68,11 @@
                     Click="ButtonDeleteAndReadd"
                     Content="Reload"
                     Grid.Row="2" />
+
+                <Button
+                    Click="EButtonOnClick"
+                    Content="Change E-Id"
+                    Grid.Row="3" />
 
             </Grid>
 
@@ -115,6 +121,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <TextBlock
@@ -124,7 +131,7 @@
                             <TextBlock
                                 Grid.Column="1"
                                 Grid.Row="0"
-                                Text="{x:Bind Path=Id}" />
+                                Text="{x:Bind Path=Id, Mode=OneWay}" />
 
                             <TextBlock
                                 Grid.Column="0"
@@ -153,6 +160,14 @@
                                 Grid.Row="3"
                                 Text="{x:Bind Path=EnumToFilter}" />
 
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.Row="4"
+                                Text="E-Id:" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Grid.Row="4"
+                                Text="{x:Bind Path=EmbeddedEntry.EmbeddedId, Mode=OneWay}" />
 
                         </Grid>
                     </Border>

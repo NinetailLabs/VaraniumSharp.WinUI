@@ -76,6 +76,11 @@ namespace VaraniumSharp.WinUI.Collections
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
+        /// Fired when the sort order of the items in the collection changes
+        /// </summary>
+        protected event EventHandler? SortChanged;
+
+        /// <summary>
         /// Occurs when the vector changes.
         /// </summary>
         public event VectorChangedEventHandler<object>? VectorChanged;
@@ -84,11 +89,6 @@ namespace VaraniumSharp.WinUI.Collections
         /// Fired when the view has changed and the <see cref="CollectionGroups"/> isn't null
         /// </summary>
         protected event VectorChangedEventHandler<object>? ViewChanged;
-
-        /// <summary>
-        /// Fired when the sort order of the items in the collection changes
-        /// </summary>
-        protected event EventHandler? SortChanged;
 
         #endregion
 
@@ -594,7 +594,12 @@ namespace VaraniumSharp.WinUI.Collections
             MoveCurrentTo(currentItem);
         }
 
-        private void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Occurs when the property of an item in the collection changes
+        /// </summary>
+        /// <param name="item">Item on which the property changed</param>
+        /// <param name="e">Property changed arguments</param>
+        protected virtual void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
         {
             if (!_liveShapingEnabled || item == null || _source == null)
             {
