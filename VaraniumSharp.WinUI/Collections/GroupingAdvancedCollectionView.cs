@@ -461,10 +461,13 @@ namespace VaraniumSharp.WinUI.Collections
                         targetIndex = ~targetIndex;
                     }
 
+                    _view.Insert(targetIndex, item);
+                    UpdateGroupStartIndexes();
+
                     // Only trigger expensive UI updates if the index really changed:
                     if (targetIndex != oldIndex)
                     {
-                        var firstGroupItem = cGroup.GroupItems.FirstOrDefault();
+                        var firstGroupItem = cGroup?.GroupItems.Except([item]).FirstOrDefault();
                         if (firstGroupItem != null)
                         {
                             var firstIndex = _view.IndexOf(firstGroupItem);
@@ -472,19 +475,22 @@ namespace VaraniumSharp.WinUI.Collections
                             var offSet = insertIndex - firstIndex;
                             if (offSet > cGroup.GroupItems.Count - 1)
                             {
-                                _view.Insert(targetIndex, item);
+                                //_view.Insert(targetIndex, item);
                             }
                             else
                             {
+                                //if (offSet < 0)
+                                //{
+                                    if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
+                                    {
+                                        return;
+                                    }
+                                //}
                                 RemoveGroupedItem(item);
-                                _view.Insert(targetIndex, item);
+                                //_view.Insert(targetIndex, item);
                                 AddGroupedItem(insertEntry, item);
                             }
                         }
-                    }
-                    else
-                    {
-                        _view.Insert(targetIndex, item);
                     }
                 }
             }
