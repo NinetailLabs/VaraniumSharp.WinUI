@@ -274,6 +274,7 @@ namespace VaraniumSharp.WinUI.Collections
             switch (args.CollectionChange)
             {
                 case CollectionChange.ItemChanged:
+                    _view.Sort(this);
                     if (typedArgs?.Item != null)
                     {
                         RemoveGroupedItem(typedArgs.Item);
@@ -282,15 +283,14 @@ namespace VaraniumSharp.WinUI.Collections
                     if (entry != null)
                     {
                         AddGroupedItem(entry, base[ndx]);
-                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemInserted:
+                    _view.Sort(this);
                     var insertEntry = GetItemGroup(base[ndx]);
                     if (insertEntry != null)
                     {
                         AddGroupedItem(insertEntry, base[ndx]);
-                        RefreshSorting();
                     }
                     break;
                 case CollectionChange.ItemRemoved:
@@ -319,6 +319,7 @@ namespace VaraniumSharp.WinUI.Collections
                             }
                         }
                     }
+                    _view.Sort(this);
                     break;
                 case CollectionChange.Reset:
                     RebuildGroups();
@@ -329,8 +330,14 @@ namespace VaraniumSharp.WinUI.Collections
         /// <inheritdoc />
         protected override void ItemOnPropertyChanged(object? item, PropertyChangedEventArgs e)
         {
-            if (item == null || CollectionGroups == null)
+            if (item == null)
             {
+                return;
+            }
+
+            if (CollectionGroups == null)
+            {
+                base.ItemOnPropertyChanged(item, e);
                 return;
             }
 
@@ -538,7 +545,7 @@ namespace VaraniumSharp.WinUI.Collections
 
             vector.IsVectorChangedDeferred = ((ObservableVector<object>)CollectionGroups).IsVectorChangedDeferred;
             var idx = vector.IndexOf(item);
-            vector.Remove(item);
+            vector.RemoveAt(idx);
 
             var startIndex = itemGroup.StartIndex;
 

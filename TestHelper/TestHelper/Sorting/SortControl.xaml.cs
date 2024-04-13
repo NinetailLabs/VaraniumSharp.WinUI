@@ -153,11 +153,16 @@ namespace TestHelper.Sorting
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             var rnd = new Random();
+            var id = rnd.Next(100);
             Entries.Add(new()
             {
-                Id = rnd.Next(100),
+                Id = id,
                 Title = "B",
-                Position = 4
+                Position = 4,
+                EmbeddedEntry = new()
+                { 
+                    EmbeddedId = id
+                }
             });
         }
 
