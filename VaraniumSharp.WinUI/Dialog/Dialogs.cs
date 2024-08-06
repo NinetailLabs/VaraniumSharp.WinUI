@@ -13,7 +13,7 @@ namespace VaraniumSharp.WinUI.Dialog
     /// Assist with showing Dialog options to the user
     /// </summary>
     [AutomaticContainerRegistration(typeof(IDialogs), Enumerations.ServiceReuse.Singleton)]
-    public sealed class Dialogs : IDialogs
+    public class Dialogs : IDialogs
     {
         #region Constructor
 
