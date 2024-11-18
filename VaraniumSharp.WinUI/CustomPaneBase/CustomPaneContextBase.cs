@@ -589,7 +589,12 @@ namespace VaraniumSharp.WinUI.CustomPaneBase
                     var customChildren = customData?.FirstOrDefault(x => x.InstanceId == customPane.InstanceId);
 
                     var controlId = customPane.GetIdentifier();
-                    var controlItems = controls.First(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
+                    var controlItems = controls.FirstOrDefault(x => x.UniqueControlIdentifier == customPane.UniqueIdentifier);
+                    if (controlItems == null)
+                    {
+                        Logger.LogError("Could not load control with {UniqueIdentifier} and {ControlId}.", customPane.UniqueIdentifier, customPane.ContentId);
+                        continue;
+                    }
                     await customPane
                         .InitAsync(controlId, controlItems.ChildItems, sortChildren?.SubEntries, groupChildren?.SubEntries, filters, customChildren?.SubEntries)
                         .ConfigureAwait(false);
