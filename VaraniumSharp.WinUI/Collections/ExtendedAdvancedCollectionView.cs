@@ -22,7 +22,9 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using CommunityToolkit.WinUI.Helpers;
 using CommunityToolkit.WinUI.UI;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Data;
+using VaraniumSharp.Logging;
 
 namespace VaraniumSharp.WinUI.Collections
 {
@@ -49,11 +51,12 @@ namespace VaraniumSharp.WinUI.Collections
         public ExtendedAdvancedCollectionView(IList source, bool isLiveShaping = false)
         {
             _liveShapingEnabled = isLiveShaping;
-            _view = new List<object>();
-            _sortDescriptions = new ObservableCollection<SortDescription>();
+            _view = [];
+            _sortDescriptions = [];
             _sortDescriptions.CollectionChanged += SortDescriptions_CollectionChanged;
-            _sortProperties = new Dictionary<string, PropertyInfo>();
+            _sortProperties = new();
             Source = source;
+            _logger = StaticLogger.GetLogger<ExtendedAdvancedCollectionView>();
         }
 
         #endregion
@@ -208,7 +211,7 @@ namespace VaraniumSharp.WinUI.Collections
 
                 if (_source is INotifyCollectionChanged sourceNcc)
                 {
-                    _sourceWeakEventListener = new WeakEventListener<ExtendedAdvancedCollectionView, object, NotifyCollectionChangedEventArgs>(this)
+                    _sourceWeakEventListener = new(this)
                         {
                             // Call the actual collection changed event
                             OnEventAction = (source, changed, arg3) => SourceNcc_CollectionChanged(source, arg3),
@@ -661,26 +664,34 @@ namespace VaraniumSharp.WinUI.Collections
 
         private bool MoveCurrentToIndex(int i)
         {
-            if (i < -1 || i >= _view.Count)
+            try
             {
+                if (i < -1 || i >= _view.Count)
+                {
+                    return false;
+                }
+
+                if (i == CurrentPosition)
+                {
+                    return false;
+                }
+
+                var e = new CurrentChangingEventArgs();
+                OnCurrentChanging(e);
+                if (e.Cancel)
+                {
+                    return false;
+                }
+
+                CurrentPosition = i;
+                OnCurrentChanged(null);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Error moving current item to index");
                 return false;
             }
-
-            if (i == CurrentPosition)
-            {
-                return false;
-            }
-
-            var e = new CurrentChangingEventArgs();
-            OnCurrentChanging(e);
-            if (e.Cancel)
-            {
-                return false;
-            }
-
-            CurrentPosition = i;
-            OnCurrentChanged(null);
-            return true;
         }
 
         /// <summary>
@@ -689,7 +700,7 @@ namespace VaraniumSharp.WinUI.Collections
         /// <param name="propertyName">name of the property that changed</param>
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new(propertyName));
         }
 
         private void RemoveFromView(int itemIndex, object item)
@@ -778,7 +789,12 @@ namespace VaraniumSharp.WinUI.Collections
 
         private readonly bool _liveShapingEnabled;
 
-        private readonly HashSet<string> _observedFilterProperties = new();
+        /// <summary>
+        /// Logger instance
+        /// </summary>
+        private readonly ILogger _logger;
+
+        private readonly HashSet<string> _observedFilterProperties = [];
 
         private readonly ObservableCollection<SortDescription> _sortDescriptions;
 
