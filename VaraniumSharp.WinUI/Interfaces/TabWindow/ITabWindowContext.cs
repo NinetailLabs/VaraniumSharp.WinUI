@@ -26,6 +26,11 @@ namespace VaraniumSharp.WinUI.Interfaces.TabWindow
         bool EnableContextMenuItems { get; }
 
         /// <summary>
+        /// Indicate if the tabs should be enabled
+        /// </summary>
+        bool EnabledTabs { get; }
+
+        /// <summary>
         /// TabViewKeyboardAccelerators instance
         /// </summary>
         TabViewKeyboardAccelerators KeyboardAccelerators { get; set; }
@@ -54,28 +59,28 @@ namespace VaraniumSharp.WinUI.Interfaces.TabWindow
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="args">Event arguments</param>
-        void OnAddClickedAsync(TabView? sender, object args);
+        Task OnAddClickedAsync(TabView? sender, object args);
 
         /// <summary>
         /// Occurs when the TabView is loaded
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event arguments</param>
-        void OnLoadedAsync(object sender, RoutedEventArgs e);
+        Task OnLoadedAsync(object sender, RoutedEventArgs e);
 
         /// <summary>
         /// Occurs when the TabSelection changes
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="e">Event argument</param>
-        void OnSelectionChangedAsync(object? sender, SelectionChangedEventArgs e);
+        Task OnSelectionChangedAsync(object? sender, SelectionChangedEventArgs e);
 
         /// <summary>
         /// Occurs when the user closes a TabView
         /// </summary>
         /// <param name="sender">Sender of the event</param>
         /// <param name="args">Event arguments</param>
-        void OnTabClosedAsync(TabView? sender, TabViewTabCloseRequestedEventArgs args);
+        Task OnTabClosedAsync(TabView? sender, TabViewTabCloseRequestedEventArgs args);
 
         /// <summary>
         /// Request saving of the layout
