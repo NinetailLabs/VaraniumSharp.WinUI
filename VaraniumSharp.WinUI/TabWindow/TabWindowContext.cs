@@ -3,13 +3,16 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.Interfaces.Wrappers;
+using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Dialog;
 using VaraniumSharp.WinUI.Interfaces.CustomPaneBase;
 using VaraniumSharp.WinUI.Interfaces.Dialogs;
@@ -43,9 +46,11 @@ namespace VaraniumSharp.WinUI.TabWindow
             _tabViewItemFlyoutHelper.SetSaveCallback(HandleTabViewPersistenceAsync);
             customLayoutEventRouter.LayoutChanged += CustomLayoutEventRouterOnLayoutChanged;
 
-            Tabs = new ObservableCollection<TabViewItem>();
+            Tabs = [];
+            EnabledTabs = true;
             Tabs.CollectionChanged += Tabs_CollectionChanged;
-            KeyboardAccelerators = new TabViewKeyboardAccelerators(HandleIndexSetAsync, HandleTabRemovalAsync, AddTabAsync, () => Tabs.Count);
+            KeyboardAccelerators = new(HandleIndexSetAsync, HandleTabRemovalAsync, AddTabAsync, () => Tabs.Count);
+            _logger = StaticLogger.GetLogger<TabWindowContext>();
         }
 
         #endregion
@@ -67,6 +72,9 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <inheritdoc/>
         public bool EnableContextMenuItems { get; private set; }
 
+        /// <inheritdoc />
+        public bool EnabledTabs { get; private set; }
+
         /// <inheritdoc/>
         public TabViewKeyboardAccelerators KeyboardAccelerators { get; set; }
 
@@ -84,13 +92,13 @@ namespace VaraniumSharp.WinUI.TabWindow
         #region Public Methods
 
         /// <inheritdoc/>
-        public async void OnAddClickedAsync(TabView? sender, object args)
+        public async Task OnAddClickedAsync(TabView? sender, object args)
         {
             await AddTabAsync().ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
-        public async void OnLoadedAsync(object sender, RoutedEventArgs e)
+        public async Task OnLoadedAsync(object sender, RoutedEventArgs e)
         {
             _loading = true;
 
@@ -127,31 +135,45 @@ namespace VaraniumSharp.WinUI.TabWindow
         }
 
         /// <inheritdoc/>
-        public async void OnSelectionChangedAsync(object? sender, SelectionChangedEventArgs e)
+        public async Task OnSelectionChangedAsync(object? sender, SelectionChangedEventArgs e)
         {
-            if (SelectedIndex < 0 || SelectedIndex >= Tabs.Count)
+            try
             {
-                return;
-            }
+                await _tabChangeSemaphore
+                    .WaitAsync()
+                    .ConfigureAwait(true);
 
-            var tab = Tabs[SelectedIndex];
-            if (tab.Name == SettingGuid)
+                EnabledTabs = false;
+
+                if (SelectedIndex < 0 || SelectedIndex >= Tabs.Count)
+                {
+                    return;
+                }
+
+                var tab = Tabs[SelectedIndex];
+                if (tab.Name == SettingGuid)
+                {
+                    EnableContextMenuItems = false;
+                    await ShowSettingPaneAsync().ConfigureAwait(true);
+                    return;
+                }
+                
+                await HandleTabChangesAsync().ConfigureAwait(true);
+                await ContentPaneManager
+                    .UpdateContentAsync(tab.Name)
+                    .ConfigureAwait(true);
+                EnableContextMenuItems = true;
+                _previousIndex = SelectedIndex;
+            }
+            finally
             {
-                EnableContextMenuItems = false;
-                await ShowSettingPaneAsync().ConfigureAwait(true);
-                return;
+                EnabledTabs = true;
+                _tabChangeSemaphore.Release();
             }
-
-            EnableContextMenuItems = true;
-            await HandleTabChangesAsync().ConfigureAwait(true);
-            await ContentPaneManager
-                .UpdateContentAsync(tab.Name)
-                .ConfigureAwait(true);
-            _previousIndex = SelectedIndex;
         }
 
         /// <inheritdoc/>
-        public async void OnTabClosedAsync(TabView? sender, TabViewTabCloseRequestedEventArgs args)
+        public async Task OnTabClosedAsync(TabView? sender, TabViewTabCloseRequestedEventArgs args)
         {
             await HandleTabRemovalAsync(args.Tab).ConfigureAwait(false);
         }
@@ -279,7 +301,7 @@ namespace VaraniumSharp.WinUI.TabWindow
                 Tabs[SelectedIndex].IconSource = new FontIconSource
                 {
                     Foreground = new SolidColorBrush(Color.FromArgb(255, 255, 185, 0)),
-                    FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                    FontFamily = new("Segoe MDL2 Assets"),
                     FontSize = 12,
                     Glyph = "\ue915"
                 };
@@ -380,10 +402,17 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// <param name="e">Event arguments</param>
         private async void Tabs_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (!_loading
-                && e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Add)
+            try
             {
-                await HandleTabViewPersistenceAsync().ConfigureAwait(false);
+                if (!_loading
+                    && e.Action is NotifyCollectionChangedAction.Remove or NotifyCollectionChangedAction.Add)
+                {
+                    await HandleTabViewPersistenceAsync().ConfigureAwait(false);
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "An error occured during the tab collection change event");
             }
         }
 
@@ -415,6 +444,16 @@ namespace VaraniumSharp.WinUI.TabWindow
         /// LayoutStorageOptions instance
         /// </summary>
         private readonly ILayoutStorageOptions _layoutStorageOptions;
+
+        /// <summary>
+        /// Logger instance
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// Semaphore used to prevent the user selecting another tab before the current one has loaded
+        /// </summary>
+        private readonly SemaphoreSlim _tabChangeSemaphore = new(1);
 
         /// <summary>
         /// TabViewItemFlyoutHelper instance
