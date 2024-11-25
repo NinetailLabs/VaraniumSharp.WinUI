@@ -237,7 +237,7 @@ namespace VaraniumSharp.WinUI.Collections
 
             if (!col.Items.IsVectorChangedDeferred)
             {
-                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));1
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
             }
         }
 
