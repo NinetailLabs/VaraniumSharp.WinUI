@@ -69,7 +69,7 @@ namespace VaraniumSharp.WinUI.GroupModule
             var counter = 0;
             foreach (var (key, pi) in groupProperties)
             {
-                if (!key.Contains("."))
+                if (!key.Contains('.'))
                 {
                     groupNames[counter] = pi.GetValue(obj)?.ToString() ?? string.Empty;
                 }
