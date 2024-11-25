@@ -54,6 +54,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -85,6 +86,11 @@
                     Click="ChangeRandomValue"
                     Content="Change Random Value"
                     Grid.Row="5" />
+
+                <Button
+                    Click="ButtonClearOnClick"
+                    Content="Clear Collection"
+                    Grid.Row="6" />
 
             </Grid>
 
