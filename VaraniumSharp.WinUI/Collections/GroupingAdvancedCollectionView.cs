@@ -32,7 +32,9 @@ namespace VaraniumSharp.WinUI.Collections
         /// <param name="source">Source collection for the grouping collection</param>
         public GroupingAdvancedCollectionView(IList source)
             : base(source, true)
-        { }
+        {
+            GroupDescriptions = new List<string>();
+        }
 
         /// <summary>
         /// Construct and set the source as well as the grouping function
@@ -101,6 +103,9 @@ namespace VaraniumSharp.WinUI.Collections
                 }
             }
         }
+
+        /// <inheritdoc />
+        public IList<string> GroupDescriptions { get; }
 
         /// <inheritdoc />
         public override object this[int index]
@@ -353,6 +358,11 @@ namespace VaraniumSharp.WinUI.Collections
             {
 
                 var filterResult = Filter?.Invoke(item);
+
+                if (!GroupDescriptions.Contains(e.PropertyName ?? string.Empty))
+                {
+                    StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("{Property} is not in current group collection. No group change needed", e.PropertyName);
+                }
 
                 var cGroup = CollectionGroups
                     ?.Select(x => (CollectionViewGroup)x)

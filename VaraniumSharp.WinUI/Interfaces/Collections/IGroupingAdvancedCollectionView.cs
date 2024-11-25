@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using CommunityToolkit.WinUI.UI;
 
@@ -26,6 +27,11 @@ public interface IGroupingAdvancedCollectionView : IAdvancedCollectionView
     /// Set to null to remove the grouping.
     /// </summary>
     Func<object, object>? Group { get; set; }
+
+    /// <summary>
+    /// Collection of properties that are used to group the collection
+    /// </summary>
+    IList<string> GroupDescriptions { get; }
 
     /// <summary>
     /// Gets or sets the source

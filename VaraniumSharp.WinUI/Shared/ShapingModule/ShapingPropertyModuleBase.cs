@@ -20,10 +20,10 @@ namespace VaraniumSharp.WinUI.Shared.ShapingModule
         protected ShapingPropertyModuleBase(IAdvancedCollectionView viewSource)
         {
             ViewSource = viewSource;
-            AvailableShapingEntries = new();
-            EntriesShapedBy = new();
+            AvailableShapingEntries = [];
+            EntriesShapedBy = [];
             EntriesShapedBy.CollectionChanged += EntriesShapedByOnCollectionChanged;
-            NestedTypeList = new();
+            NestedTypeList = [];
         }
 
         #endregion

@@ -237,7 +237,7 @@ namespace VaraniumSharp.WinUI.Collections
         #region Public Methods
 
         /// <inheritdoc />
-        public void Add(object item)
+        public void Add(object? item)
         {
             if (IsReadOnly)
             {
