@@ -255,6 +255,8 @@ namespace VaraniumSharp.WinUI.Collections
                 throw new NotSupportedException("Collection is read-only.");
             }
 
+            DetachPropertyChangedHandler(_source);
+
             _source?.Clear();
         }
 

@@ -237,8 +237,7 @@ namespace VaraniumSharp.WinUI.Collections
 
             if (!col.Items.IsVectorChangedDeferred)
             {
-                StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("Updating vector for {StartIndex} and {ItemIndex}", col.StartIndex, col.Items.IndexOf(item));
-                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
+                OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));1
             }
         }
 
@@ -358,12 +357,6 @@ namespace VaraniumSharp.WinUI.Collections
             {
 
                 var filterResult = Filter?.Invoke(item);
-
-                if (!GroupDescriptions.Contains(e.PropertyName ?? string.Empty))
-                {
-                    StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("{Property} is not in current group collection. No group change needed", e.PropertyName);
-                }
-
                 var cGroup = CollectionGroups
                     ?.Select(x => (CollectionViewGroup)x)
                     .FirstOrDefault(x => x.Items.Contains(item));
@@ -375,7 +368,6 @@ namespace VaraniumSharp.WinUI.Collections
 
                 if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) != 0)
                 {
-                    StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("Updating group for entry when {Property} changed. Group {Key}", e.PropertyName, key);
                     RemoveGroupedItem(item);
                     AddGroupedItem(key, item);
                     if (CollectionGroups != null && cGroup?.GroupItems.Count == 0)
