@@ -315,5 +315,10 @@ namespace TestHelper.Sorting
         private int _selectedIndex;
 
         #endregion
+
+        private void ButtonClearOnClick(object sender, RoutedEventArgs e)
+        {
+            CollectionView.Clear();
+        }
     }
 }
