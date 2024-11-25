@@ -53,6 +53,7 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -79,6 +80,11 @@
                     Click="ChangeLetterClick"
                     Content ="Change Title"
                     Grid.Row="4" />
+
+                <Button
+                    Click="ChangeRandomValue"
+                    Content="Change Random Value"
+                    Grid.Row="5" />
 
             </Grid>
 

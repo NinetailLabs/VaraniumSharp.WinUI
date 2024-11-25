@@ -237,7 +237,7 @@ namespace VaraniumSharp.WinUI.Collections
         #region Public Methods
 
         /// <inheritdoc />
-        public void Add(object item)
+        public void Add(object? item)
         {
             if (IsReadOnly)
             {
@@ -274,10 +274,10 @@ namespace VaraniumSharp.WinUI.Collections
         public IEnumerator<object> GetEnumerator() => _view.GetEnumerator();
 
         /// <inheritdoc />
-        public virtual int IndexOf(object item) => _view.IndexOf(item);
+        public virtual int IndexOf(object? item) => _view.IndexOf(item);
 
         /// <inheritdoc />
-        public void Insert(int index, object item)
+        public void Insert(int index, object? item)
         {
             if (IsReadOnly)
             {

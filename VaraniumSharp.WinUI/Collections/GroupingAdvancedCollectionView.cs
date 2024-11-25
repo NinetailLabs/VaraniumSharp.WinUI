@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Windows.Foundation.Collections;
+using Microsoft.Extensions.Logging;
+using VaraniumSharp.Logging;
 using VaraniumSharp.WinUI.Interfaces.Collections;
 
 namespace VaraniumSharp.WinUI.Collections
@@ -30,7 +32,9 @@ namespace VaraniumSharp.WinUI.Collections
         /// <param name="source">Source collection for the grouping collection</param>
         public GroupingAdvancedCollectionView(IList source)
             : base(source, true)
-        { }
+        {
+            GroupDescriptions = new List<string>();
+        }
 
         /// <summary>
         /// Construct and set the source as well as the grouping function
@@ -101,6 +105,9 @@ namespace VaraniumSharp.WinUI.Collections
         }
 
         /// <inheritdoc />
+        public IList<string> GroupDescriptions { get; }
+
+        /// <inheritdoc />
         public override object this[int index]
         {
             get
@@ -140,8 +147,13 @@ namespace VaraniumSharp.WinUI.Collections
         #region Public Methods
 
         /// <inheritdoc />
-        public override int IndexOf(object item)
+        public override int IndexOf(object? item)
         {
+            if (item == null)
+            {
+                return -1;
+            }
+
             if (CollectionGroups == null)
             {
                 return base.IndexOf(item);
@@ -179,7 +191,7 @@ namespace VaraniumSharp.WinUI.Collections
             
             if (col == null)
             {
-                col = new CollectionViewGroup(key);
+                col = new(key);
                 var keys = CollectionGroups
                     .Cast<CollectionViewGroup>()
                     .Select(x => x.Group)
@@ -225,6 +237,7 @@ namespace VaraniumSharp.WinUI.Collections
 
             if (!col.Items.IsVectorChangedDeferred)
             {
+                StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("Updating vector for {StartIndex} and {ItemIndex}", col.StartIndex, col.Items.IndexOf(item));
                 OnVectorChanged(new VectorChangedEventArgs(CollectionChange.ItemInserted, col.StartIndex + col.Items.IndexOf(item)));
             }
         }
@@ -341,88 +354,98 @@ namespace VaraniumSharp.WinUI.Collections
                 return;
             }
 
-            var filterResult = Filter?.Invoke(item);
+            try
+            {
 
-            var cGroup = CollectionGroups
-                ?.Select(x => (CollectionViewGroup)x)
-                .FirstOrDefault(x => x.Items.Contains(item));
-            var key = GetItemGroup(item);
-            if (key == null)
-            {
-                return;
-            }
-            if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) != 0)
-            {
-                RemoveGroupedItem(item);
-                AddGroupedItem(key, item);
-                if (CollectionGroups != null && cGroup?.GroupItems.Count == 0)
+                var filterResult = Filter?.Invoke(item);
+
+                if (!GroupDescriptions.Contains(e.PropertyName ?? string.Empty))
                 {
-                    var idx = CollectionGroups.IndexOf(cGroup);
-                    CollectionGroups.RemoveAt(idx);
-                    UpdateGroupStartIndexes();
+                    StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("{Property} is not in current group collection. No group change needed", e.PropertyName);
                 }
-            }
 
-            if ((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
-            {
-                if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) == 0)
+                var cGroup = CollectionGroups
+                    ?.Select(x => (CollectionViewGroup)x)
+                    .FirstOrDefault(x => x.Items.Contains(item));
+                var key = GetItemGroup(item);
+                if (key == null)
                 {
-                    var oldIndex = _view.IndexOf(item);
-                    if (oldIndex < 0)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    // Move the item to the correct position in the view and update the start index of the groups
-                    _view.RemoveAt(oldIndex);
-                    var targetIndex = _view.BinarySearch(item, this);
-                    if (targetIndex < 0)
+                if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) != 0)
+                {
+                    StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogDebug("Updating group for entry when {Property} changed. Group {Key}", e.PropertyName, key);
+                    RemoveGroupedItem(item);
+                    AddGroupedItem(key, item);
+                    if (CollectionGroups != null && cGroup?.GroupItems.Count == 0)
                     {
-                        targetIndex = ~targetIndex;
+                        var idx = CollectionGroups.IndexOf(cGroup);
+                        CollectionGroups.RemoveAt(idx);
+                        UpdateGroupStartIndexes();
                     }
-                    _view.Insert(targetIndex, item);
-                    UpdateGroupStartIndexes();
-                    
-                    // If our entry didn't move we can exit early
-                    if (targetIndex == oldIndex)
-                    {
-                        return;
-                    }
+                }
 
-                    // Ignore our entry similar to the AddGroupItem, otherwise our firstGroupItem will likely be the item itself
-                    var firstGroupItem = cGroup.GroupItems.Except([item]).FirstOrDefault();
-                    if (firstGroupItem == null)
+                if ((filterResult ?? true) && SortDescriptions.Any(sd => sd.PropertyName == e.PropertyName))
+                {
+                    if (Comparer.Default.Compare(cGroup?.Group ?? string.Empty, key) == 0)
                     {
-                        return;
-                    }
-
-                    var firstIndex = _view.IndexOf(firstGroupItem);
-                    var insertIndex = _view.IndexOf(item);
-                    var offSet = insertIndex - firstIndex;
-                    if (offSet <= cGroup.GroupItems.Count - 1)
-                    {
-                        // If the item is already in the correct position we can exit early
-                        if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
+                        var oldIndex = _view.IndexOf(item);
+                        if (oldIndex < 0)
                         {
                             return;
                         }
 
-                        RemoveGroupedItem(item);
-                        AddGroupedItem(key, item);
-                    }
-                    else
-                    {
+                        // Move the item to the correct position in the view and update the start index of the groups
+                        _view.RemoveAt(oldIndex);
+                        var targetIndex = _view.BinarySearch(item, this);
+                        if (targetIndex < 0)
+                        {
+                            targetIndex = ~targetIndex;
+                        }
+
+                        _view.Insert(targetIndex, item);
+                        UpdateGroupStartIndexes();
+
+                        // If our entry didn't move we can exit early
+                        if (targetIndex == oldIndex)
+                        {
+                            return;
+                        }
+
+                        // Ignore our entry similar to the AddGroupItem, otherwise our firstGroupItem will likely be the item itself
+                        var firstGroupItem = cGroup?.GroupItems.Except([item]).FirstOrDefault();
+                        if (firstGroupItem == null || cGroup == null)
+                        {
+                            return;
+                        }
+
+                        var firstIndex = _view.IndexOf(firstGroupItem);
+                        var insertIndex = _view.IndexOf(item);
+                        var offSet = insertIndex - firstIndex;
+                        if (offSet <= cGroup.GroupItems.Count - 1)
+                        {
+                            // If the item is already in the correct position we can exit early
+                            if (cGroup.GroupItems.IndexOf(item) == (offSet < 0 ? 0 : offSet))
+                            {
+                                return;
+                            }
+                        }
+
                         // TODO - There are some strange edge cases where the item will removed and re-added to the same location at the end of the group, however trying to fix this issue can cause items to become stuck in the wrong location
                         //var groupItems = cGroup.GroupItems.Count;
                         //if (offSet > groupItems && cGroup.GroupItems.IndexOf(item) == groupItems - 1)
                         //{
                         //    return;
                         //}
-
                         RemoveGroupedItem(item);
                         AddGroupedItem(key, item);
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                StaticLogger.GetLogger<GroupingAdvancedCollectionView>().LogError(exception, "Error occurred while handling item property {Property} update", e.PropertyName);
             }
         }
 
@@ -446,9 +469,9 @@ namespace VaraniumSharp.WinUI.Collections
                 {
                     continue;
                 }
-                if (viewDictionary.ContainsKey(key))
+                if (viewDictionary.TryGetValue(key, out var value))
                 {
-                    viewDictionary[key].Add(item);
+                    value.Add(item);
                 }
                 else
                 {
@@ -494,13 +517,13 @@ namespace VaraniumSharp.WinUI.Collections
                         throw new InvalidOperationException("Cannot group items if the key is null");
                     }
 
-                    if (!groupKeys.ContainsKey(key))
+                    if (!groupKeys.TryGetValue(key, out var value))
                     {
                         groupKeys.Add(key, [item]);
                     }
                     else
                     {
-                        groupKeys[key].Add(item);
+                        value.Add(item);
                     }
                 }
 

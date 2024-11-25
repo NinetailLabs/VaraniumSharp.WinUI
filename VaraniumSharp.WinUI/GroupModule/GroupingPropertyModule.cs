@@ -53,6 +53,12 @@ namespace VaraniumSharp.WinUI.GroupModule
         {
             Shape("");
             IsShaped = EntriesShapedBy.Count > 0;
+            var groupSource = (IGroupingAdvancedCollectionView)ViewSource;
+            groupSource.GroupDescriptions.Clear();
+            foreach (var shapingEntry in EntriesShapedBy)
+            {
+                groupSource.GroupDescriptions.Add(shapingEntry.PropertyName);
+            }
             FireShapingChangedEvent();
         }
 
@@ -69,7 +75,7 @@ namespace VaraniumSharp.WinUI.GroupModule
             var counter = 0;
             foreach (var (key, pi) in groupProperties)
             {
-                if (!key.Contains("."))
+                if (!key.Contains('.'))
                 {
                     groupNames[counter] = pi.GetValue(obj)?.ToString() ?? string.Empty;
                 }

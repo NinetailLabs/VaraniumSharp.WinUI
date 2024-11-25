@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using CommunityToolkit.WinUI.UI;
 using Microsoft.UI.Xaml;
 using VaraniumSharp.Attributes;
 using VaraniumSharp.WinUI.Collections;
@@ -187,6 +186,14 @@ namespace TestHelper.Sorting
             if (SelectedEntry != null)
             {
                 SelectedEntry.Title = titles[rand.Next(5)].ToString();
+            }
+        }
+
+        private void ChangeRandomValue(object sender, RoutedEventArgs e)
+        {
+            if (SelectedEntry != null)
+            {
+                SelectedEntry.RandomValue = !SelectedEntry.RandomValue;
             }
         }
 

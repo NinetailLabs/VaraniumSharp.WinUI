@@ -72,6 +72,11 @@ namespace TestHelper.Sorting
         [SortableProperty("Title", "Sort by Title")]
         public string Title { get; set; }
 
+        /// <summary>
+        /// A random value that isn't used for sorting or grouping
+        /// </summary>
+        public bool RandomValue { get; set; }
+
         #endregion
     }
 }
